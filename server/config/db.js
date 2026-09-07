@@ -1,8 +1,20 @@
 const mongoose = require('mongoose');
+const { MongoMemoryServer } = require('mongodb-memory-server');
+
+let mongoServer;
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/caseprint');
+    let uri = process.env.MONGODB_URI;
+    
+    // If no external DB is provided, spin up a temporary memory DB!
+    if (!uri) {
+      console.log('[DB] No MONGODB_URI found. Starting in-memory database...');
+      mongoServer = await MongoMemoryServer.create();
+      uri = mongoServer.getUri();
+    }
+
+    const conn = await mongoose.connect(uri);
     console.log(`[DB] MongoDB connected: ${conn.connection.host}`);
     return conn;
   } catch (error) {
