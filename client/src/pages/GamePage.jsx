@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGame } from '../contexts/GameContext';
 import PhaseHeader from '../components/game/PhaseHeader';
@@ -12,10 +12,18 @@ const GamePage = () => {
   const navigate = useNavigate();
   const { roomState, currentPlayer } = useGame();
   
-  const [activeRightTab, setActiveRightTab] = useState('chat'); // 'chat' or 'notes'
+  const [activeRightTab, setActiveRightTab] = useState('chat'); // 'chat' or 'notes' (Desktop)
+  const [mobileTab, setMobileTab] = useState('case'); // 'case', 'chat', 'notes' (Mobile)
+
+  // Sync mobile tab to right tab
+  useEffect(() => {
+    if (mobileTab === 'chat' || mobileTab === 'notes') {
+      setActiveRightTab(mobileTab);
+    }
+  }, [mobileTab]);
 
   // Security redirect
-  React.useEffect(() => {
+  useEffect(() => {
     if (!roomState || !currentPlayer) {
       navigate('/');
     } else if (roomState.status === 'FINISHED') {
@@ -28,15 +36,16 @@ const GamePage = () => {
   const isAccusationPhase = roomState.phase === 'ACCUSATION';
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-bg flex flex-col">
+    <div className="h-[100dvh] w-screen overflow-hidden bg-bg flex flex-col">
       {/* Top Bar */}
-      <PhaseHeader phase={roomState.phase} duration={0} /> {/* We rely on server for phase changes now, duration just UI visual if we passed it down from context */}
+      <PhaseHeader phase={roomState.phase} duration={0} />
 
       {/* Main Layout */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden relative">
         
-        {/* Left Side: Case File (65%) */}
-        <div className="w-full lg:w-[65%] h-full p-4 pt-12 relative z-10">
+        {/* Left Side: Case File */}
+        {/* Visible on mobile if mobileTab === 'case'. Always visible on desktop. */}
+        <div className={`w-full lg:w-[65%] h-full p-2 sm:p-4 pt-4 lg:pt-12 relative z-10 ${mobileTab === 'case' ? 'block' : 'hidden lg:block'}`}>
            {isAccusationPhase ? (
              <div className="h-full flex items-center justify-center p-4">
                <div className="max-w-2xl w-full">
@@ -48,26 +57,27 @@ const GamePage = () => {
            )}
         </div>
 
-        {/* Right Side: Comms & Notes (35%) */}
-        <div className="hidden lg:flex w-[35%] h-full flex-col border-l border-border bg-surface relative z-20 shadow-[-5px_0_15px_rgba(0,0,0,0.5)]">
+        {/* Right Side: Comms & Notes */}
+        {/* Visible on mobile if mobileTab !== 'case'. Always visible on desktop. */}
+        <div className={`w-full lg:w-[35%] h-full flex-col border-l border-border bg-surface relative z-20 lg:shadow-[-5px_0_15px_rgba(0,0,0,0.5)] ${mobileTab !== 'case' ? 'flex' : 'hidden lg:flex'}`}>
           
-          {/* Tabs */}
-          <div className="flex bg-surface-light border-b border-border">
+          {/* Desktop Tabs (Hidden on mobile) */}
+          <div className="hidden lg:flex bg-surface-light border-b border-border">
             <button 
               className={`flex-1 py-3 text-sm font-bold uppercase tracking-wider transition-colors ${activeRightTab === 'chat' ? 'bg-surface text-accent border-t-2 border-accent' : 'text-text-secondary hover:text-text-primary'}`}
-              onClick={() => setActiveRightTab('chat')}
+              onClick={() => { setActiveRightTab('chat'); setMobileTab('chat'); }}
             >
               Comms
             </button>
             <button 
               className={`flex-1 py-3 text-sm font-bold uppercase tracking-wider transition-colors ${activeRightTab === 'notes' ? 'bg-surface text-accent border-t-2 border-accent' : 'text-text-secondary hover:text-text-primary'}`}
-              onClick={() => setActiveRightTab('notes')}
+              onClick={() => { setActiveRightTab('notes'); setMobileTab('notes'); }}
             >
               Notebook
             </button>
           </div>
 
-          {/* Content */}
+          {/* Content Pane */}
           <div className="flex-1 overflow-hidden">
             {activeRightTab === 'chat' ? (
               <ChatPanel roomCode={roomCode} currentPlayer={currentPlayer} />
@@ -75,10 +85,35 @@ const GamePage = () => {
               <Notebook />
             )}
           </div>
-
         </div>
 
       </div>
+
+      {/* Mobile Bottom Navigation */}
+      <div className="lg:hidden flex bg-surface-light border-t border-border z-50">
+        <button 
+          onClick={() => setMobileTab('case')} 
+          className={`flex-1 py-2 text-xs font-bold uppercase tracking-wide flex flex-col items-center justify-center transition-colors ${mobileTab === 'case' ? 'text-accent bg-surface' : 'text-text-secondary'}`}
+        >
+          <span className="text-xl mb-1">📁</span>
+          Case File
+        </button>
+        <button 
+          onClick={() => setMobileTab('chat')} 
+          className={`flex-1 py-2 text-xs font-bold uppercase tracking-wide flex flex-col items-center justify-center transition-colors ${mobileTab === 'chat' ? 'text-accent bg-surface' : 'text-text-secondary'}`}
+        >
+          <span className="text-xl mb-1">💬</span>
+          Comms
+        </button>
+        <button 
+          onClick={() => setMobileTab('notes')} 
+          className={`flex-1 py-2 text-xs font-bold uppercase tracking-wide flex flex-col items-center justify-center transition-colors ${mobileTab === 'notes' ? 'text-accent bg-surface' : 'text-text-secondary'}`}
+        >
+          <span className="text-xl mb-1">📝</span>
+          Notes
+        </button>
+      </div>
+
     </div>
   );
 };

@@ -52,49 +52,50 @@ const PhaseHeader = ({ phase, duration }) => {
   };
 
   return (
-    <div className="bg-surface border-b border-border p-3 flex justify-between items-center z-20 relative shadow-sm">
-      <div className="flex items-center gap-6">
-        <div>
-          <h2 className="text-xl font-typewriter text-accent">
+    <div className="bg-surface border-b border-border p-2 sm:p-3 flex justify-between items-center z-20 relative shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-6 truncate pr-2">
+        <div className="truncate">
+          <h2 className="text-sm sm:text-xl font-typewriter text-accent truncate">
             {roomState?.caseId?.replace('-', ' ').toUpperCase() || 'UNKNOWN CASE'}
           </h2>
-          <p className="text-xs text-text-secondary uppercase tracking-widest font-bold">
+          <p className="text-[10px] sm:text-xs text-text-secondary uppercase tracking-widest font-bold truncate">
             Phase: <span className="text-paper-cream">{phaseNames[phase]}</span>
           </p>
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-4 shrink-0">
         {phase === 'INVESTIGATION' && currentPlayer?.isHost && (
-          <div className="mr-4 pr-4 border-r border-border">
+          <div className="mr-1 sm:mr-4 pr-2 sm:pr-4 border-r border-border">
             <button 
               onClick={() => {
                 if (window.confirm("Are you sure you want to end the investigation and move to accusations?")) {
                   advancePhase(roomState.roomCode);
                 }
               }}
-              className="btn btn-primary text-xs px-4 py-2 hover:bg-white hover:text-black transition-colors"
+              className="btn btn-primary text-[10px] sm:text-xs px-2 sm:px-4 py-1 sm:py-2 hover:bg-white hover:text-black transition-colors"
             >
-              MOVE TO ACCUSATIONS
+              <span className="hidden sm:inline">MOVE TO ACCUSATIONS</span>
+              <span className="sm:hidden">ACCUSE</span>
             </button>
           </div>
         )}
 
         <div className="text-right">
-          <span className="text-xs text-text-secondary uppercase block">Elapsed Time</span>
+          <span className="hidden sm:block text-[10px] sm:text-xs text-text-secondary uppercase">Elapsed Time</span>
           {phase !== 'VERDICT' ? (
-            <span className="font-mono text-2xl font-bold text-paper-cream">
+            <span className="font-mono text-sm sm:text-2xl font-bold text-paper-cream">
               {formatTime(elapsedTime)}
             </span>
           ) : (
-            <span className="font-mono text-2xl font-bold text-text-secondary">--:--</span>
+            <span className="font-mono text-sm sm:text-2xl font-bold text-text-secondary">--:--</span>
           )}
         </div>
         
-        <div className="ml-4 pl-4 border-l border-border">
+        <div className="ml-1 sm:ml-4 pl-2 sm:pl-4 border-l border-border">
           <button 
             onClick={handleLeaveOrEnd}
-            className="btn btn-outline text-xs px-3 py-1 border-danger text-danger hover:bg-danger hover:text-white"
+            className="btn btn-outline text-[10px] sm:text-xs px-2 sm:px-3 py-1 border-danger text-danger hover:bg-danger hover:text-white"
             title={currentPlayer?.isHost ? "End Session" : "Leave Game"}
           >
             {currentPlayer?.isHost ? "END" : "LEAVE"}

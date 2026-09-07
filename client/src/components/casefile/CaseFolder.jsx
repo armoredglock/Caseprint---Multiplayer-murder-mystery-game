@@ -36,8 +36,8 @@ const IncidentReport = ({ overview }) => (
 const VictimProfile = ({ victim }) => (
   <div className="bg-white p-6 shadow border border-gray-200 font-ui text-ink-black">
     <h2 className="font-bold text-2xl mb-4 border-b-2 border-ink-black uppercase">VICTIM PROFILE</h2>
-    <div className="flex gap-6">
-      <div className="w-1/3">
+    <div className="flex flex-col sm:flex-row gap-6">
+      <div className="w-full sm:w-1/3 max-w-[200px] mx-auto sm:max-w-none">
         <div className="bg-white p-2 pb-8 shadow-md border border-gray-100 transform -rotate-3">
           <div className="bg-gray-200 h-48 flex items-center justify-center font-mono text-gray-400 text-sm border border-gray-300 relative overflow-hidden">
             {victim?.photo ? (
@@ -49,7 +49,7 @@ const VictimProfile = ({ victim }) => (
           <p className="text-center font-handwriting text-xl mt-2">{victim?.name}</p>
         </div>
       </div>
-      <div className="w-2/3 space-y-2 font-mono text-sm">
+      <div className="w-full sm:w-2/3 space-y-2 font-mono text-sm">
         <p><strong>NAME:</strong> {victim?.name}</p>
         <p><strong>AGE:</strong> {victim?.age}</p>
         <p><strong>OCCUPATION:</strong> {victim?.occupation}</p>

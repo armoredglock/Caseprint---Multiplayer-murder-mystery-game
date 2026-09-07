@@ -109,7 +109,7 @@ const getRandomName = () => {
         transition={{ duration: 1 }}
       >
         <div className="text-center mb-12">
-          <h1 className="text-6xl md:text-8xl font-typewriter text-paper-cream mb-4 tracking-tighter" style={{ textShadow: '2px 4px 10px rgba(0,0,0,0.8)' }}>
+          <h1 className="text-5xl sm:text-6xl md:text-8xl font-typewriter text-paper-cream mb-4 tracking-tighter" style={{ textShadow: '2px 4px 10px rgba(0,0,0,0.8)' }}>
             CASEPRINT
           </h1>
           <p className="text-xl md:text-2xl text-accent font-ui tracking-widest uppercase">
@@ -121,7 +121,7 @@ const getRandomName = () => {
           
           {/* Create Room Card */}
           <motion.div 
-            className="bg-surface-light p-8 rounded-lg shadow-lg border border-border w-full md:w-1/2"
+            className="bg-surface-light p-6 md:p-8 rounded-lg shadow-lg border border-border w-full md:w-1/2"
             whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0,0,0,0.5)' }}
           >
             <h2 className="text-2xl mb-6 border-b border-border pb-2 text-center">Start an Investigation</h2>
@@ -182,7 +182,7 @@ const getRandomName = () => {
 
           {/* Join Room Card */}
           <motion.div 
-            className="bg-surface-light p-8 rounded-lg shadow-lg border border-border w-full md:w-1/2"
+            className="bg-surface-light p-6 md:p-8 rounded-lg shadow-lg border border-border w-full md:w-1/2"
             whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0,0,0,0.5)' }}
           >
             <h2 className="text-2xl mb-6 border-b border-border pb-2 text-center">Join the Force</h2>
