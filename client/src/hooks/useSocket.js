@@ -22,27 +22,33 @@ export const useSocket = () => {
 
   const createRoom = useCallback((playerName, caseId, password) => {
     return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error("Server connection timed out. Is the backend running?")), 5000);
       socket.emit('room:create', { playerName, caseId, password }, (response) => {
-        if (response.success) resolve(response);
-        else reject(new Error(response.error));
+        clearTimeout(timeout);
+        if (response && response.success) resolve(response);
+        else reject(new Error(response?.error || 'Unknown error'));
       });
     });
   }, []);
 
   const joinRoom = useCallback((roomCode, playerName, password) => {
     return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error("Server connection timed out.")), 5000);
       socket.emit('room:join', { roomCode, playerName, password }, (response) => {
-        if (response.success) resolve(response);
-        else reject(new Error(response.error));
+        clearTimeout(timeout);
+        if (response && response.success) resolve(response);
+        else reject(new Error(response?.error || 'Unknown error'));
       });
     });
   }, []);
 
   const kickPlayer = useCallback((roomCode, targetSocketId) => {
     return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error("Request timed out.")), 5000);
       socket.emit('room:kick', { roomCode, targetSocketId }, (response) => {
-        if (response.success) resolve(response);
-        else reject(new Error(response.error));
+        clearTimeout(timeout);
+        if (response && response.success) resolve(response);
+        else reject(new Error(response?.error || 'Unknown error'));
       });
     });
   }, []);
