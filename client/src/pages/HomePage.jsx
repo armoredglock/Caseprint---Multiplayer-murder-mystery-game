@@ -13,10 +13,12 @@ const HomePage = () => {
   const [roomCode, setRoomCode] = useState('');
   const [password, setPassword] = useState('');
   const [cases, setCases] = useState([
-    { caseId: 'the-crimson-riddle', title: 'The Crimson Riddle', difficulty: 'Easy' },
-    { caseId: 'echoes-of-betrayal', title: 'Echoes of Betrayal', difficulty: 'Hard' }
+    { caseId: 'boardroom-betrayal', title: 'The Boardroom Betrayal', difficulty: 'Medium' },
+    { caseId: 'canvas-of-blood', title: 'Canvas of Blood', difficulty: 'Hard' },
+    { caseId: 'crimson-gala', title: 'The Crimson Gala', difficulty: 'Easy' },
+    { caseId: 'echoes-in-code', title: 'Echoes in the Code', difficulty: 'Medium' }
   ]);
-  const [selectedCaseId, setSelectedCaseId] = useState('the-crimson-riddle');
+  const [selectedCaseId, setSelectedCaseId] = useState('boardroom-betrayal');
   const [loadingCases, setLoadingCases] = useState(false);
   const [error, setError] = useState('');
   const [isCreating, setIsCreating] = useState(false);
