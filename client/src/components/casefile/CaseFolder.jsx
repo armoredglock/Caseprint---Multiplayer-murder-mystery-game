@@ -73,12 +73,21 @@ const CaseFolder = () => {
     { id: 'victim', label: 'Victim Profile', wave: 0 },
   ];
 
-  if (caseData?.suspects) tabs.push({ id: 'suspects', label: 'Suspects', wave: 1 });
-  if (caseData?.witnessStatements) tabs.push({ id: 'witnesses', label: 'Witnesses', wave: 2 });
-  if (caseData?.forensics) tabs.push({ id: 'forensics', label: 'Lab Reports', wave: 2 });
-  if (caseData?.physicalEvidence) tabs.push({ id: 'evidence', label: 'Evidence', wave: 2 });
-  if (caseData?.digitalEvidence) tabs.push({ id: 'digital', label: 'Digital', wave: 3 });
-  if (caseData?.timeline) tabs.push({ id: 'timeline', label: 'Timeline', wave: 3 });
+  const hasDigital = caseData?.digitalEvidence && (
+    (caseData.digitalEvidence.phoneRecords?.length > 0) ||
+    (caseData.digitalEvidence.emails?.length > 0) ||
+    (caseData.digitalEvidence.cctvLogs?.length > 0) ||
+    (caseData.digitalEvidence.puzzles?.length > 0) ||
+    caseData.digitalEvidence.socialMedia ||
+    caseData.digitalEvidence.other
+  );
+
+  if (caseData?.suspects && caseData.suspects.length > 0) tabs.push({ id: 'suspects', label: 'Suspects' });
+  if (caseData?.witnessStatements && caseData.witnessStatements.length > 0) tabs.push({ id: 'witnesses', label: 'Witnesses' });
+  if (caseData?.forensics) tabs.push({ id: 'forensics', label: 'Lab Reports' });
+  if (caseData?.physicalEvidence && caseData.physicalEvidence.length > 0) tabs.push({ id: 'evidence', label: 'Evidence' });
+  if (hasDigital) tabs.push({ id: 'digital', label: 'Digital' });
+  if (caseData?.timeline && caseData.timeline.length > 0) tabs.push({ id: 'timeline', label: 'Timeline' });
 
   // Reset to overview if active tab becomes unavailable (shouldn't happen in normal flow, but just in case)
   useEffect(() => {

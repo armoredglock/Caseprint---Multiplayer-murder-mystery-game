@@ -3,25 +3,52 @@ const caseService = require('./caseService');
 const GameSession = require('../models/GameSession');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-// We no longer use strict time limits. Time is tracked as elapsed time.
+const Case = require('../models/Case');
 
-const startGame = async (io, roomCode, caseId) => {
+// Store active timers to clear them when game ends
+const activeTimers = new Map();
+
+const startGame = async (io, roomCode, scenarioId) => {
   const room = await roomManager.getRoom(roomCode);
   if (!room) return;
 
+  // Find all cases matching the scenarioId and pick one at random
+  const variations = await Case.find({ scenarioId });
+  let caseId = scenarioId; // Fallback
+  if (variations && variations.length > 0) {
+    const randomVariation = variations[Math.floor(Math.random() * variations.length)];
+    caseId = randomVariation.caseId;
+  }
+
   await roomManager.updateRoom(roomCode, {
     status: 'IN_GAME',
-    phase: 'INVESTIGATION', // Start directly in investigation since all docs are provided
+    phase: 'INVESTIGATION', 
+    scenarioId,
     caseId,
+    currentWave: 1,
     phaseStartedAt: new Date()
   });
 
   // Broadcast game start
   io.to(roomCode).emit('game:started', { phase: 'INVESTIGATION', duration: 0 });
   
-  // Send full case data immediately
-  const caseData = await caseService.getCaseDataForWave(caseId, 0);
-  io.to(roomCode).emit('game:case-data', caseData);
+  // Send Wave 1 data immediately
+  const caseData = await caseService.getCaseDataForWave(caseId, 1);
+  io.to(roomCode).emit('game:case-data', { wave: 1, caseData });
+
+  // Setup timer-based waves
+  // Wave 2 triggers after 5 minutes (300000 ms), Wave 3 after 10 minutes (600000 ms)
+  const timers = [];
+  
+  timers.push(setTimeout(() => {
+    triggerClueWave(io, roomCode, 2);
+  }, 5 * 60 * 1000));
+  
+  timers.push(setTimeout(() => {
+    triggerClueWave(io, roomCode, 3);
+  }, 10 * 60 * 1000));
+
+  activeTimers.set(roomCode, timers);
 };
 
 const advancePhase = async (io, roomCode, currentPhase) => {
@@ -115,6 +142,8 @@ const resolveGame = async (io, roomCode) => {
   if (!room || !solution) return;
 
   await roomManager.updateRoom(roomCode, { phase: 'VERDICT' });
+
+  clearTimersForRoom(roomCode);
 
   // Setup AI evaluator
   let genAI = null;
@@ -246,8 +275,16 @@ const resolveGame = async (io, roomCode) => {
   });
 };
 
+const clearTimersForRoom = (roomCode) => {
+  if (activeTimers.has(roomCode)) {
+    activeTimers.get(roomCode).forEach(timer => clearTimeout(timer));
+    activeTimers.delete(roomCode);
+  }
+};
+
 module.exports = {
   startGame,
   advancePhase,
-  submitAccusation
+  submitAccusation,
+  clearTimersForRoom
 };

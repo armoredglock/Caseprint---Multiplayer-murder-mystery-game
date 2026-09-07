@@ -67,10 +67,15 @@ const PhaseHeader = ({ phase, duration }) => {
       <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-6 truncate pr-2">
         <div className="truncate">
           <h2 className="text-sm sm:text-xl font-typewriter text-accent truncate">
-            {roomState?.caseId?.replace('-', ' ').toUpperCase() || 'UNKNOWN CASE'}
+            {roomState?.scenarioId?.replace('-', ' ').toUpperCase() || roomState?.caseId?.replace('-', ' ').toUpperCase() || 'UNKNOWN CASE'}
           </h2>
-          <p className="text-[10px] sm:text-xs text-text-secondary uppercase tracking-widest font-bold truncate">
-            Phase: <span className="text-paper-cream">{phaseNames[phase]}</span>
+          <p className="text-[10px] sm:text-xs text-text-secondary uppercase tracking-widest font-bold truncate flex gap-2">
+            <span>Phase: <span className="text-paper-cream">{phaseNames[phase]}</span></span>
+            {roomState?.currentWave && phase === 'INVESTIGATION' && (
+              <span className="text-purple-400 border-l border-border pl-2">
+                Wave: {roomState.currentWave}
+              </span>
+            )}
           </p>
         </div>
       </div>

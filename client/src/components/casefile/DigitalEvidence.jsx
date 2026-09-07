@@ -8,18 +8,22 @@ const DigitalEvidence = ({ digital }) => {
   const hasPhone = digital.phoneRecords && digital.phoneRecords.length > 0;
   const hasEmail = digital.emails && digital.emails.length > 0;
   const hasCCTV = digital.cctvLogs && digital.cctvLogs.length > 0;
+  const hasPuzzle = digital.puzzles && digital.puzzles.length > 0;
 
   // Default to first available
   React.useEffect(() => {
-    if (activeTab === 'phone' && !hasPhone && hasEmail) setActiveTab('email');
-    else if (activeTab === 'phone' && !hasPhone && !hasEmail && hasCCTV) setActiveTab('cctv');
-  }, [hasPhone, hasEmail, hasCCTV, activeTab]);
+    if (activeTab === 'phone' && !hasPhone) {
+      if (hasEmail) setActiveTab('email');
+      else if (hasCCTV) setActiveTab('cctv');
+      else if (hasPuzzle) setActiveTab('puzzle');
+    }
+  }, [hasPhone, hasEmail, hasCCTV, hasPuzzle, activeTab]);
 
   return (
     <div className="bg-gray-100 p-4 font-mono text-sm h-full flex flex-col border border-gray-300">
       
       {/* Internal Tabs */}
-      <div className="flex gap-2 mb-4 border-b border-gray-300 pb-2">
+      <div className="flex gap-2 mb-4 border-b border-gray-300 pb-2 flex-wrap">
         {hasPhone && (
           <button 
             className={`px-4 py-2 font-bold ${activeTab === 'phone' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
@@ -42,6 +46,14 @@ const DigitalEvidence = ({ digital }) => {
             onClick={() => setActiveTab('cctv')}
           >
             CCTV TERMINAL
+          </button>
+        )}
+        {hasPuzzle && (
+          <button 
+            className={`px-4 py-2 font-bold ${activeTab === 'puzzle' ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+            onClick={() => setActiveTab('puzzle')}
+          >
+            DECRYPT/CIPHERS
           </button>
         )}
       </div>
@@ -137,6 +149,36 @@ const DigitalEvidence = ({ digital }) => {
               ))}
             </div>
             <div className="mt-8 opacity-50 animate-pulse">_</div>
+          </div>
+        )}
+
+        {/* Puzzles */}
+        {activeTab === 'puzzle' && (
+          <div className="p-4 bg-gray-50 h-full overflow-y-auto">
+            <div className="text-center mb-6 font-ui">
+              <h3 className="font-bold text-xl uppercase tracking-widest text-purple-800">ENCRYPTED DATA</h3>
+              <p className="text-xs text-gray-500">MANUAL DECRYPTION REQUIRED</p>
+            </div>
+            <div className="space-y-6">
+              {digital.puzzles.map((puzzle, idx) => (
+                <div key={idx} className="border-2 border-purple-200 bg-white rounded shadow-sm overflow-hidden">
+                  <div className="bg-purple-100 px-4 py-2 border-b border-purple-200 flex justify-between items-center">
+                    <span className="font-bold text-purple-900">{puzzle.title}</span>
+                    <span className="text-xs bg-purple-700 text-white px-2 py-1 rounded shadow">{puzzle.encodedType}</span>
+                  </div>
+                  <div className="p-6 text-center">
+                    <div className="bg-gray-100 p-4 font-mono text-lg tracking-widest break-all border border-gray-300 shadow-inner inline-block min-w-[50%]">
+                      {puzzle.content}
+                    </div>
+                  </div>
+                  {puzzle.clue && (
+                    <div className="bg-yellow-50 p-3 border-t border-yellow-200 text-yellow-800 text-sm italic text-center">
+                      Clue: {puzzle.clue}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         )}
 

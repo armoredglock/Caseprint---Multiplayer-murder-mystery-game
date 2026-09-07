@@ -23,7 +23,8 @@ const suspectSchema = new mongoose.Schema({
   alibi: String,
   motiveAssessment: { type: String, enum: ['LOW', 'MEDIUM', 'HIGH', 'UNKNOWN'] },
   background: String,
-  status: { type: String, enum: ['PERSON OF INTEREST', 'ALIBI UNVERIFIED', 'CLEARED', 'PRIME SUSPECT', 'ANOMALY'] }
+  status: { type: String, enum: ['PERSON OF INTEREST', 'ALIBI UNVERIFIED', 'CLEARED', 'PRIME SUSPECT', 'ANOMALY'] },
+  wave: { type: Number, default: 1 }
 }, { _id: false });
 
 const witnessStatementSchema = new mongoose.Schema({
@@ -34,7 +35,8 @@ const witnessStatementSchema = new mongoose.Schema({
   takenBy: String,
   timestamp: String,
   body: String,
-  signature: String
+  signature: String,
+  wave: { type: Number, default: 1 }
 }, { _id: false });
 
 const toxicologyEntrySchema = new mongoose.Schema({
@@ -54,7 +56,8 @@ const physicalEvidenceSchema = new mongoose.Schema({
     officer: String,
     date: String,
     action: String
-  }]
+  }],
+  wave: { type: Number, default: 1 }
 }, { _id: false });
 
 const phoneRecordSchema = new mongoose.Schema({
@@ -64,7 +67,8 @@ const phoneRecordSchema = new mongoose.Schema({
   duration: String,
   type: { type: String, enum: ['INCOMING', 'OUTGOING', 'MISSED', 'TEXT'] },
   note: String,
-  flagged: { type: Boolean, default: false }
+  flagged: { type: Boolean, default: false },
+  wave: { type: Number, default: 1 }
 }, { _id: false });
 
 const emailSchema = new mongoose.Schema({
@@ -74,25 +78,37 @@ const emailSchema = new mongoose.Schema({
   date: String,
   body: String,
   attachments: [String],
-  flagged: { type: Boolean, default: false }
+  flagged: { type: Boolean, default: false },
+  wave: { type: Number, default: 1 }
 }, { _id: false });
 
 const cctvLogSchema = new mongoose.Schema({
   camera: String,
   timestamp: String,
   note: String,
-  flagged: { type: Boolean, default: false }
+  flagged: { type: Boolean, default: false },
+  wave: { type: Number, default: 1 }
 }, { _id: false });
 
 const timelineEventSchema = new mongoose.Schema({
   time: String,
   event: String,
   linkedEvidence: [String],
-  critical: { type: Boolean, default: false }
+  critical: { type: Boolean, default: false },
+  wave: { type: Number, default: 1 }
+}, { _id: false });
+
+const puzzleSchema = new mongoose.Schema({
+  title: String,
+  content: String,
+  encodedType: String, // e.g. "Caesar Cipher", "Base64", "Hex"
+  clue: String,
+  wave: { type: Number, default: 1 }
 }, { _id: false });
 
 const caseSchema = new mongoose.Schema({
   caseId: { type: String, required: true, unique: true, index: true },
+  scenarioId: { type: String, required: true, index: true },
   title: { type: String, required: true },
   subtitle: String,
   difficulty: { type: String, enum: ['Easy', 'Medium', 'Hard'], default: 'Medium' },
@@ -161,7 +177,8 @@ const caseSchema = new mongoose.Schema({
     emails: [emailSchema],
     cctvLogs: [cctvLogSchema],
     socialMedia: String,
-    other: String
+    other: String,
+    puzzles: [puzzleSchema]
   },
 
   timeline: [timelineEventSchema],

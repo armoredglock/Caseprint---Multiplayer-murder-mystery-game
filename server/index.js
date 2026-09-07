@@ -128,6 +128,7 @@ io.on('connection', (socket) => {
       const room = await roomManager.getRoom(data.roomCode);
       if (room && room.hostSocketId === socket.id) {
         io.to(data.roomCode).emit('session_ended');
+        gameEngine.clearTimersForRoom(data.roomCode);
         await roomManager.deleteRoom(data.roomCode);
       }
       if (callback) callback({ success: true });

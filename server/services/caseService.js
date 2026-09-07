@@ -4,21 +4,47 @@ const { seedCases } = require('../data/seedCases');
 
 const getPublicCases = async () => {
   try {
-    const cases = await Case.find({}, 'caseId title subtitle difficulty playerRange thumbnail themeColor');
+    // We want to return unique scenarios, not every variation
+    const cases = await Case.aggregate([
+      {
+        $group: {
+          _id: "$scenarioId",
+          caseId: { $first: "$scenarioId" }, // We use scenarioId as the ID for the lobby
+          title: { $first: "$title" },
+          subtitle: { $first: "$subtitle" },
+          difficulty: { $first: "$difficulty" },
+          playerRange: { $first: "$playerRange" },
+          thumbnail: { $first: "$thumbnail" },
+          themeColor: { $first: "$themeColor" }
+        }
+      },
+      { $project: { _id: 0 } }
+    ]);
     if (cases && cases.length > 0) return cases;
   } catch (err) {
     console.log("DB fetch failed for public cases, using fallback memory cases.");
   }
-  // Fallback
-  return seedCases.map(c => ({
-    caseId: c.caseId,
-    title: c.title,
-    subtitle: c.subtitle,
-    difficulty: c.difficulty,
-    playerRange: c.playerRange,
-    thumbnail: c.thumbnail,
-    themeColor: c.themeColor
-  }));
+  // Fallback - filter unique by scenarioId
+  const uniqueScenarios = {};
+  seedCases.forEach(c => {
+    if (!uniqueScenarios[c.scenarioId]) {
+      uniqueScenarios[c.scenarioId] = {
+        caseId: c.scenarioId, // Map scenarioId to caseId for backwards compatibility
+        title: c.title,
+        subtitle: c.subtitle,
+        difficulty: c.difficulty,
+        playerRange: c.playerRange,
+        thumbnail: c.thumbnail,
+        themeColor: c.themeColor
+      };
+    }
+  });
+  return Object.values(uniqueScenarios);
+};
+
+const filterByWave = (arr, currentWave) => {
+  if (!Array.isArray(arr)) return arr;
+  return arr.filter(item => !item.wave || item.wave <= currentWave);
 };
 
 const getCaseDataForWave = async (caseId, currentWave) => {
@@ -29,28 +55,46 @@ const getCaseDataForWave = async (caseId, currentWave) => {
 
   let caseObj = null;
   if (!fullCase) {
-    // Fallback to memory
     caseObj = seedCases.find(c => c.caseId === caseId);
     if (!caseObj) return null;
   } else {
     caseObj = fullCase.toObject();
   }
   
-  // NEVER send the solution to the client during gameplay
-  // Provide all documents immediately to remove the wave system restriction
-  const allowedFields = [
-    'caseId', 'title', 'subtitle', 'themeColor', 'overview', 'victim', 
-    'suspects', 'witnessStatements', 'forensics', 'physicalEvidence', 
-    'digitalEvidence', 'timeline'
-  ];
+  // Base fields that don't need wave filtering
+  const filteredCase = {
+    caseId: caseObj.caseId,
+    scenarioId: caseObj.scenarioId,
+    title: caseObj.title,
+    subtitle: caseObj.subtitle,
+    themeColor: caseObj.themeColor,
+    overview: caseObj.overview,
+    victim: caseObj.victim
+  };
 
-  // Filter the case object to only include allowed fields
-  const filteredCase = {};
-  allowedFields.forEach(field => {
-    if (caseObj[field] !== undefined) {
-      filteredCase[field] = caseObj[field];
-    }
-  });
+  // Filter arrays by wave
+  filteredCase.suspects = filterByWave(caseObj.suspects, currentWave);
+  filteredCase.witnessStatements = filterByWave(caseObj.witnessStatements, currentWave);
+  filteredCase.physicalEvidence = filterByWave(caseObj.physicalEvidence, currentWave);
+  filteredCase.timeline = filterByWave(caseObj.timeline, currentWave);
+
+  if (caseObj.forensics) {
+    // Only return forensics if currentWave >= 1, but usually forensics might be wave 2.
+    // Let's assume forensics is fully available if there are any wave items?
+    // Actually, we can check if it has a wave property or default to 1.
+    filteredCase.forensics = caseObj.forensics;
+  }
+
+  if (caseObj.digitalEvidence) {
+    filteredCase.digitalEvidence = {
+      phoneRecords: filterByWave(caseObj.digitalEvidence.phoneRecords, currentWave),
+      emails: filterByWave(caseObj.digitalEvidence.emails, currentWave),
+      cctvLogs: filterByWave(caseObj.digitalEvidence.cctvLogs, currentWave),
+      puzzles: filterByWave(caseObj.digitalEvidence.puzzles || [], currentWave),
+      socialMedia: caseObj.digitalEvidence.socialMedia,
+      other: caseObj.digitalEvidence.other
+    };
+  }
 
   return filteredCase;
 };

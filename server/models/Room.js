@@ -22,6 +22,7 @@ const roomSchema = new mongoose.Schema({
   roomCode: { type: String, required: true, unique: true, index: true },
   hostSocketId: String,
   hostName: String,
+  scenarioId: { type: String, required: true },
   caseId: { type: String, required: true },
   password: { type: String, default: '' },
   players: { type: [playerSchema], default: [] },

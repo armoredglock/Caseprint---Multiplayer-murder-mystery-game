@@ -8,7 +8,7 @@ const generateRoomCode = () => {
   return crypto.randomBytes(3).toString('hex').toUpperCase();
 };
 
-const createRoom = async (hostSocketId, hostName, caseId, password = '') => {
+const createRoom = async (hostSocketId, hostName, scenarioId, password = '') => {
   let roomCode;
   let isUnique = false;
   
@@ -23,7 +23,8 @@ const createRoom = async (hostSocketId, hostName, caseId, password = '') => {
     roomCode,
     hostSocketId,
     hostName,
-    caseId,
+    scenarioId,
+    caseId: scenarioId, // placeholder until game starts
     password,
     players: [{ socketId: hostSocketId, name: hostName, isHost: true }]
   });
