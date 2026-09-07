@@ -69,6 +69,13 @@ io.on('connection', (socket) => {
       io.to(data.roomCode).emit('room:player-joined', { players: room.players });
       
       if (callback) callback({ success: true, room });
+
+      // If room is already in game (e.g. player reconnects or refreshes), send them the current case data!
+      if (room.status === 'IN_GAME' || room.status === 'FINISHED') {
+        const caseService = require('./services/caseService');
+        const caseData = await caseService.getCaseDataForWave(room.caseId, room.currentWave || 1);
+        socket.emit('game:case-data', { wave: room.currentWave || 1, caseData });
+      }
     } catch (err) {
       if (callback) callback({ success: false, error: err.message });
     }
