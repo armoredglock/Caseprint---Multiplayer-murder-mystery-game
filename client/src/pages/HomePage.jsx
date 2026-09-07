@@ -12,26 +12,30 @@ const HomePage = () => {
   const [playerName, setPlayerName] = useState('');
   const [roomCode, setRoomCode] = useState('');
   const [password, setPassword] = useState('');
-  const [cases, setCases] = useState([]);
-  const [selectedCaseId, setSelectedCaseId] = useState('');
-  const [loadingCases, setLoadingCases] = useState(true);
+  const [cases, setCases] = useState([
+    { caseId: 'the-crimson-riddle', title: 'The Crimson Riddle', difficulty: 'Easy' },
+    { caseId: 'echoes-of-betrayal', title: 'Echoes of Betrayal', difficulty: 'Hard' }
+  ]);
+  const [selectedCaseId, setSelectedCaseId] = useState('the-crimson-riddle');
+  const [loadingCases, setLoadingCases] = useState(false);
   const [error, setError] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
 
+  // We can still try to fetch in the background in case new cases are added,
+  // but we default to the hardcoded ones immediately so there is no wait.
   useEffect(() => {
     const fetchCases = async () => {
       try {
         const res = await fetch(`${import.meta.env.VITE_SERVER_URL || 'http://localhost:4000'}/api/cases`);
-        const data = await res.json();
-        setCases(data);
-        if (data.length > 0) {
-          setSelectedCaseId(data[0].caseId);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.length > 0) {
+            setCases(data);
+          }
         }
       } catch (err) {
-        console.error("Failed to fetch cases", err);
-      } finally {
-        setLoadingCases(false);
+        console.warn("Using default static cases, failed to fetch dynamic cases:", err);
       }
     };
     fetchCases();
@@ -108,11 +112,11 @@ const getRandomName = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
-        <div className="text-center mb-12">
-          <h1 className="text-5xl sm:text-6xl md:text-8xl font-typewriter text-paper-cream mb-4 tracking-tighter" style={{ textShadow: '2px 4px 10px rgba(0,0,0,0.8)' }}>
+        <div className="text-center mb-6 md:mb-8 mt-4 md:mt-0">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-typewriter text-paper-cream mb-2 tracking-tighter" style={{ textShadow: '2px 4px 10px rgba(0,0,0,0.8)' }}>
             CASEPRINT
           </h1>
-          <p className="text-xl md:text-2xl text-accent font-ui tracking-widest uppercase">
+          <p className="text-lg md:text-xl text-accent font-ui tracking-widest uppercase">
             The Detective Game
           </p>
         </div>
