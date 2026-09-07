@@ -1,64 +1,56 @@
-# Caseprint 🕵️‍♂️🔍
+# Caseprint
 
-**Caseprint** is a real-time, multiplayer cooperative murder mystery game. Players join a shared lobby and work together as detectives to analyze evidence, interrogate suspects, review forensics, and ultimately agree on a verdict to catch the killer.
+Caseprint is a real-time, multiplayer cooperative murder mystery game. Players join a shared session and work together to analyze evidence, interrogate suspects, and determine a verdict.
 
----
+## Features
 
-## 🎮 Features
-- **Real-Time Cooperative Gameplay:** Powered by Socket.io, all players see live updates when someone joins, chats, or submits an accusation.
-- **Multiple Cases:** Choose from a variety of handcrafted murder mysteries ranging in difficulty from Easy to Hard.
-- **Interactive Case Files:** Sift through dynamic suspect dossiers, forensic reports, digital evidence, and interactive timelines.
-- **Procedural Character Avatars:** Every suspect, victim, and witness features a unique, dynamically generated portrait.
-- **Verdict System:** Discuss with your team and submit your final accusation. If everyone agrees, the real killer is revealed!
+- **Real-Time Multiplayer:** Built on Socket.io for synchronized state across all connected clients.
+- **Dynamic Case Data:** Multiple cases with varying difficulty levels loaded from the backend.
+- **Interactive Evidence:** UI components for suspect dossiers, forensic reports, digital evidence, and timelines.
+- **Procedural Avatars:** Characters utilize dynamically generated portraits based on seeded data.
+- **Verdict System:** A consensus-based voting mechanism to conclude the game session.
 
----
+## Tech Stack
 
-## 🛠️ Tech Stack
-- **Frontend:** React (Vite), Tailwind CSS
-- **Backend:** Node.js, Express
-- **Real-Time Engine:** Socket.io
+- **Client:** React (Vite), Tailwind CSS
+- **Server:** Node.js, Express
+- **Real-Time:** Socket.io
 - **Database:** MongoDB (Mongoose)
 
----
-
-## 🚀 Running Locally
+## Local Development
 
 ### Prerequisites
-Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/armoredglock/Caseprint---Multiplayer-murder-mystery-game.git
-cd Caseprint---Multiplayer-murder-mystery-game
-```
+- Node.js (v16+)
+- MongoDB (optional for local development, as the project defaults to an in-memory database)
 
-### 2. Setup the Backend
-Open a terminal in the `server` directory:
-```bash
-cd server
-npm install
-```
-Start the backend server:
-```bash
-node index.js
-```
-*(Note: The server uses an in-memory MongoDB by default for local development, so no cloud database connection is required to test!)*
+### Installation
 
-### 3. Setup the Frontend
-Open a new terminal in the `client` directory:
-```bash
-cd client
-npm install
-npm run dev
-```
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/armoredglock/Caseprint---Multiplayer-murder-mystery-game.git
+   cd Caseprint---Multiplayer-murder-mystery-game
+   ```
 
-### 4. Play!
-Open your browser and navigate to `http://localhost:5173`. Create a room, share the room code with a friend, and start solving the case!
+2. Start the backend server:
+   ```bash
+   cd server
+   npm install
+   node index.js
+   ```
 
----
+3. Start the frontend client (in a separate terminal):
+   ```bash
+   cd client
+   npm install
+   npm run dev
+   ```
 
-## 📦 Deployment
-The application is designed for a split-deployment architecture:
-- **Frontend** should be deployed to **Vercel** (or Netlify).
-- **Backend** should be deployed to **Render** (or Railway) to support persistent WebSockets.
-- Ensure the backend environment uses a live `MONGODB_URI` string, and the frontend environment uses the `VITE_SERVER_URL` pointing to the live backend.
+The client will be available at `http://localhost:5173`.
+
+## Deployment
+
+The application is structured for a split-deployment model:
+
+1. **Frontend:** Deploy the `client` directory to a static hosting provider (e.g., Vercel, Netlify). Ensure `VITE_SERVER_URL` is configured to point to the backend URL.
+2. **Backend:** Deploy the `server` directory to a Node.js hosting provider that supports WebSockets (e.g., Render, Railway). Set the `MONGODB_URI` environment variable to a valid MongoDB cluster connection string.
