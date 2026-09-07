@@ -2,37 +2,49 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useGame } from '../contexts/GameContext';
+import { useToast } from '../contexts/ToastContext';
 import { socket } from '../socket';
 import { useSocket } from '../hooks/useSocket';
+import ConfirmModal from '../components/ui/ConfirmModal';
 
 const LobbyPage = () => {
   const { roomCode } = useParams();
   const navigate = useNavigate();
   const { roomState, currentPlayer, clearSession } = useGame();
   const { kickPlayer, leaveRoom, endSession, changePlayerName } = useSocket();
+  const { addToast } = useToast();
 
   const [isEditingName, setIsEditingName] = useState(false);
   const [editNameValue, setEditNameValue] = useState("");
+  const [confirmAction, setConfirmAction] = useState(null); // 'end', 'leave'
 
   const handleSaveName = async () => {
     if (editNameValue.trim() && editNameValue !== currentPlayer.name) {
       try {
         await changePlayerName(roomCode, editNameValue.trim());
       } catch (err) {
-        alert("Failed to change name: " + err.message);
+        addToast("Failed to change name: " + err.message, "error");
       }
     }
     setIsEditingName(false);
   };
 
-  const handleLeaveOrEnd = async () => {
+  const handleLeaveOrEnd = () => {
     if (currentPlayer.isHost) {
-      if (window.confirm("Are you sure you want to end this session for everyone?")) {
-        await endSession(roomCode);
-        clearSession();
-        navigate('/');
-      }
+      setConfirmAction('end');
     } else {
+      setConfirmAction('leave');
+    }
+  };
+
+  const executeConfirmAction = async () => {
+    const action = confirmAction;
+    setConfirmAction(null);
+    if (action === 'end') {
+      await endSession(roomCode);
+      clearSession();
+      navigate('/');
+    } else if (action === 'leave') {
       await leaveRoom(roomCode);
       clearSession();
       navigate('/');
@@ -62,7 +74,7 @@ const LobbyPage = () => {
     try {
       await kickPlayer(roomCode, targetSocketId);
     } catch (err) {
-      alert("Failed to kick player: " + err.message);
+      addToast("Failed to kick player: " + err.message, "error");
     }
   };
 
@@ -224,6 +236,18 @@ const LobbyPage = () => {
           
         </div>
       </div>
+
+      <ConfirmModal 
+        isOpen={confirmAction !== null}
+        title={confirmAction === 'end' ? 'End Session' : 'Leave Room'}
+        message={
+          confirmAction === 'end' ? 'Are you sure you want to end this session for everyone?' :
+          'Are you sure you want to leave the room?'
+        }
+        confirmText={confirmAction === 'end' ? 'End Session' : 'Leave Room'}
+        onConfirm={executeConfirmAction}
+        onCancel={() => setConfirmAction(null)}
+      />
     </div>
   );
 };

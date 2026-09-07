@@ -2,26 +2,37 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../../contexts/GameContext';
 import { useSocket } from '../../hooks/useSocket';
+import ConfirmModal from '../ui/ConfirmModal';
 
 const PhaseHeader = ({ phase, duration }) => {
   const { roomState, currentPlayer, clearSession } = useGame();
   const { leaveRoom, endSession, advancePhase } = useSocket();
   const navigate = useNavigate();
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [confirmAction, setConfirmAction] = useState(null); // 'end', 'leave', 'advance'
 
-  const handleLeaveOrEnd = async () => {
+  const handleLeaveOrEnd = () => {
     if (currentPlayer.isHost) {
-      if (window.confirm("Are you sure you want to end this session for everyone?")) {
-        await endSession(roomState.roomCode);
-        clearSession();
-        navigate('/');
-      }
+      setConfirmAction('end');
     } else {
-      if (window.confirm("Are you sure you want to leave the game?")) {
-        await leaveRoom(roomState.roomCode);
-        clearSession();
-        navigate('/');
-      }
+      setConfirmAction('leave');
+    }
+  };
+
+  const executeConfirmAction = async () => {
+    const action = confirmAction;
+    setConfirmAction(null);
+
+    if (action === 'end') {
+      await endSession(roomState.roomCode);
+      clearSession();
+      navigate('/');
+    } else if (action === 'leave') {
+      await leaveRoom(roomState.roomCode);
+      clearSession();
+      navigate('/');
+    } else if (action === 'advance') {
+      advancePhase(roomState.roomCode);
     }
   };
 
@@ -68,11 +79,7 @@ const PhaseHeader = ({ phase, duration }) => {
         {phase === 'INVESTIGATION' && currentPlayer?.isHost && (
           <div className="mr-1 sm:mr-4 pr-2 sm:pr-4 border-r border-border">
             <button 
-              onClick={() => {
-                if (window.confirm("Are you sure you want to end the investigation and move to accusations?")) {
-                  advancePhase(roomState.roomCode);
-                }
-              }}
+              onClick={() => setConfirmAction('advance')}
               className="btn btn-primary text-[10px] sm:text-xs px-2 sm:px-4 py-1 sm:py-2 hover:bg-white hover:text-black transition-colors"
             >
               <span className="hidden sm:inline">MOVE TO ACCUSATIONS</span>
@@ -102,6 +109,27 @@ const PhaseHeader = ({ phase, duration }) => {
           </button>
         </div>
       </div>
+
+      <ConfirmModal 
+        isOpen={confirmAction !== null}
+        title={
+          confirmAction === 'end' ? 'End Session' :
+          confirmAction === 'leave' ? 'Leave Game' :
+          'Move to Accusations'
+        }
+        message={
+          confirmAction === 'end' ? 'Are you sure you want to end this session for everyone?' :
+          confirmAction === 'leave' ? 'Are you sure you want to leave the game?' :
+          'Are you sure you want to end the investigation and force everyone to submit their final accusations?'
+        }
+        confirmText={
+          confirmAction === 'end' ? 'End Session' :
+          confirmAction === 'leave' ? 'Leave Game' :
+          'Move to Accusations'
+        }
+        onConfirm={executeConfirmAction}
+        onCancel={() => setConfirmAction(null)}
+      />
     </div>
   );
 };

@@ -123,9 +123,16 @@ const resolveGame = async (io, roomCode) => {
   }
 
   // Score calculations using AI
-  const results = await Promise.all(room.accusations.map(async (acc) => {
+  const results = await Promise.all(room.players.map(async (player) => {
     let score = 0;
     
+    const acc = room.accusations.find(a => a.socketId === player.socketId) || {
+      suspect: 'None',
+      motive: 'Did not submit in time.',
+      method: 'Did not submit in time.',
+      submittedAt: new Date() // No speed bonus
+    };
+
     let correctKiller = false;
     let correctMotive = false;
     let correctMethod = false;
@@ -133,58 +140,60 @@ const resolveGame = async (io, roomCode) => {
     let motiveScore = 0;
     let methodScore = 0;
 
-    if (genAI) {
-      try {
-        const model = genAI.getGenerativeModel({ 
-          model: "gemini-1.5-flash",
-          generationConfig: { responseMimeType: "application/json" }
-        });
-        
-        const prompt = `
-        You are an expert detective evaluator grading a player's final accusation.
-        True Solution:
-        - Killer: ${solution.killer}
-        - Motive: ${solution.motive}
-        - Method: ${solution.method}
-        
-        Player's Accusation:
-        - Accused: ${acc.suspect}
-        - Motive: ${acc.motive}
-        - Method: ${acc.method}
-        
-        Evaluate the player's accuracy. Be generous but fair. 
-        Return exactly this JSON structure:
-        {
-          "correctKiller": boolean, // true if they got the killer name right
-          "correctMotive": boolean, // true if motive is mostly correct
-          "correctMethod": boolean, // true if method is mostly correct
-          "motiveScore": number, // int out of 25 points based on motive accuracy
-          "methodScore": number // int out of 25 points based on method accuracy
-        }`;
-        
-        const response = await model.generateContent(prompt);
-        const data = JSON.parse(response.response.text());
-        
-        correctKiller = data.correctKiller;
-        correctMotive = data.correctMotive;
-        correctMethod = data.correctMethod;
+    if (acc.suspect !== 'None') {
+      if (genAI) {
+        try {
+          const model = genAI.getGenerativeModel({ 
+            model: "gemini-1.5-flash",
+            generationConfig: { responseMimeType: "application/json" }
+          });
+          
+          const prompt = `
+          You are an expert detective evaluator grading a player's final accusation.
+          True Solution:
+          - Killer: ${solution.killer}
+          - Motive: ${solution.motive}
+          - Method: ${solution.method}
+          
+          Player's Accusation:
+          - Accused: ${acc.suspect}
+          - Motive: ${acc.motive}
+          - Method: ${acc.method}
+          
+          Evaluate the player's accuracy. Be generous but fair. 
+          Return exactly this JSON structure:
+          {
+            "correctKiller": boolean, // true if they got the killer name right
+            "correctMotive": boolean, // true if motive is mostly correct
+            "correctMethod": boolean, // true if method is mostly correct
+            "motiveScore": number, // int out of 25 points based on motive accuracy
+            "methodScore": number // int out of 25 points based on method accuracy
+          }`;
+          
+          const response = await model.generateContent(prompt);
+          const data = JSON.parse(response.response.text());
+          
+          correctKiller = data.correctKiller;
+          correctMotive = data.correctMotive;
+          correctMethod = data.correctMethod;
+          killerScore = correctKiller ? 50 : 0;
+          motiveScore = data.motiveScore || 0;
+          methodScore = data.methodScore || 0;
+          
+        } catch (err) {
+          console.error("[AI] Error evaluating accusation:", err);
+        }
+      } else {
+        // Fallback if no API key
+        const accSuspect = acc.suspect.toLowerCase().trim();
+        const solKiller = solution.killer.toLowerCase().trim();
+        correctKiller = accSuspect === solKiller || solKiller.includes(accSuspect);
+        correctMotive = acc.motive.length > 10;
+        correctMethod = acc.method.length > 10;
         killerScore = correctKiller ? 50 : 0;
-        motiveScore = data.motiveScore || 0;
-        methodScore = data.methodScore || 0;
-        
-      } catch (err) {
-        console.error("[AI] Error evaluating accusation:", err);
+        motiveScore = correctMotive ? 25 : 0;
+        methodScore = correctMethod ? 25 : 0;
       }
-    } else {
-      // Fallback if no API key
-      const accSuspect = acc.suspect.toLowerCase().trim();
-      const solKiller = solution.killer.toLowerCase().trim();
-      correctKiller = accSuspect === solKiller || solKiller.includes(accSuspect);
-      correctMotive = acc.motive.length > 10;
-      correctMethod = acc.method.length > 10;
-      killerScore = correctKiller ? 50 : 0;
-      motiveScore = correctMotive ? 25 : 0;
-      methodScore = correctMethod ? 25 : 0;
     }
     
     score += killerScore + motiveScore + methodScore;
@@ -198,8 +207,8 @@ const resolveGame = async (io, roomCode) => {
     score += speedBonus;
 
     return {
-      name: acc.playerName,
-      socketId: acc.socketId,
+      name: player.name,
+      socketId: player.socketId,
       accusation: { suspect: acc.suspect, motive: acc.motive, method: acc.method },
       score,
       correctKiller, correctMotive, correctMethod, speedBonus

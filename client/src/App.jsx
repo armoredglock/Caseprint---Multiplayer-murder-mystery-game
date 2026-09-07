@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { GameProvider } from './contexts/GameContext';
 import { ToastProvider } from './contexts/ToastContext';
 import HomePage from './pages/HomePage';
-import RoomPage from './pages/RoomPage';
+import LobbyPage from './pages/LobbyPage';
 import GamePage from './pages/GamePage';
 import VerdictPage from './pages/VerdictPage';
 import FloatingDust from './components/ui/FloatingDust';
@@ -20,7 +20,7 @@ function App() {
           <FloatingDust />
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/room/:roomCode" element={<RoomPage />} />
+            <Route path="/lobby/:roomCode" element={<LobbyPage />} />
             <Route path="/game/:roomCode" element={<GamePage />} />
             <Route path="/verdict/:roomCode" element={<VerdictPage />} />
           </Routes>
