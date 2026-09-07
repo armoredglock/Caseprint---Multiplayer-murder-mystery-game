@@ -51,7 +51,11 @@ export const GameProvider = ({ children }) => {
     });
 
     socket.on('game:case-data', (data) => {
-      setCaseData(data);
+      if (data.caseData) {
+        setCaseData(data.caseData);
+      } else {
+        setCaseData(data); // Fallback for backwards compatibility if needed
+      }
     });
 
     socket.on('game:clue-wave', (data) => {
@@ -61,8 +65,11 @@ export const GameProvider = ({ children }) => {
     });
 
     socket.on('game:player-accused', (data) => {
-      addToast(`${data.playerName} submitted their accusation.`, 'info');
-      console.log(`${data.playerName} submitted their accusation.`);
+      setMessages(prev => [...prev, {
+        sender: 'SYSTEM',
+        message: `${data.playerName} has submitted their final accusation.`,
+        timestamp: new Date().toISOString()
+      }]);
     });
 
     socket.on('game:verdict', (data) => {

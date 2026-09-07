@@ -32,7 +32,24 @@ const ChatPanel = ({ roomCode, currentPlayer }) => {
       
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((msg, idx) => {
-          const isMe = msg.sender === currentPlayer.name;
+          const isSystem = msg.sender === 'SYSTEM';
+          const isMe = !isSystem && msg.sender === currentPlayer.name;
+          
+          if (isSystem) {
+            return (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                key={idx} 
+                className="flex justify-center my-2"
+              >
+                <div className="bg-yellow-500/20 border border-yellow-500/50 text-yellow-200 px-3 py-1 rounded text-xs text-center font-bold tracking-wide">
+                  {msg.message}
+                </div>
+              </motion.div>
+            );
+          }
+
           return (
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
