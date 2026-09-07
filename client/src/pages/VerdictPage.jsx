@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGame } from '../contexts/GameContext';
 import { motion } from 'framer-motion';
@@ -9,6 +9,7 @@ const VerdictPage = () => {
   const { roomState, gameResult, currentPlayer, clearSession } = useGame();
   
   const [revealStep, setRevealStep] = useState(0); 
+  const scoreboardRef = useRef(null);
   // 0: Loading, 1: Accusations, 2: The Truth, 3: Scoreboard
 
   useEffect(() => {
@@ -25,6 +26,14 @@ const VerdictPage = () => {
 
     return () => timers.forEach(t => clearTimeout(t));
   }, [roomState, gameResult, navigate]);
+
+  useEffect(() => {
+    if (revealStep === 3 && scoreboardRef.current) {
+      setTimeout(() => {
+        scoreboardRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  }, [revealStep]);
 
   const handlePlayAgain = () => {
     clearSession();
@@ -129,6 +138,7 @@ const VerdictPage = () => {
         {/* Step 3: Scoreboard */}
         {revealStep >= 3 && (
           <motion.div 
+            ref={scoreboardRef}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mt-12"

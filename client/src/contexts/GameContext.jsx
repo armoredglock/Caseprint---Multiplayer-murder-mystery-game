@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { socket } from '../socket';
+import { useToast } from './ToastContext';
 
 const GameContext = createContext();
 
 export const GameProvider = ({ children }) => {
+  const { addToast } = useToast();
   const [roomState, setRoomState] = useState(null);
   const [currentPlayer, setCurrentPlayer] = useState(null);
   const [caseData, setCaseData] = useState(null);
@@ -26,14 +28,14 @@ export const GameProvider = ({ children }) => {
     });
 
     socket.on('kicked_from_room', () => {
-      alert("You have been kicked from the room by the host.");
+      addToast("You have been kicked from the room by the host.", 'error', 5000);
       setRoomState(null);
       setCurrentPlayer(null);
       window.location.href = '/';
     });
 
     socket.on('session_ended', () => {
-      alert("The host has ended the session.");
+      addToast("The host has ended the session.", 'error', 5000);
       setRoomState(null);
       setCurrentPlayer(null);
       window.location.href = '/';
@@ -58,7 +60,7 @@ export const GameProvider = ({ children }) => {
     });
 
     socket.on('game:player-accused', (data) => {
-      // Could show a notification "Player X submitted their accusation"
+      addToast(`${data.playerName} submitted their accusation.`, 'info');
       console.log(`${data.playerName} submitted their accusation.`);
     });
 

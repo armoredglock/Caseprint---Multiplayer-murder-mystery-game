@@ -1,6 +1,7 @@
 const roomManager = require('./roomManager');
 const caseService = require('./caseService');
 const GameSession = require('../models/GameSession');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 // We no longer use strict time limits. Time is tracked as elapsed time.
 
@@ -115,22 +116,78 @@ const resolveGame = async (io, roomCode) => {
 
   await roomManager.updateRoom(roomCode, { phase: 'VERDICT' });
 
-  // Score calculations
-  const results = room.accusations.map(acc => {
+  // Setup AI evaluator
+  let genAI = null;
+  if (process.env.GEMINI_API_KEY) {
+    genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  }
+
+  // Score calculations using AI
+  const results = await Promise.all(room.accusations.map(async (acc) => {
     let score = 0;
     
-    // Normalize strings for comparison (in real app, use IDs)
-    const accSuspect = acc.suspect.toLowerCase().trim();
-    const solKiller = solution.killer.toLowerCase().trim();
+    let correctKiller = false;
+    let correctMotive = false;
+    let correctMethod = false;
+    let killerScore = 0;
+    let motiveScore = 0;
+    let methodScore = 0;
+
+    if (genAI) {
+      try {
+        const model = genAI.getGenerativeModel({ 
+          model: "gemini-1.5-flash",
+          generationConfig: { responseMimeType: "application/json" }
+        });
+        
+        const prompt = `
+        You are an expert detective evaluator grading a player's final accusation.
+        True Solution:
+        - Killer: ${solution.killer}
+        - Motive: ${solution.motive}
+        - Method: ${solution.method}
+        
+        Player's Accusation:
+        - Accused: ${acc.suspect}
+        - Motive: ${acc.motive}
+        - Method: ${acc.method}
+        
+        Evaluate the player's accuracy. Be generous but fair. 
+        Return exactly this JSON structure:
+        {
+          "correctKiller": boolean, // true if they got the killer name right
+          "correctMotive": boolean, // true if motive is mostly correct
+          "correctMethod": boolean, // true if method is mostly correct
+          "motiveScore": number, // int out of 25 points based on motive accuracy
+          "methodScore": number // int out of 25 points based on method accuracy
+        }`;
+        
+        const response = await model.generateContent(prompt);
+        const data = JSON.parse(response.response.text());
+        
+        correctKiller = data.correctKiller;
+        correctMotive = data.correctMotive;
+        correctMethod = data.correctMethod;
+        killerScore = correctKiller ? 50 : 0;
+        motiveScore = data.motiveScore || 0;
+        methodScore = data.methodScore || 0;
+        
+      } catch (err) {
+        console.error("[AI] Error evaluating accusation:", err);
+      }
+    } else {
+      // Fallback if no API key
+      const accSuspect = acc.suspect.toLowerCase().trim();
+      const solKiller = solution.killer.toLowerCase().trim();
+      correctKiller = accSuspect === solKiller || solKiller.includes(accSuspect);
+      correctMotive = acc.motive.length > 10;
+      correctMethod = acc.method.length > 10;
+      killerScore = correctKiller ? 50 : 0;
+      motiveScore = correctMotive ? 25 : 0;
+      methodScore = correctMethod ? 25 : 0;
+    }
     
-    const correctKiller = accSuspect === solKiller || solKiller.includes(accSuspect);
-    // Simplified checks for MVP
-    const correctMotive = acc.motive.length > 10; // Placeholder for NLP matching
-    const correctMethod = acc.method.length > 10; // Placeholder
-    
-    if (correctKiller) score += 50;
-    if (correctMotive) score += 25;
-    if (correctMethod) score += 25;
+    score += killerScore + motiveScore + methodScore;
 
     // Speed bonus (max 20 pts) based on submission time relative to phase start
     const submitTime = new Date(acc.submittedAt).getTime();
@@ -147,7 +204,7 @@ const resolveGame = async (io, roomCode) => {
       score,
       correctKiller, correctMotive, correctMethod, speedBonus
     };
-  });
+  }));
 
   // Sort by score descending
   results.sort((a, b) => b.score - a.score);
