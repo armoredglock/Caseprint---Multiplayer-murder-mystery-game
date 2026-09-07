@@ -85,7 +85,7 @@ const getRandomName = () => {
   };
 
   return (
-    <div className="home-page min-h-screen relative overflow-hidden flex flex-col items-center justify-center">
+    <div className="home-page min-h-screen relative overflow-x-hidden overflow-y-auto py-12 md:py-24 flex flex-col items-center justify-center">
       {/* Background Particles */}
       {[...Array(20)].map((_, i) => (
         <div 
