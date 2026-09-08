@@ -29,6 +29,8 @@ const AccusationForm = () => {
   };
 
   if (submitted) {
+    const pendingPlayers = roomState?.players?.filter(p => !p.hasAccused) || [];
+    
     return (
       <div className="h-full flex flex-col items-center justify-center p-8 text-center bg-surface-light border border-border rounded-lg shadow-inner">
         <div className="w-16 h-16 rounded-full bg-surface border-2 border-accent flex items-center justify-center mb-4">
@@ -36,12 +38,19 @@ const AccusationForm = () => {
         </div>
         <h3 className="text-2xl font-ui font-bold mb-2">Accusation Filed</h3>
         <p className="text-text-secondary">Your theory has been submitted to the Captain. Awaiting other detectives...</p>
-        <div className="mt-8 flex justify-center gap-2">
-           {roomState?.players?.map(p => (
-             <div key={p.socketId} className={`w-3 h-3 rounded-full ${p.hasAccused ? 'bg-accent' : 'bg-surface border border-border'}`} title={p.name} />
-           ))}
-        </div>
-        <p className="text-xs text-text-secondary mt-2">Waiting for {roomState?.players?.filter(p => !p.hasAccused).length} more...</p>
+        
+        {pendingPlayers.length > 0 && (
+          <div className="mt-6 w-full max-w-xs border-t border-border pt-6 text-left">
+            <p className="text-xs text-text-secondary uppercase tracking-wider font-bold mb-3 text-center">Pending Detectives ({pendingPlayers.length})</p>
+            <ul className="space-y-1">
+              {pendingPlayers.map(p => (
+                <li key={p.socketId} className="text-sm font-mono text-paper-cream flex justify-center">
+                  {p.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     );
   }

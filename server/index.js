@@ -73,7 +73,7 @@ io.on('connection', (socket) => {
       // If room is already in game (e.g. player reconnects or refreshes), send them the current case data!
       if (room.status === 'IN_GAME' || room.status === 'FINISHED') {
         const caseService = require('./services/caseService');
-        const caseData = await caseService.getCaseDataForWave(room.caseId, room.currentWave || 1);
+        const caseData = await caseService.getCaseDataForWave(data.roomCode, room.currentWave || 1);
         socket.emit('game:case-data', { wave: room.currentWave || 1, caseData });
       }
     } catch (err) {
@@ -184,10 +184,10 @@ io.on('connection', (socket) => {
   // Disconnect handling
   socket.on('disconnect', async () => {
     console.log(`[Socket] User disconnected: ${socket.id}`);
-    
-    // Find rooms this socket was in (we'd need a reverse lookup in a real app, 
-    // for MVP we can just iterate active rooms if necessary, but socket.rooms is empty on disconnect)
-    // For now, clients must explicitly leave or room expires via TTL.
+    const affectedRooms = await roomManager.setPlayerOffline(socket.id);
+    for (const room of affectedRooms) {
+      io.to(room.roomCode).emit('room:state', room);
+    }
   });
 });
 

@@ -55,10 +55,12 @@ const PlayersModal = ({ isOpen, onClose }) => {
                       🕵️
                     </div>
                     <div className="flex-1 overflow-hidden">
-                      <p className="font-bold truncate text-sm">
-                        {player.name} {isMe && <span className="text-[10px] bg-white/10 px-1.5 py-0.5 rounded text-white ml-2 font-normal">YOU</span>}
+                      <p className={`font-bold truncate text-sm ${player.isOffline ? 'text-text-secondary line-through' : ''}`}>
+                        {player.name} 
+                        {isMe && <span className="text-[10px] bg-white/10 px-1.5 py-0.5 rounded text-white ml-2 font-normal">YOU</span>}
+                        {player.isOffline && <span className="text-[10px] bg-danger/20 text-danger border border-danger/50 px-1.5 py-0.5 rounded ml-2 font-normal">OFFLINE</span>}
                       </p>
-                      {player.isHost && <span className="text-[10px] text-accent uppercase font-bold block mt-0.5">Captain</span>}
+                      {player.isHost && <span className={`text-[10px] uppercase font-bold block mt-0.5 ${player.isOffline ? 'text-text-secondary' : 'text-accent'}`}>Captain</span>}
                     </div>
                     {currentPlayer.isHost && !player.isHost && !isMe && (
                       <button 

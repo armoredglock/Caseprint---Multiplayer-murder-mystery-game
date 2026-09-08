@@ -45,6 +45,7 @@ const joinRoom = async (roomCode, socketId, playerName, password = '') => {
   if (existingPlayerIndex !== -1) {
     // Player is reconnecting! Update their socketId.
     room.players[existingPlayerIndex].socketId = socketId;
+    room.players[existingPlayerIndex].isOffline = false;
     if (room.hostName === playerName) {
       room.hostSocketId = socketId;
     }
@@ -162,6 +163,23 @@ const deleteRoom = async (roomCode) => {
   activeRooms.delete(roomCode);
 };
 
+const setPlayerOffline = async (socketId) => {
+  const affectedRooms = [];
+  // Since we don't have a direct socket to room mapping, find rooms with this socket
+  const rooms = await Room.find({ "players.socketId": socketId });
+  for (const room of rooms) {
+    const playerIndex = room.players.findIndex(p => p.socketId === socketId);
+    if (playerIndex !== -1) {
+      room.players[playerIndex].isOffline = true;
+      await room.save();
+      const updated = room.toObject();
+      activeRooms.set(room.roomCode, updated);
+      affectedRooms.push(updated);
+    }
+  }
+  return affectedRooms;
+};
+
 module.exports = {
   createRoom,
   joinRoom,
@@ -170,5 +188,6 @@ module.exports = {
   updateRoom,
   kickPlayer,
   changePlayerName,
-  deleteRoom
+  deleteRoom,
+  setPlayerOffline
 };
