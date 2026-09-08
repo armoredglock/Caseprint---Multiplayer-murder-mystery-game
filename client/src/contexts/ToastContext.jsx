@@ -26,24 +26,29 @@ export const ToastProvider = ({ children }) => {
   return (
     <ToastContext.Provider value={{ addToast }}>
       {children}
-      <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none">
+      <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] flex flex-col items-center gap-3 pointer-events-none w-full max-w-lg px-4">
         <AnimatePresence>
           {toasts.map((toast) => (
             <motion.div
               key={toast.id}
-              initial={{ opacity: 0, x: 50, scale: 0.9 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
-              className={`px-4 py-3 rounded shadow-lg pointer-events-auto flex items-center gap-3 backdrop-blur-md border border-white/10 ${
-                toast.type === 'success' ? 'bg-green-900/80 text-green-100 border-green-500/30' :
-                toast.type === 'error' ? 'bg-red-900/80 text-red-100 border-red-500/30' :
-                'bg-surface/90 text-paper-cream border-accent/30'
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95, y: -10, transition: { duration: 0.2 } }}
+              className={`px-4 py-3 shadow-[4px_4px_0_rgba(0,0,0,0.3)] pointer-events-auto flex items-center justify-between gap-3 border-2 w-full font-typewriter relative ${
+                toast.type === 'success' ? 'bg-[#e2edd8] text-ink-black border-[#4a7c59]' :
+                toast.type === 'error' ? 'bg-[#f2d8d8] text-[#900] border-[#900]' :
+                'bg-paper-cream text-ink-black border-ink-black/40'
               }`}
             >
-              <span className="text-sm font-mono tracking-wide">{toast.message}</span>
+              <div className="flex-1">
+                {toast.type === 'error' && <span className="font-bold text-[#900] mr-2">URGENT:</span>}
+                {toast.type === 'info' && <span className="font-bold text-ink-black/70 mr-2">MEMO:</span>}
+                <span className="text-sm tracking-wide font-bold">{toast.message}</span>
+              </div>
               <button 
                 onClick={() => removeToast(toast.id)}
-                className="ml-2 text-white/50 hover:text-white"
+                className="ml-2 text-ink-black/40 hover:text-ink-black transition-colors text-xl font-bold px-2"
+                title="Dismiss"
               >
                 ×
               </button>
