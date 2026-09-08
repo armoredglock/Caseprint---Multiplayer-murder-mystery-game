@@ -41,11 +41,15 @@ const ChatPanel = ({ roomCode, currentPlayer }) => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 key={idx} 
-                className="flex justify-center my-2"
+                className="flex justify-center my-4 relative"
               >
-                <div className="bg-paper-cream shadow-sm border-2 border-ink-black/20 text-ink-black px-4 py-2 text-xs text-center font-bold tracking-widest uppercase font-typewriter transform -rotate-1 relative">
-                  <div className="absolute -top-1 -left-1 w-2 h-2 rounded-full bg-ink-red/80"></div>
-                  {msg.message}
+                <div className="bg-[#f4f1ea] shadow-[2px_5px_15px_rgba(0,0,0,0.4)] border border-ink-black/20 text-ink-black px-6 py-3 text-sm text-center font-bold tracking-widest uppercase font-typewriter transform rotate-[1deg] relative max-w-[90%] before:content-[''] before:absolute before:inset-0 before:bg-[url('/textures/paper-cream.png')] before:opacity-50 before:mix-blend-multiply before:pointer-events-none">
+                  {/* Realistic Push Pin */}
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 w-4 h-4 rounded-full bg-red-600 shadow-[1px_4px_6px_rgba(0,0,0,0.6),inset_-2px_-2px_4px_rgba(0,0,0,0.4)] before:content-[''] before:absolute before:top-[2px] before:left-[2px] before:w-1.5 before:h-1.5 before:bg-white/60 before:rounded-full">
+                    {/* Pin Metal Needle Shadow */}
+                    <div className="absolute -bottom-3 left-1 w-1 h-3 bg-black/30 rounded-full blur-[1px] -z-10 transform -rotate-[20deg]" />
+                  </div>
+                  <span className="relative z-10 block">{msg.message}</span>
                 </div>
               </motion.div>
             );
