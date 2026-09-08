@@ -18,6 +18,14 @@ const startGame = async (io, roomCode, scenarioId) => {
   if (variations && variations.length > 0) {
     const randomVariation = variations[Math.floor(Math.random() * variations.length)];
     caseId = randomVariation.caseId;
+  } else {
+    // Memory fallback if DB is empty
+    const { seedCases } = require('../data/seedCases');
+    const memoryVariations = seedCases.filter(c => c.scenarioId === scenarioId);
+    if (memoryVariations && memoryVariations.length > 0) {
+      const randomVariation = memoryVariations[Math.floor(Math.random() * memoryVariations.length)];
+      caseId = randomVariation.caseId;
+    }
   }
 
   await roomManager.updateRoom(roomCode, {
