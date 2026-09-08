@@ -3,12 +3,10 @@
   position: relative;
   width: 100%;
   height: 100%;
-  padding: 20px;
+  padding: 20px 10px;
   perspective: 1000px;
-  /* Wood desk background for realism */
-  background: #1a1510 url('/textures/wood-desk.png') center/cover;
-  border-radius: 8px;
-  box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+  /* Make transparent so global wood desk shows through */
+  background: transparent;
   display: flex;
   flex-direction: column;
 }
@@ -28,11 +26,10 @@
   border: 1px solid var(--color-manila-dark);
 }
 
-/* Folder Tabs */
 .folder-tabs {
   display: flex;
   position: absolute;
-  top: -35px;
+  top: -40px;
   left: 0;
   right: 0;
   z-index: 10;
@@ -40,6 +37,7 @@
   white-space: nowrap;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
+  padding-left: 10px;
 }
 
 .folder-tabs::-webkit-scrollbar {
@@ -47,30 +45,33 @@
 }
 
 .folder-tab {
-  height: 35px;
-  padding: 5px 15px 0;
+  height: 40px;
+  padding: 8px 24px 0;
   background-color: var(--color-manila);
-  border-radius: 8px 8px 0 0;
-  margin-right: 2px;
+  border-radius: 12px 16px 0 0;
+  margin-right: -4px; /* overlap slightly */
   cursor: pointer;
   font-family: var(--font-typewriter);
-  font-size: 0.9rem;
-  font-weight: bold;
-  color: rgba(0,0,0,0.6);
-  border: 1px solid var(--color-manila-dark);
+  font-size: 1rem;
+  font-weight: 900;
+  color: rgba(0,0,0,0.7);
+  border: 2px solid var(--color-ink-black);
   border-bottom: none;
   transition: transform 0.2s, background-color 0.2s;
-  box-shadow: 2px -2px 5px rgba(0,0,0,0.2);
+  box-shadow: 2px -4px 6px rgba(0,0,0,0.3);
+  position: relative;
+  z-index: 1;
 }
 
 .folder-tab:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  background-color: #e3c78f;
 }
 
 .folder-tab.active {
   background-color: var(--color-paper-cream);
   color: var(--color-ink-black);
-  z-index: 11;
+  z-index: 11 !important;
   transform: translateY(2px); /* Covers the border */
   border-bottom: 2px solid var(--color-paper-cream);
 }
