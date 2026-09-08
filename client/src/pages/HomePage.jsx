@@ -127,13 +127,15 @@ const getRandomName = () => {
           
           {/* Create Room Card */}
           <motion.div 
-            className="bg-surface-light p-6 md:p-8 rounded-lg shadow-lg border border-border w-full md:w-1/2"
-            whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0,0,0,0.5)' }}
+            className="bg-manila text-ink-black p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-manila-dark w-full md:w-1/2 relative before:content-[''] before:absolute before:top-0 before:left-4 before:w-12 before:h-2 before:bg-manila-dark"
+            style={{ clipPath: 'polygon(0 0, 30% 0, 33% 20px, 100% 20px, 100% 100%, 0 100%)', borderRadius: '4px 4px 4px 4px', paddingTop: '32px' }}
+            whileHover={{ y: -5, boxShadow: '0 15px 35px rgba(0,0,0,0.9)' }}
           >
-            <h2 className="text-2xl mb-6 border-b border-border pb-2 text-center">Start an Investigation</h2>
-            <form onSubmit={handleCreateRoom} className="space-y-4">
+            <div className="absolute top-2 right-4 stamp stamp-red opacity-30 text-xl transform rotate-12">TOP SECRET</div>
+            <h2 className="text-3xl mb-6 border-b-2 border-ink-black/20 pb-2 text-center font-bold font-ui">Start an Investigation</h2>
+            <form onSubmit={handleCreateRoom} className="space-y-4 font-ui">
               <div>
-                <label className="block text-sm text-text-secondary mb-1">Detective Name</label>
+                <label className="block text-sm text-ink-black/70 font-bold mb-1 uppercase tracking-wider">Lead Detective Name</label>
                 <div className="flex gap-2">
                   <input 
                     type="text" 
@@ -141,22 +143,22 @@ const getRandomName = () => {
                     value={playerName}
                     onChange={(e) => setPlayerName(e.target.value)}
                     maxLength={20}
-                    className="flex-1"
+                    className="flex-1 bg-transparent border-b-2 border-ink-black/30 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/30 font-handwriting text-xl"
                   />
-                  <button type="button" onClick={() => setPlayerName(getRandomName())} className="btn btn-outline px-3" title="Randomize Name">
+                  <button type="button" onClick={() => setPlayerName(getRandomName())} className="px-3 text-2xl hover:scale-110 transition-transform" title="Randomize Name">
                     🎲
                   </button>
                 </div>
               </div>
               <div>
-                <label className="block text-sm text-text-secondary mb-1 uppercase tracking-wide">Select Case</label>
+                <label className="block text-sm text-ink-black/70 font-bold mb-1 uppercase tracking-wider">Select Case File</label>
                 {loadingCases ? (
-                  <div className="animate-pulse h-10 bg-surface rounded"></div>
+                  <div className="animate-pulse h-10 bg-manila-dark rounded"></div>
                 ) : (
                   <select 
                     value={selectedCaseId} 
                     onChange={(e) => setSelectedCaseId(e.target.value)}
-                    className="w-full bg-surface border-accent"
+                    className="w-full bg-transparent border-b-2 border-ink-black/30 focus:border-ink-black focus:outline-none px-2 py-1 font-mono text-sm"
                   >
                     {cases.map(c => (
                       <option key={c.caseId} value={c.caseId}>
@@ -167,18 +169,19 @@ const getRandomName = () => {
                 )}
               </div>
               <div>
-                <label className="block text-sm text-text-secondary mb-1">Room Password (Optional)</label>
+                <label className="block text-sm text-ink-black/70 font-bold mb-1 uppercase tracking-wider">Security Clearance (Password)</label>
                 <input 
                   type="password" 
-                  placeholder="Leave blank for public"
+                  placeholder="Leave blank for public access"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   maxLength={20}
+                  className="w-full bg-transparent border-b-2 border-ink-black/30 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/30 font-mono"
                 />
               </div>
               <button 
                 type="submit" 
-                className="btn btn-primary w-full"
+                className="w-full bg-ink-black text-paper-cream py-3 font-bold uppercase tracking-widest hover:bg-ink-black/80 transition-colors mt-6 border-2 border-ink-black shadow-[4px_4px_0_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[2px_2px_0_rgba(0,0,0,0.5)]"
                 disabled={isCreating}
               >
                 {isCreating ? 'Opening File...' : 'Create Room'}
@@ -188,13 +191,15 @@ const getRandomName = () => {
 
           {/* Join Room Card */}
           <motion.div 
-            className="bg-surface-light p-6 md:p-8 rounded-lg shadow-lg border border-border w-full md:w-1/2"
-            whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0,0,0,0.5)' }}
+            className="bg-manila text-ink-black p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-manila-dark w-full md:w-1/2 relative before:content-[''] before:absolute before:top-0 before:left-4 before:w-12 before:h-2 before:bg-manila-dark"
+            style={{ clipPath: 'polygon(0 0, 30% 0, 33% 20px, 100% 20px, 100% 100%, 0 100%)', borderRadius: '4px 4px 4px 4px', paddingTop: '32px' }}
+            whileHover={{ y: -5, boxShadow: '0 15px 35px rgba(0,0,0,0.9)' }}
           >
-            <h2 className="text-2xl mb-6 border-b border-border pb-2 text-center">Join the Force</h2>
-            <form onSubmit={handleJoinRoom} className="space-y-4">
+             <div className="absolute top-2 right-4 stamp stamp-blue opacity-30 text-xl transform -rotate-6">URGENT</div>
+            <h2 className="text-3xl mb-6 border-b-2 border-ink-black/20 pb-2 text-center font-bold font-ui">Join the Force</h2>
+            <form onSubmit={handleJoinRoom} className="space-y-4 font-ui">
               <div>
-                <label className="block text-sm text-text-secondary mb-1">Detective Name</label>
+                <label className="block text-sm text-ink-black/70 font-bold mb-1 uppercase tracking-wider">Detective Name</label>
                 <div className="flex gap-2">
                   <input 
                     type="text" 
@@ -202,37 +207,38 @@ const getRandomName = () => {
                     value={playerName}
                     onChange={(e) => setPlayerName(e.target.value)}
                     maxLength={20}
-                    className="flex-1"
+                    className="flex-1 bg-transparent border-b-2 border-ink-black/30 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/30 font-handwriting text-xl"
                   />
-                  <button type="button" onClick={() => setPlayerName(getRandomName())} className="btn btn-outline px-3" title="Randomize Name">
+                  <button type="button" onClick={() => setPlayerName(getRandomName())} className="px-3 text-2xl hover:scale-110 transition-transform" title="Randomize Name">
                     🎲
                   </button>
                 </div>
               </div>
               <div>
-                <label className="block text-sm text-text-secondary mb-1">Room Code</label>
+                <label className="block text-sm text-ink-black/70 font-bold mb-1 uppercase tracking-wider">Case File Number (Room Code)</label>
                 <input 
                   type="text" 
-                  placeholder="6-Letter Code"
+                  placeholder="6-LETTER CODE"
                   value={roomCode}
                   onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
                   maxLength={6}
-                  className="uppercase text-center text-xl tracking-widest"
+                  className="w-full bg-transparent border-b-2 border-ink-black/30 focus:border-ink-black focus:outline-none px-2 py-1 uppercase text-center text-2xl tracking-widest font-mono font-bold text-ink-blue"
                 />
               </div>
               <div>
-                <label className="block text-sm text-text-secondary mb-1">Room Password (If applicable)</label>
+                <label className="block text-sm text-ink-black/70 font-bold mb-1 uppercase tracking-wider">Security Clearance (Password)</label>
                 <input 
                   type="password" 
                   placeholder="Enter password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   maxLength={20}
+                  className="w-full bg-transparent border-b-2 border-ink-black/30 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/30 font-mono"
                 />
               </div>
               <button 
                 type="submit" 
-                className="btn btn-outline w-full"
+                className="w-full bg-transparent text-ink-black py-3 font-bold uppercase tracking-widest hover:bg-ink-black/10 transition-colors mt-6 border-2 border-ink-black shadow-[4px_4px_0_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[2px_2px_0_rgba(0,0,0,0.5)]"
                 disabled={isJoining}
               >
                 {isJoining ? 'Connecting...' : 'Join Room'}
