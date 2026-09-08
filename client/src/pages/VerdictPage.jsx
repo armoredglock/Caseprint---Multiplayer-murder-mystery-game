@@ -6,17 +6,23 @@ import { motion } from 'framer-motion';
 const VerdictPage = () => {
   const { roomCode } = useParams();
   const navigate = useNavigate();
-  const { roomState, gameResult, currentPlayer, clearSession } = useGame();
+  const { roomState, currentPlayer, gameResult, clearSession, isRestoring } = useGame();
   
   const [revealStep, setRevealStep] = useState(0); 
   const scoreboardRef = useRef(null);
   // 0: Loading, 1: Accusations, 2: The Truth, 3: Scoreboard
 
   useEffect(() => {
-    if (!roomState || !gameResult) {
+    if (isRestoring) return;
+    if (!roomState || !currentPlayer) {
       navigate('/');
-      return;
+    } else if (roomState.status !== 'FINISHED') {
+      navigate(`/game/${roomCode}`);
     }
+  }, [roomState, currentPlayer, navigate, roomCode, isRestoring]);
+
+  useEffect(() => {
+    if (isRestoring || !roomState || !gameResult) return;
 
     // Sequence the dramatic reveal (sped up)
     const timers = [];

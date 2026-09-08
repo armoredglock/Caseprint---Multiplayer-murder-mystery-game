@@ -10,7 +10,7 @@ import ConfirmModal from '../components/ui/ConfirmModal';
 const LobbyPage = () => {
   const { roomCode } = useParams();
   const navigate = useNavigate();
-  const { roomState, currentPlayer, clearSession } = useGame();
+  const { roomState, currentPlayer, isRestoring, clearSession } = useGame();
   const { kickPlayer, leaveRoom, endSession, changePlayerName } = useSocket();
   const { addToast } = useToast();
 
@@ -52,12 +52,13 @@ const LobbyPage = () => {
   };
 
   useEffect(() => {
+    if (isRestoring) return;
     // If user refreshes or direct navigates without session, send to home
     if (!roomState || !currentPlayer) {
       navigate('/');
       return;
     }
-  }, [roomState, currentPlayer, navigate]);
+  }, [roomState, currentPlayer, navigate, isRestoring]);
 
   // Handle game start redirect
   useEffect(() => {
@@ -82,6 +83,10 @@ const LobbyPage = () => {
     navigator.clipboard.writeText(roomCode);
     // Could add a toast notification here
   };
+
+  if (isRestoring) {
+    return <div className="min-h-screen bg-bg flex items-center justify-center font-typewriter text-white text-xl">RESTORING CONNECTION...</div>;
+  }
 
   if (!roomState) return null;
 

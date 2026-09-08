@@ -10,7 +10,7 @@ import CaseFolder from '../components/casefile/CaseFolder';
 const GamePage = () => {
   const { roomCode } = useParams();
   const navigate = useNavigate();
-  const { roomState, currentPlayer } = useGame();
+  const { roomState, currentPlayer, isRestoring } = useGame();
   
   const [activeRightTab, setActiveRightTab] = useState('chat'); // 'chat' or 'notes' (Desktop)
   const [mobileTab, setMobileTab] = useState('case'); // 'case', 'chat', 'notes' (Mobile)
@@ -24,12 +24,17 @@ const GamePage = () => {
 
   // Security redirect
   useEffect(() => {
+    if (isRestoring) return;
     if (!roomState || !currentPlayer) {
       navigate('/');
     } else if (roomState.status === 'FINISHED') {
       navigate(`/verdict/${roomCode}`);
     }
-  }, [roomState, currentPlayer, navigate, roomCode]);
+  }, [roomState, currentPlayer, navigate, roomCode, isRestoring]);
+
+  if (isRestoring) {
+    return <div className="h-[100dvh] w-screen bg-bg flex items-center justify-center font-typewriter text-white text-xl">RESTORING CONNECTION...</div>;
+  }
 
   if (!roomState || !currentPlayer) return null;
 

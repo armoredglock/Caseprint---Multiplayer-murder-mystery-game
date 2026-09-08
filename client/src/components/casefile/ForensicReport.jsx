@@ -54,10 +54,10 @@ const ForensicReport = ({ forensics }) => {
           </section>
         )}
 
-        <div className="grid grid-cols-2 gap-8 pt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
           <section>
-            <h3 className="text-gray-500 font-bold border-b border-gray-300 mb-2">FINGERPRINTS</h3>
-            <p className="text-xs leading-relaxed">{forensics.fingerprints || 'None recovered'}</p>
+             <h3 className="text-gray-500 font-bold border-b border-gray-300 mb-2">FINGERPRINTS</h3>
+             <p className="text-xs leading-relaxed break-words">{forensics.fingerprints || 'None recovered'}</p>
           </section>
           <section>
             <h3 className="text-gray-500 font-bold border-b border-gray-300 mb-2">DNA</h3>

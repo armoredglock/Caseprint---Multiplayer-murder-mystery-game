@@ -11,8 +11,35 @@ export const GameProvider = ({ children }) => {
   const [caseData, setCaseData] = useState(null);
   const [messages, setMessages] = useState([]);
   const [gameResult, setGameResult] = useState(null);
+  const [isRestoring, setIsRestoring] = useState(true);
 
   useEffect(() => {
+    const restoreSession = () => {
+      const saved = localStorage.getItem('caseprint_session');
+      if (saved) {
+        try {
+          const { roomCode, playerName } = JSON.parse(saved);
+          socket.emit('room:join', { roomCode, playerName, password: '' }, (response) => {
+            if (response && response.success) {
+              setRoomState(response.room);
+              const player = response.room.players.find(p => p.name === playerName);
+              setCurrentPlayer(player);
+            } else {
+              localStorage.removeItem('caseprint_session');
+            }
+            setIsRestoring(false);
+          });
+        } catch (err) {
+          localStorage.removeItem('caseprint_session');
+          setIsRestoring(false);
+        }
+      } else {
+        setIsRestoring(false);
+      }
+    };
+    
+    restoreSession();
+
     // Room events
     socket.on('room:player-joined', (data) => {
       setRoomState(prev => prev ? { ...prev, players: data.players } : null);
@@ -106,6 +133,7 @@ export const GameProvider = ({ children }) => {
   const initSession = (room, player) => {
     setRoomState(room);
     setCurrentPlayer(player);
+    localStorage.setItem('caseprint_session', JSON.stringify({ roomCode: room.roomCode, playerName: player.name }));
   };
 
   const clearSession = () => {
@@ -114,6 +142,7 @@ export const GameProvider = ({ children }) => {
     setCaseData(null);
     setMessages([]);
     setGameResult(null);
+    localStorage.removeItem('caseprint_session');
   };
 
   const sendMessage = (message) => {
@@ -135,6 +164,7 @@ export const GameProvider = ({ children }) => {
       caseData,
       messages,
       gameResult,
+      isRestoring,
       initSession,
       clearSession,
       sendMessage,
