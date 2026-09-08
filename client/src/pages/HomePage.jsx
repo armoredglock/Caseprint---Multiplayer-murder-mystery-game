@@ -128,24 +128,24 @@ const getRandomName = () => {
           {/* Create Room Card */}
           {/* Create Room Card */}
           <motion.div 
-            className="bg-manila text-ink-black p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-manila-dark w-full md:w-1/2 relative before:content-[''] before:absolute before:top-0 before:left-4 before:w-12 before:h-2 before:bg-manila-dark"
+            className="bg-manila-dark text-ink-black p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-[#967d4a] w-full md:w-1/2 relative before:content-[''] before:absolute before:top-0 before:left-4 before:w-12 before:h-2 before:bg-[#967d4a]"
             style={{ clipPath: 'polygon(0 0, 30% 0, 33% 20px, 100% 20px, 100% 100%, 0 100%)', borderRadius: '4px 4px 4px 4px', paddingTop: '32px' }}
             whileHover={{ y: -5, boxShadow: '0 15px 35px rgba(0,0,0,0.9)' }}
           >
             {/* Distressed Inner Borders */}
-            <div className="absolute inset-2 border-2 border-ink-black/10 border-dashed pointer-events-none opacity-70" style={{ clipPath: 'polygon(0 0, 30% 0, 32% 16px, 100% 16px, 100% 100%, 0 100%)' }} />
-            <div className="absolute inset-3 border border-ink-black/5 pointer-events-none opacity-50" style={{ clipPath: 'polygon(0 0, 29% 0, 31% 14px, 100% 14px, 100% 100%, 0 100%)' }} />
+            <div className="absolute inset-2 border-2 border-ink-black/15 border-dashed pointer-events-none opacity-70" style={{ clipPath: 'polygon(0 0, 30% 0, 32% 16px, 100% 16px, 100% 100%, 0 100%)' }} />
+            <div className="absolute inset-3 border border-ink-black/10 pointer-events-none opacity-50" style={{ clipPath: 'polygon(0 0, 29% 0, 31% 14px, 100% 14px, 100% 100%, 0 100%)' }} />
             
             {/* Paperclip Graphic */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="absolute -top-3 -left-3 text-gray-500/80 transform -rotate-12 drop-shadow-md z-10 pointer-events-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="absolute -top-3 -left-3 text-gray-800/60 transform -rotate-12 drop-shadow-md z-10 pointer-events-none">
               <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
             </svg>
 
             <div className="absolute top-2 right-4 stamp stamp-red opacity-30 text-xl transform rotate-12">TOP SECRET</div>
-            <h2 className="text-3xl mb-6 border-b-2 border-ink-black/20 pb-2 text-center font-bold font-ui relative z-10">Start an Investigation</h2>
+            <h2 className="text-3xl mb-6 border-b-2 border-ink-black/30 pb-2 text-center font-bold font-ui relative z-10">Start an Investigation</h2>
             <form onSubmit={handleCreateRoom} className="space-y-4 font-ui relative z-10">
               <div>
-                <label className="block text-sm text-ink-black/70 font-bold mb-1 uppercase tracking-wider">Lead Detective Name</label>
+                <label className="block text-sm text-ink-black/80 font-bold mb-1 uppercase tracking-wider">Lead Detective Name</label>
                 <div className="flex gap-2">
                   <input 
                     type="text" 
@@ -153,7 +153,7 @@ const getRandomName = () => {
                     value={playerName}
                     onChange={(e) => setPlayerName(e.target.value)}
                     maxLength={20}
-                    className="flex-1 bg-transparent border-b-2 border-ink-black/30 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/30 font-handwriting text-xl"
+                    className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/40 font-handwriting text-xl"
                   />
                   <button type="button" onClick={() => setPlayerName(getRandomName())} className="px-3 text-2xl hover:scale-110 transition-transform" title="Randomize Name">
                     🎲
@@ -161,14 +161,14 @@ const getRandomName = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-sm text-ink-black/70 font-bold mb-1 uppercase tracking-wider">Select Case File</label>
+                <label className="block text-sm text-ink-black/80 font-bold mb-1 uppercase tracking-wider">Select Case File</label>
                 {loadingCases ? (
-                  <div className="animate-pulse h-10 bg-manila-dark rounded"></div>
+                  <div className="animate-pulse h-10 bg-[#967d4a] rounded"></div>
                 ) : (
                   <select 
                     value={selectedCaseId} 
                     onChange={(e) => setSelectedCaseId(e.target.value)}
-                    className="w-full bg-transparent border-b-2 border-ink-black/30 focus:border-ink-black focus:outline-none px-2 py-1 font-mono text-sm"
+                    className="w-full bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 font-mono text-sm"
                   >
                     {cases.map(c => (
                       <option key={c.caseId} value={c.caseId}>
@@ -179,14 +179,14 @@ const getRandomName = () => {
                 )}
               </div>
               <div>
-                <label className="block text-sm text-ink-black/70 font-bold mb-1 uppercase tracking-wider">Security Clearance (Password)</label>
+                <label className="block text-sm text-ink-black/80 font-bold mb-1 uppercase tracking-wider">Security Clearance (Password)</label>
                 <input 
                   type="password" 
                   placeholder="Leave blank for public access"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   maxLength={20}
-                  className="w-full bg-transparent border-b-2 border-ink-black/30 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/30 font-mono"
+                  className="w-full bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/40 font-mono"
                 />
               </div>
               <button 
@@ -201,24 +201,24 @@ const getRandomName = () => {
 
           {/* Join Room Card */}
           <motion.div 
-            className="bg-manila text-ink-black p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-manila-dark w-full md:w-1/2 relative before:content-[''] before:absolute before:top-0 before:left-4 before:w-12 before:h-2 before:bg-manila-dark"
+            className="bg-manila-dark text-ink-black p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-[#967d4a] w-full md:w-1/2 relative before:content-[''] before:absolute before:top-0 before:left-4 before:w-12 before:h-2 before:bg-[#967d4a]"
             style={{ clipPath: 'polygon(0 0, 30% 0, 33% 20px, 100% 20px, 100% 100%, 0 100%)', borderRadius: '4px 4px 4px 4px', paddingTop: '32px' }}
             whileHover={{ y: -5, boxShadow: '0 15px 35px rgba(0,0,0,0.9)' }}
           >
             {/* Distressed Inner Borders */}
-            <div className="absolute inset-2 border-2 border-ink-black/10 border-dashed pointer-events-none opacity-70" style={{ clipPath: 'polygon(0 0, 30% 0, 32% 16px, 100% 16px, 100% 100%, 0 100%)' }} />
-            <div className="absolute inset-3 border border-ink-black/5 pointer-events-none opacity-50" style={{ clipPath: 'polygon(0 0, 29% 0, 31% 14px, 100% 14px, 100% 100%, 0 100%)' }} />
+            <div className="absolute inset-2 border-2 border-ink-black/15 border-dashed pointer-events-none opacity-70" style={{ clipPath: 'polygon(0 0, 30% 0, 32% 16px, 100% 16px, 100% 100%, 0 100%)' }} />
+            <div className="absolute inset-3 border border-ink-black/10 pointer-events-none opacity-50" style={{ clipPath: 'polygon(0 0, 29% 0, 31% 14px, 100% 14px, 100% 100%, 0 100%)' }} />
             
             {/* Paperclip Graphic */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="absolute -top-2 -left-2 text-gray-500/80 transform -rotate-6 drop-shadow-md z-10 pointer-events-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="absolute -top-2 -left-2 text-gray-800/60 transform -rotate-6 drop-shadow-md z-10 pointer-events-none">
               <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
             </svg>
 
              <div className="absolute top-2 right-4 stamp stamp-blue opacity-30 text-xl transform -rotate-6">URGENT</div>
-            <h2 className="text-3xl mb-6 border-b-2 border-ink-black/20 pb-2 text-center font-bold font-ui relative z-10">Join the Force</h2>
+            <h2 className="text-3xl mb-6 border-b-2 border-ink-black/30 pb-2 text-center font-bold font-ui relative z-10">Join the Force</h2>
             <form onSubmit={handleJoinRoom} className="space-y-4 font-ui relative z-10">
               <div>
-                <label className="block text-sm text-ink-black/70 font-bold mb-1 uppercase tracking-wider">Detective Name</label>
+                <label className="block text-sm text-ink-black/80 font-bold mb-1 uppercase tracking-wider">Detective Name</label>
                 <div className="flex gap-2">
                   <input 
                     type="text" 
@@ -226,7 +226,7 @@ const getRandomName = () => {
                     value={playerName}
                     onChange={(e) => setPlayerName(e.target.value)}
                     maxLength={20}
-                    className="flex-1 bg-transparent border-b-2 border-ink-black/30 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/30 font-handwriting text-xl"
+                    className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/40 font-handwriting text-xl"
                   />
                   <button type="button" onClick={() => setPlayerName(getRandomName())} className="px-3 text-2xl hover:scale-110 transition-transform" title="Randomize Name">
                     🎲
