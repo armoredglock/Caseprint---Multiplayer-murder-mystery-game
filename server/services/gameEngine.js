@@ -310,9 +310,10 @@ const submitAccusation = async (io, roomCode, socketId, accusation) => {
     roomDoc.players[playerIndex].hasAccused = true;
   }
   
-  await roomDoc.save();
-  const updatedRoom = roomDoc.toObject();
-  require('./roomManager').activeRooms?.set(roomCode, updatedRoom);
+  const updatedRoom = await roomManager.updateRoom(roomCode, {
+    accusations: roomDoc.accusations,
+    players: roomDoc.players
+  });
 
   // Acknowledge submission to player
   io.to(socketId).emit('game:accusation-received');
