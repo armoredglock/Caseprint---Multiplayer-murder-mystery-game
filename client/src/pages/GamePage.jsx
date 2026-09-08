@@ -52,7 +52,23 @@ const GamePage = () => {
   const isAccusationPhase = roomState.phase === 'ACCUSATION';
 
   return (
-    <div className="h-[100dvh] w-screen overflow-hidden bg-bg flex flex-col relative">
+    <div className="h-[100dvh] w-screen overflow-hidden home-page flex flex-col relative">
+      {/* Background Particles */}
+      {[...Array(15)].map((_, i) => (
+        <div 
+          key={i} 
+          className="dust-particle z-0"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            width: `${Math.random() * 8 + 2}px`,
+            height: `${Math.random() * 8 + 2}px`,
+            animationDelay: `${Math.random() * 10}s`,
+            animationDuration: `${Math.random() * 10 + 10}s`
+          }}
+        />
+      ))}
+
       {/* Intro Animation Overlay */}
       <AnimatePresence>
         {showIntro && (
@@ -89,14 +105,16 @@ const GamePage = () => {
       </AnimatePresence>
 
       {/* Top Bar */}
-      <PhaseHeader phase={roomState.phase} duration={0} />
+      <div className="relative z-20 bg-surface/90 backdrop-blur-sm border-b-2 border-ink-black/50 shadow-md">
+        <PhaseHeader phase={roomState.phase} duration={0} />
+      </div>
 
       {/* Main Layout */}
-      <div className="flex-1 flex overflow-hidden relative">
+      <div className="flex-1 flex overflow-hidden relative z-10">
         
         {/* Left Side: Case File */}
         {/* Visible on mobile if mobileTab === 'case'. Always visible on desktop. */}
-        <div className={`w-full lg:w-[65%] h-full p-2 sm:p-4 pt-10 lg:pt-12 relative z-10 ${mobileTab === 'case' ? 'block' : 'hidden lg:block'}`}>
+        <div className={`w-full lg:w-[65%] h-full p-2 sm:p-4 pt-4 lg:pt-6 relative z-10 ${mobileTab === 'case' ? 'block' : 'hidden lg:block'}`}>
            {isAccusationPhase ? (
              <div className="h-full flex items-center justify-center p-4">
                <div className="max-w-2xl w-full">
@@ -110,10 +128,10 @@ const GamePage = () => {
 
         {/* Right Side: Comms & Notes */}
         {/* Visible on mobile if mobileTab !== 'case'. Always visible on desktop. */}
-        <div className={`w-full lg:w-[35%] h-full flex-col border-l border-border bg-surface relative z-20 lg:shadow-[-5px_0_15px_rgba(0,0,0,0.5)] ${mobileTab !== 'case' ? 'flex' : 'hidden lg:flex'}`}>
+        <div className={`w-full lg:w-[35%] h-full flex-col border-l-2 border-ink-black/50 bg-surface/95 backdrop-blur-md relative z-20 lg:shadow-[-5px_0_15px_rgba(0,0,0,0.5)] ${mobileTab !== 'case' ? 'flex' : 'hidden lg:flex'}`}>
           
           {/* Desktop Tabs (Hidden on mobile) */}
-          <div className="hidden lg:flex bg-surface-light border-b border-border">
+          <div className="hidden lg:flex bg-surface-light/50 border-b-2 border-ink-black/20">
             <button 
               className={`flex-1 py-3 text-sm font-bold uppercase tracking-wider transition-colors ${activeRightTab === 'chat' ? 'bg-surface text-accent border-t-2 border-accent' : 'text-text-secondary hover:text-text-primary'}`}
               onClick={() => { setActiveRightTab('chat'); setMobileTab('chat'); }}
