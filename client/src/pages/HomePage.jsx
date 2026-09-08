@@ -152,7 +152,7 @@ const getRandomName = () => {
                     value={playerName}
                     onChange={(e) => setPlayerName(e.target.value)}
                     maxLength={20}
-                    className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 !placeholder-gray-800/60 !text-ink-black font-mono text-2xl font-bold"
+                    className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 !placeholder-gray-800/60 placeholder:text-lg placeholder:font-normal !text-ink-black font-mono text-2xl font-bold"
                   />
                   <button type="button" onClick={() => setPlayerName(getRandomName())} className="px-3 text-2xl hover:scale-110 transition-transform" title="Randomize Name">
                     🎲
@@ -185,7 +185,7 @@ const getRandomName = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   maxLength={20}
-                  className="w-full bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 !placeholder-gray-800/60 !text-ink-black font-mono font-bold"
+                  className="w-full bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 !placeholder-gray-800/60 placeholder:text-base placeholder:font-normal !text-ink-black font-mono font-bold"
                 />
               </div>
               <button 
@@ -225,7 +225,7 @@ const getRandomName = () => {
                     value={playerName}
                     onChange={(e) => setPlayerName(e.target.value)}
                     maxLength={20}
-                    className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 !placeholder-gray-800/60 !text-ink-black font-mono text-2xl font-bold"
+                    className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 !placeholder-gray-800/60 placeholder:text-lg placeholder:font-normal !text-ink-black font-mono text-2xl font-bold"
                   />
                   <button type="button" onClick={() => setPlayerName(getRandomName())} className="px-3 text-2xl hover:scale-110 transition-transform" title="Randomize Name">
                     🎲
@@ -240,7 +240,7 @@ const getRandomName = () => {
                   value={roomCode}
                   onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
                   maxLength={6}
-                  className="w-full bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 uppercase text-center text-3xl tracking-widest font-mono font-bold !text-ink-blue !placeholder-gray-800/40"
+                  className="w-full bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 uppercase text-center text-3xl tracking-widest font-mono font-bold !text-ink-blue !placeholder-gray-800/40 placeholder:text-lg placeholder:tracking-normal placeholder:font-normal"
                 />
               </div>
               <div>
@@ -251,7 +251,7 @@ const getRandomName = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   maxLength={20}
-                  className="w-full bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 !placeholder-gray-800/60 !text-ink-black font-mono font-bold"
+                  className="w-full bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 !placeholder-gray-800/60 placeholder:text-base placeholder:font-normal !text-ink-black font-mono font-bold"
                 />
               </div>
               <button 
