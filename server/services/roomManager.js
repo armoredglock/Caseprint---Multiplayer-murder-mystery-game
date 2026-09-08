@@ -39,7 +39,6 @@ const joinRoom = async (roomCode, socketId, playerName, password = '') => {
   const room = await Room.findOne({ roomCode });
   
   if (!room) throw new Error('Room not found');
-  if (room.password && room.password !== password) throw new Error('Incorrect password');
   
   const existingPlayerIndex = room.players.findIndex(p => p.name === playerName);
 
@@ -51,6 +50,7 @@ const joinRoom = async (roomCode, socketId, playerName, password = '') => {
     }
   } else {
     // New player joining
+    if (room.password && room.password !== password) throw new Error('Incorrect password');
     if (room.status !== 'LOBBY') throw new Error('Game already in progress');
     if (room.players.length >= room.maxPlayers) throw new Error('Room is full');
     room.players.push({ socketId, name: playerName });
@@ -59,7 +59,7 @@ const joinRoom = async (roomCode, socketId, playerName, password = '') => {
   await room.save();
   
   activeRooms.set(roomCode, room.toObject());
-  return room;
+  return room.toObject();
 };
 
 const leaveRoom = async (roomCode, socketId) => {

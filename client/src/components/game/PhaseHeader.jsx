@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGame } from '../../contexts/GameContext';
 import { useSocket } from '../../hooks/useSocket';
 import ConfirmModal from '../ui/ConfirmModal';
+import PlayersModal from '../ui/PlayersModal';
 
 const PhaseHeader = ({ phase, duration }) => {
   const { roomState, currentPlayer, clearSession } = useGame();
@@ -10,6 +11,7 @@ const PhaseHeader = ({ phase, duration }) => {
   const navigate = useNavigate();
   const [elapsedTime, setElapsedTime] = useState(0);
   const [confirmAction, setConfirmAction] = useState(null); // 'end', 'leave', 'advance'
+  const [isPlayersModalOpen, setIsPlayersModalOpen] = useState(false);
 
   const handleLeaveOrEnd = () => {
     if (currentPlayer.isHost) {
@@ -81,17 +83,27 @@ const PhaseHeader = ({ phase, duration }) => {
       </div>
 
       <div className="flex items-center gap-2 sm:gap-4 shrink-0">
-        {phase === 'INVESTIGATION' && currentPlayer?.isHost && (
-          <div className="mr-1 sm:mr-4 pr-2 sm:pr-4 border-r border-border">
+        
+        <div className="mr-1 sm:mr-4 pr-2 sm:pr-4 border-r border-border flex items-center gap-2 sm:gap-3">
+          <button 
+            onClick={() => setIsPlayersModalOpen(true)}
+            className="btn btn-outline text-[10px] sm:text-xs px-2 sm:px-3 py-1 sm:py-1.5 flex items-center gap-1.5 hover:border-accent hover:text-accent transition-colors"
+            title="View Team Roster"
+          >
+            <span className="text-sm">🕵️</span>
+            <span className="hidden sm:inline">TEAM ({roomState?.players?.length || 0})</span>
+          </button>
+          
+          {phase === 'INVESTIGATION' && currentPlayer?.isHost && (
             <button 
               onClick={() => setConfirmAction('advance')}
-              className="btn btn-primary text-[10px] sm:text-xs px-2 sm:px-4 py-1 sm:py-2 hover:bg-white hover:text-black transition-colors"
+              className="btn btn-primary text-[10px] sm:text-xs px-2 sm:px-4 py-1 sm:py-1.5 hover:bg-white hover:text-black transition-colors"
             >
               <span className="hidden sm:inline">MOVE TO ACCUSATIONS</span>
               <span className="sm:hidden">ACCUSE</span>
             </button>
-          </div>
-        )}
+          )}
+        </div>
 
         <div className="text-right">
           <span className="hidden sm:block text-[10px] sm:text-xs text-text-secondary uppercase">Elapsed Time</span>
@@ -107,7 +119,7 @@ const PhaseHeader = ({ phase, duration }) => {
         <div className="ml-1 sm:ml-4 pl-2 sm:pl-4 border-l border-border">
           <button 
             onClick={handleLeaveOrEnd}
-            className="btn btn-outline text-[10px] sm:text-xs px-2 sm:px-3 py-1 border-danger text-danger hover:bg-danger hover:text-white"
+            className="btn btn-outline text-[10px] sm:text-xs px-2 sm:px-3 py-1 sm:py-1.5 border-danger text-danger hover:bg-danger hover:text-white"
             title={currentPlayer?.isHost ? "End Session" : "Leave Game"}
           >
             {currentPlayer?.isHost ? "END" : "LEAVE"}
@@ -134,6 +146,11 @@ const PhaseHeader = ({ phase, duration }) => {
         }
         onConfirm={executeConfirmAction}
         onCancel={() => setConfirmAction(null)}
+      />
+
+      <PlayersModal 
+        isOpen={isPlayersModalOpen} 
+        onClose={() => setIsPlayersModalOpen(false)} 
       />
     </div>
   );
