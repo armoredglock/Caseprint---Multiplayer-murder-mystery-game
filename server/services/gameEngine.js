@@ -92,18 +92,38 @@ const generateNarrativeForWave = (caseObj, waveNum) => {
   return `UPDATE: ${parts.join(" ")}`;
 };
 
+const scheduleNextWave = async (io, roomCode, nextWaveNum) => {
+  const room = await roomManager.getRoom(roomCode);
+  if (!room || room.phase !== 'INVESTIGATION' || nextWaveNum > 4) return;
+
+  const minSecs = 60;
+  const maxSecs = 120;
+  const delay = Math.floor(Math.random() * (maxSecs - minSecs + 1) + minSecs) * 1000;
+
+  const timer = setTimeout(async () => {
+    const currentRoom = await roomManager.getRoom(roomCode);
+    if (currentRoom.puzzlePending) {
+      await roomManager.updateRoom(roomCode, { queuedWave: nextWaveNum });
+    } else {
+      await triggerClueWave(io, roomCode, nextWaveNum);
+    }
+  }, delay);
+
+  const timers = activeTimers.get(roomCode) || [];
+  timers.push(timer);
+  activeTimers.set(roomCode, timers);
+};
+
 const startGame = async (io, roomCode, scenarioId) => {
   const room = await roomManager.getRoom(roomCode);
   if (!room) return;
 
-  // Find all cases matching the scenarioId and pick one at random
   const variations = await Case.find({ scenarioId });
-  let caseId = scenarioId; // Fallback
+  let caseId = scenarioId;
   if (variations && variations.length > 0) {
     const randomVariation = variations[Math.floor(Math.random() * variations.length)];
     caseId = randomVariation.caseId;
   } else {
-    // Memory fallback if DB is empty
     const { seedCases } = require('../data/seedCases');
     const memoryVariations = seedCases.filter(c => c.scenarioId === scenarioId);
     if (memoryVariations && memoryVariations.length > 0) {
@@ -112,7 +132,6 @@ const startGame = async (io, roomCode, scenarioId) => {
     }
   }
 
-  // Get base case and generate custom randomized distribution
   const baseCase = await caseService.getFullCase(caseId);
   const customizedCase = baseCase ? randomizeEvidenceDistribution(baseCase) : null;
 
@@ -122,7 +141,10 @@ const startGame = async (io, roomCode, scenarioId) => {
     scenarioId,
     caseId,
     caseDataOverride: customizedCase,
-    currentWave: 1,
+    currentWave: 0,
+    solvedPuzzles: [],
+    puzzlePending: false,
+    queuedWave: null,
     phaseStartedAt: new Date()
   });
 
@@ -133,29 +155,10 @@ const startGame = async (io, roomCode, scenarioId) => {
     timestamp: new Date().toISOString()
   });
 
-  // Send Wave 1 data immediately
-  const caseData = await caseService.getCaseDataForWave(roomCode, 1);
-  io.to(roomCode).emit('game:case-data', { wave: 1, caseData });
+  activeTimers.set(roomCode, []);
 
-  // Setup dynamic timer-based waves
-  const timers = [];
-  let accumulatedTime = 0;
-  
-  // Helper to schedule a wave
-  const scheduleWave = (waveNum, minSecs, maxSecs) => {
-    const delay = Math.floor(Math.random() * (maxSecs - minSecs + 1) + minSecs) * 1000;
-    accumulatedTime += delay;
-    timers.push(setTimeout(() => {
-      triggerClueWave(io, roomCode, waveNum);
-    }, accumulatedTime));
-  };
-
-  // Schedule Waves 2, 3, and 4 dynamically
-  scheduleWave(2, 60, 120);
-  scheduleWave(3, 60, 120);
-  scheduleWave(4, 60, 120);
-
-  activeTimers.set(roomCode, timers);
+  // Trigger Wave 1 immediately
+  await triggerClueWave(io, roomCode, 1);
 };
 
 const advancePhase = async (io, roomCode, currentPhase) => {
@@ -192,15 +195,93 @@ const triggerClueWave = async (io, roomCode, waveNum) => {
   const room = await roomManager.getRoom(roomCode);
   if (!room || room.phase !== 'INVESTIGATION') return;
 
-  await roomManager.updateRoom(roomCode, { currentWave: waveNum });
-  
   const caseService = require('./caseService');
   const caseData = await caseService.getCaseDataForWave(roomCode, waveNum);
-  
   const caseObj = room.caseDataOverride || await caseService.getFullCase(room.caseId);
+  
+  const puzzlesInWave = caseData.digitalEvidence?.puzzles?.filter(p => p.wave === waveNum) || [];
+  const unsolvedPuzzles = puzzlesInWave.filter(p => !room.solvedPuzzles?.includes(p.id));
+  
+  const isPuzzlePending = unsolvedPuzzles.length > 0;
+
+  await roomManager.updateRoom(roomCode, { 
+    currentWave: waveNum,
+    puzzlePending: isPuzzlePending,
+    queuedWave: null 
+  });
+  
   const message = generateNarrativeForWave(caseObj, waveNum);
 
   io.to(roomCode).emit('game:clue-wave', { wave: waveNum, caseData, message });
+
+  if (waveNum < 4) {
+    scheduleNextWave(io, roomCode, waveNum + 1);
+  }
+};
+
+const solvePuzzle = async (io, roomCode, socketId, puzzleId, submittedAnswer, playerName) => {
+  const room = await roomManager.getRoom(roomCode);
+  if (!room || room.phase !== 'INVESTIGATION') return { success: false, error: 'Game not in investigation phase.' };
+
+  const caseService = require('./caseService');
+  const caseData = await caseService.getCaseDataForWave(roomCode, room.currentWave);
+  
+  // Look in all puzzles up to current wave
+  let puzzle = null;
+  if (caseData.digitalEvidence?.puzzles) {
+    puzzle = caseData.digitalEvidence.puzzles.find(p => p.id === puzzleId);
+  }
+  
+  if (!puzzle) return { success: false, error: 'Puzzle not found.' };
+  
+  if (room.solvedPuzzles?.includes(puzzleId)) {
+    return { success: true, alreadySolved: true };
+  }
+
+  // Check answer
+  const isCorrect = puzzle.answer && submittedAnswer.toLowerCase().trim() === puzzle.answer.toLowerCase().trim();
+  
+  if (!isCorrect) {
+    return { success: false, error: 'Incorrect answer.' };
+  }
+
+  const solved = room.solvedPuzzles || [];
+  solved.push(puzzleId);
+  
+  const puzzlesInWave = caseData.digitalEvidence?.puzzles?.filter(p => p.wave === room.currentWave) || [];
+  const unsolvedPuzzles = puzzlesInWave.filter(p => !solved.includes(p.id));
+  
+  const isPuzzlePending = unsolvedPuzzles.length > 0;
+  
+  const updatedRoom = await roomManager.updateRoom(roomCode, { 
+    solvedPuzzles: solved,
+    puzzlePending: isPuzzlePending
+  });
+  
+  io.to(roomCode).emit('game:puzzle-solved', { puzzleId, solvedBy: playerName });
+  io.to(roomCode).emit('chat:broadcast', {
+    sender: 'SYSTEM',
+    message: `${playerName} successfully solved the puzzle: ${puzzle.title}!`,
+    timestamp: new Date().toISOString(),
+    isHost: false
+  });
+  
+  // If no more pending puzzles and we have a queued wave, trigger it
+  if (!isPuzzlePending && room.queuedWave) {
+    io.to(roomCode).emit('chat:broadcast', {
+      sender: 'SYSTEM',
+      message: `The firewall has been breached. Re-establishing connection for the next data wave...`,
+      timestamp: new Date().toISOString(),
+      isHost: false
+    });
+    
+    // Slight delay before triggering the queued wave so they can read the chat
+    setTimeout(() => {
+      triggerClueWave(io, roomCode, room.queuedWave);
+    }, 4000);
+  }
+
+  return { success: true, puzzle };
 };
 
 const submitAccusation = async (io, roomCode, socketId, accusation) => {
@@ -353,7 +434,7 @@ const resolveGame = async (io, roomCode) => {
       socketId: player.socketId,
       accusation: { suspect: acc.suspect, motive: acc.motive, method: acc.method },
       score,
-      correctKiller, correctMotive, correctMethod, speedBonus
+      correctKiller, correctMotive, correctMethod, motiveScore, methodScore, speedBonus
     };
   }));
 
@@ -399,5 +480,6 @@ module.exports = {
   startGame,
   advancePhase,
   submitAccusation,
-  clearTimersForRoom
+  clearTimersForRoom,
+  solvePuzzle
 };

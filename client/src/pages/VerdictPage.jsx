@@ -180,9 +180,9 @@ const VerdictPage = () => {
                         <div className="flex gap-3 text-xs font-mono mt-1">
                            <span className={result.correctKiller ? 'text-green-400' : 'text-danger'}>Killer: {result.correctKiller ? '+50' : '0'}</span>
                            <span className="text-text-secondary">|</span>
-                           <span className={result.correctMotive ? 'text-green-400' : 'text-danger'}>Motive: {result.correctMotive ? '+25' : '0'}</span>
+                           <span className={result.motiveScore > 12 ? 'text-green-400' : 'text-danger'}>Motive Similarity: +{result.motiveScore || 0}/25</span>
                            <span className="text-text-secondary">|</span>
-                           <span className={result.correctMethod ? 'text-green-400' : 'text-danger'}>Method: {result.correctMethod ? '+25' : '0'}</span>
+                           <span className={result.methodScore > 12 ? 'text-green-400' : 'text-danger'}>Method Similarity: +{result.methodScore || 0}/25</span>
                            <span className="text-text-secondary">|</span>
                            <span className="text-accent">Speed: +{result.speedBonus}</span>
                         </div>

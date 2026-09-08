@@ -39,6 +39,9 @@ const roomSchema = new mongoose.Schema({
     default: null
   },
   currentWave: { type: Number, default: 0 },
+  solvedPuzzles: { type: [String], default: [] },
+  puzzlePending: { type: Boolean, default: false },
+  queuedWave: { type: Number, default: null },
   accusations: { type: [accusationSchema], default: [] },
   phaseStartedAt: Date,
   createdAt: { type: Date, default: Date.now },

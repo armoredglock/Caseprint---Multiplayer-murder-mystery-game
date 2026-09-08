@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useGame } from '../../contexts/GameContext';
 
 const DigitalEvidence = ({ digital }) => {
-  const [activeTab, setActiveTab] = React.useState('phone');
+  const [activeTab, setActiveTab] = useState('phone');
+  const { roomState, submitPuzzle } = useGame();
+  
+  const [puzzleInputs, setPuzzleInputs] = useState({});
+  const [puzzleErrors, setPuzzleErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!digital) return <div>No digital evidence extracted.</div>;
 
@@ -10,7 +16,6 @@ const DigitalEvidence = ({ digital }) => {
   const hasCCTV = digital.cctvLogs && digital.cctvLogs.length > 0;
   const hasPuzzle = digital.puzzles && digital.puzzles.length > 0;
 
-  // Default to first available
   React.useEffect(() => {
     if (activeTab === 'phone' && !hasPhone) {
       if (hasEmail) setActiveTab('email');
@@ -18,6 +23,24 @@ const DigitalEvidence = ({ digital }) => {
       else if (hasPuzzle) setActiveTab('puzzle');
     }
   }, [hasPhone, hasEmail, hasCCTV, hasPuzzle, activeTab]);
+
+  const handlePuzzleSubmit = async (puzzleId) => {
+    const answer = puzzleInputs[puzzleId] || "";
+    if (!answer.trim()) return;
+    
+    setIsSubmitting(true);
+    setPuzzleErrors(prev => ({ ...prev, [puzzleId]: null }));
+    
+    const response = await submitPuzzle(puzzleId, answer);
+    
+    setIsSubmitting(false);
+    
+    if (!response.success && !response.alreadySolved) {
+      setPuzzleErrors(prev => ({ ...prev, [puzzleId]: response.error || "Incorrect answer." }));
+    } else {
+      setPuzzleInputs(prev => ({ ...prev, [puzzleId]: "" }));
+    }
+  };
 
   return (
     <div className="bg-gray-100 p-4 font-mono text-sm h-full flex flex-col border border-gray-300">
@@ -157,32 +180,75 @@ const DigitalEvidence = ({ digital }) => {
           <div className="p-4 bg-gray-50 h-full overflow-y-auto">
             <div className="text-center mb-6 font-ui">
               <h3 className="font-bold text-xl uppercase tracking-widest text-purple-800">ENCRYPTED DATA</h3>
-              <p className="text-xs text-gray-500">MANUAL DECRYPTION REQUIRED</p>
+              <p className="text-xs text-gray-500">MANUAL DECRYPTION REQUIRED TO PROCEED</p>
             </div>
             <div className="space-y-6">
-              {digital.puzzles.map((puzzle, idx) => (
-                <div key={idx} className="border-2 border-purple-200 bg-white rounded shadow-sm overflow-hidden">
-                  <div className="bg-purple-100 px-4 py-2 border-b border-purple-200 flex justify-between items-center">
-                    <span className="font-bold text-purple-900">{puzzle.title}</span>
-                    <span className="text-xs bg-purple-700 text-white px-2 py-1 rounded shadow">{puzzle.encodedType || puzzle.format}</span>
+              {digital.puzzles.map((puzzle, idx) => {
+                const isSolved = roomState?.solvedPuzzles?.includes(puzzle.id);
+                
+                return (
+                  <div key={puzzle.id || idx} className={`border-2 rounded shadow-sm overflow-hidden ${isSolved ? 'border-green-400' : 'border-purple-300'}`}>
+                    <div className={`${isSolved ? 'bg-green-100 border-green-200' : 'bg-purple-100 border-purple-200'} px-4 py-2 border-b flex justify-between items-center`}>
+                      <span className={`font-bold ${isSolved ? 'text-green-900' : 'text-purple-900'}`}>
+                        {isSolved ? `🔓 DECRYPTED: ${puzzle.title}` : `🔒 ENCRYPTED: ${puzzle.title}`}
+                      </span>
+                      <span className={`text-xs text-white px-2 py-1 rounded shadow ${isSolved ? 'bg-green-600' : 'bg-purple-700'}`}>
+                        {puzzle.encodedType || puzzle.format}
+                      </span>
+                    </div>
+                    {puzzle.description && (
+                      <div className="p-3 bg-white text-sm text-gray-700 border-b border-gray-100 font-ui">
+                        {puzzle.description}
+                      </div>
+                    )}
+                    
+                    {!isSolved ? (
+                      <>
+                        <div className="p-6 text-center bg-white">
+                          <div className="bg-gray-100 p-4 font-mono text-lg tracking-widest break-all border border-gray-300 shadow-inner inline-block min-w-[50%] user-select-all selection:bg-purple-200">
+                            {puzzle.content || puzzle.data}
+                          </div>
+                        </div>
+                        {(puzzle.clue || puzzle.hint) && (
+                          <div className="bg-yellow-50 p-3 border-y border-yellow-200 text-yellow-800 text-sm italic text-center">
+                            Clue: {puzzle.clue || puzzle.hint}
+                          </div>
+                        )}
+                        <div className="p-4 bg-gray-100 border-t border-gray-300 flex flex-col items-center">
+                          <div className="flex w-full max-w-md gap-2">
+                            <input 
+                              type="text" 
+                              placeholder="Enter decryption key..."
+                              className="flex-1 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-purple-500 font-ui"
+                              value={puzzleInputs[puzzle.id] || ""}
+                              onChange={e => setPuzzleInputs(prev => ({ ...prev, [puzzle.id]: e.target.value }))}
+                              onKeyDown={e => { if (e.key === 'Enter') handlePuzzleSubmit(puzzle.id); }}
+                              disabled={isSubmitting}
+                            />
+                            <button 
+                              onClick={() => handlePuzzleSubmit(puzzle.id)}
+                              disabled={isSubmitting || !puzzleInputs[puzzle.id]}
+                              className="bg-purple-600 text-white px-4 py-2 rounded font-bold hover:bg-purple-700 disabled:opacity-50"
+                            >
+                              {isSubmitting ? '...' : 'SUBMIT'}
+                            </button>
+                          </div>
+                          {puzzleErrors[puzzle.id] && (
+                            <p className="text-red-500 text-xs mt-2 font-bold">{puzzleErrors[puzzle.id]}</p>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="p-6 text-center bg-green-50">
+                        <div className="bg-white p-4 font-mono text-lg text-green-800 tracking-wide border border-green-300 shadow-sm inline-block min-w-[50%]">
+                          {puzzle.answer || "Decrypted successfully."}
+                        </div>
+                        <p className="text-green-600 text-xs mt-3 uppercase tracking-widest font-bold">Network Firewall Bypassed</p>
+                      </div>
+                    )}
                   </div>
-                  {puzzle.description && (
-                    <div className="p-3 bg-white text-sm text-gray-700 border-b border-gray-100 font-ui">
-                      {puzzle.description}
-                    </div>
-                  )}
-                  <div className="p-6 text-center">
-                    <div className="bg-gray-100 p-4 font-mono text-lg tracking-widest break-all border border-gray-300 shadow-inner inline-block min-w-[50%] user-select-all selection:bg-purple-200">
-                      {puzzle.content || puzzle.data}
-                    </div>
-                  </div>
-                  {(puzzle.clue || puzzle.hint) && (
-                    <div className="bg-yellow-50 p-3 border-t border-yellow-200 text-yellow-800 text-sm italic text-center">
-                      Clue: {puzzle.clue || puzzle.hint}
-                    </div>
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

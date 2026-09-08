@@ -177,6 +177,19 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('game:submit-puzzle', async (data, callback) => {
+    try {
+      const room = await roomManager.getRoom(data.roomCode);
+      if (!room) throw new Error("Room not found");
+      const player = room.players.find(p => p.socketId === socket.id);
+      
+      const result = await gameEngine.solvePuzzle(io, data.roomCode, socket.id, data.puzzleId, data.answer, player?.name);
+      if (callback) callback(result);
+    } catch (err) {
+      if (callback) callback({ success: false, error: err.message });
+    }
+  });
+
   socket.on('game:submit-accusation', async (data) => {
     await gameEngine.submitAccusation(io, data.roomCode, socket.id, data.accusation);
   });

@@ -296,6 +296,7 @@ module.exports = {
         "data": "V2UgYXJlIGJlaW5nIHdhdGNoZWQuIFRoZSB0cmFuc2ZlcnMgd2VyZSBqdXN0IHRoZSBiZWdpbm5pbmcuIElmIEkgZGllLCBsb29rIGludG8gdGhlIFN3aXNzIGFjY291bnRzLg==",
         "format": "BASE64",
         "hint": "Looks like standard MIME encoding...",
+        "answer": "We are being watched",
         "wave": 4
       }
     ],

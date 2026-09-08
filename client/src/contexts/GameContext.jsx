@@ -133,6 +133,13 @@ export const GameProvider = ({ children }) => {
       setGameResult(data);
     });
 
+    socket.on('game:puzzle-solved', (data) => {
+      setRoomState(prev => prev ? { 
+        ...prev, 
+        solvedPuzzles: [...(prev.solvedPuzzles || []), data.puzzleId] 
+      } : null);
+    });
+
     // Chat events
     socket.on('chat:broadcast', (msg) => {
       setMessages(prev => [...prev, msg]);
@@ -147,6 +154,7 @@ export const GameProvider = ({ children }) => {
       socket.off('game:clue-wave');
       socket.off('game:player-accused');
       socket.off('game:verdict');
+      socket.off('game:puzzle-solved');
       socket.off('chat:broadcast');
       socket.off('kicked_from_room');
       socket.off('session_ended');
@@ -179,6 +187,18 @@ export const GameProvider = ({ children }) => {
       socket.emit('game:submit-accusation', { roomCode: roomState.roomCode, accusation });
     }
   };
+  
+  const submitPuzzle = (puzzleId, answer) => {
+    return new Promise((resolve) => {
+      if (roomState) {
+        socket.emit('game:submit-puzzle', { roomCode: roomState.roomCode, puzzleId, answer }, (res) => {
+          resolve(res);
+        });
+      } else {
+        resolve({ success: false });
+      }
+    });
+  };
 
   return (
     <GameContext.Provider value={{
@@ -191,7 +211,8 @@ export const GameProvider = ({ children }) => {
       initSession,
       clearSession,
       sendMessage,
-      submitAccusation
+      submitAccusation,
+      submitPuzzle
     }}>
       {children}
     </GameContext.Provider>
