@@ -15,10 +15,10 @@ const GamePage = () => {
   
   const [showIntro, setShowIntro] = useState(true);
   
-  // Auto-hide intro screen after 3 seconds
+  // Auto-hide intro screen after 4.5 seconds
   useEffect(() => {
     if (showIntro && !isRestoring) {
-      const timer = setTimeout(() => setShowIntro(false), 2500);
+      const timer = setTimeout(() => setShowIntro(false), 4500);
       return () => clearTimeout(timer);
     }
   }, [showIntro, isRestoring]);
@@ -58,14 +58,15 @@ const GamePage = () => {
         {showIntro && (
           <motion.div
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 1.1, filter: 'blur(10px)' }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.8, ease: 'easeInOut' }}
             className="fixed inset-0 z-[200] home-page flex items-center justify-center"
           >
             <motion.div 
-              initial={{ scale: 0.8, rotate: -5, opacity: 0 }}
-              animate={{ scale: 1, rotate: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5, type: 'spring' }}
+              initial={{ scale: 0.8, rotate: -5, y: -500, opacity: 0 }}
+              animate={{ scale: 1, rotate: 0, y: 0, opacity: 1 }}
+              exit={{ y: '100vh', rotate: 10, scale: 0.8, opacity: 0 }}
+              transition={{ delay: 0.2, duration: 0.8, type: 'spring', bounce: 0.4 }}
               className="bg-manila-dark p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.9)] border-2 border-[#967d4a] relative max-w-xl text-center flex flex-col items-center justify-center"
               style={{ clipPath: 'polygon(0 0, 30% 0, 32% 20px, 100% 20px, 100% 100%, 0 100%)', borderRadius: '4px 4px 4px 4px', paddingTop: '40px' }}
             >
