@@ -225,7 +225,7 @@ const getRandomName = () => {
                     value={playerName}
                     onChange={(e) => setPlayerName(e.target.value)}
                     maxLength={20}
-                    className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 !placeholder-gray-800/60 !text-ink-black font-handwriting text-2xl font-bold"
+                    className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 !placeholder-gray-800/60 !text-ink-black font-mono text-2xl font-bold"
                   />
                   <button type="button" onClick={() => setPlayerName(getRandomName())} className="px-3 text-2xl hover:scale-110 transition-transform" title="Randomize Name">
                     🎲
