@@ -20,18 +20,14 @@ export const GameProvider = ({ children }) => {
         try {
           const { roomCode, playerName } = JSON.parse(saved);
           
-          let hasResponded = false;
-          const timeoutId = setTimeout(() => {
-            if (!hasResponded) {
+          const doEmit = () => {
+            const responseTimeout = setTimeout(() => {
               console.warn("Session restore timed out.");
               setIsRestoring(false);
-            }
-          }, 3000);
+            }, 5000);
 
-          const doEmit = () => {
             socket.emit('room:join', { roomCode, playerName, password: '' }, (response) => {
-              hasResponded = true;
-              clearTimeout(timeoutId);
+              clearTimeout(responseTimeout);
               if (response && response.success) {
                 setRoomState(response.room);
                 const player = response.room.players.find(p => p.name === playerName);
@@ -46,7 +42,15 @@ export const GameProvider = ({ children }) => {
           if (socket.connected) {
             doEmit();
           } else {
-            socket.once('connect', doEmit);
+            const connectionTimeout = setTimeout(() => {
+              console.warn("Socket connection timed out.");
+              setIsRestoring(false);
+            }, 10000);
+
+            socket.once('connect', () => {
+              clearTimeout(connectionTimeout);
+              doEmit();
+            });
           }
         } catch (err) {
           localStorage.removeItem('caseprint_session');
