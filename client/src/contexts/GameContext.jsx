@@ -59,7 +59,13 @@ export const GameProvider = ({ children }) => {
     });
 
     socket.on('game:clue-wave', (data) => {
-      addToast(`WAVE ${data.wave} UNLOCKED: New evidence has been added to your case folder.`, 'info', 7000);
+      const msgText = data.message || `WAVE ${data.wave} UNLOCKED: New evidence has been added to your case folder.`;
+      addToast(msgText, 'info', 10000); // 10 seconds for longer narrative texts
+      setMessages(prev => [...prev, {
+        sender: 'SYSTEM',
+        message: msgText,
+        timestamp: new Date().toISOString()
+      }]);
       setRoomState(prev => prev ? { ...prev, currentWave: data.wave } : null);
       setCaseData(data.caseData);
     });

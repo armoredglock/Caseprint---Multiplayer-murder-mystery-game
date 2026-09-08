@@ -34,7 +34,16 @@
   position: absolute;
   top: -35px;
   left: 0;
+  right: 0;
   z-index: 10;
+  overflow-x: auto;
+  white-space: nowrap;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.folder-tabs::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }
 
 .folder-tab {

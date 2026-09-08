@@ -80,6 +80,20 @@ const seedCases = [
         background: "Extremely loyal on paper, but has the boardroom master keys.",
         status: "ALIBI UNVERIFIED",
         wave: 1
+      },
+      {
+        id: "suspect-3",
+        name: "David Chen",
+        age: 26,
+        occupation: "Unemployed",
+        photo: "https://i.pravatar.cc/150?u=DavidChen",
+        relationToVictim: "Estranged Son",
+        lastKnownWhereabouts: "Unknown",
+        alibi: "No verified alibi. Claims he was at a movie theater downtown.",
+        motiveAssessment: "MEDIUM",
+        background: "Cut out of Marcus's will 6 months ago. Has a history of substance abuse and severe debt.",
+        status: "PERSON OF INTEREST",
+        wave: 2
       }
     ],
     
@@ -122,7 +136,8 @@ const seedCases = [
       dna: "None found.",
       causeOfDeath: "Acute cyanide poisoning",
       mannerOfDeath: "Homicide",
-      additionalNotes: "Time of death definitively estimated between 21:50 and 22:05."
+      additionalNotes: "Time of death definitively estimated between 21:50 and 22:05.",
+      wave: 2
     },
     
     physicalEvidence: [
@@ -175,15 +190,17 @@ const seedCases = [
         { camera: "CAM-42-HALL", timestamp: "21:40:12", note: "Valerie Pierce enters boardroom carrying decanter.", flagged: false, wave: 1 },
         { camera: "CAM-42-HALL", timestamp: "21:42:05", note: "Valerie Pierce exits boardroom.", flagged: false, wave: 1 },
         { camera: "CAM-42-HALL", timestamp: "21:48:30", note: "System glitch. Camera CAM-42-HALL goes completely offline.", flagged: true, wave: 1 },
-        { camera: "CAM-41-LOUNGE", timestamp: "21:50:00", note: "Hayes is NOT visible in lounge. He is missing from camera view for 15 minutes.", flagged: true, wave: 2 },
+        { camera: "CAM-41-STAIRS", timestamp: "21:55:12", note: "[DISTORTED FEED RECOVERED] A figure matching Robert Hayes's build is seen exiting the stairwell onto the 42nd floor.", flagged: true, wave: 3 }
       ],
       puzzles: [
         {
-          title: "Encrypted Note Found on Victim's Desk",
-          content: "VGhlIGFjY2VzcyBjb2RlIHRvIHRoZSB2YXVsdCBpcyA3NzQyLiBIYXllcyBrbm93cy4=",
-          encodedType: "Base64",
-          clue: "Decode this Base64 string to read a secret note.",
-          wave: 2
+          id: "puz-001",
+          title: "Encrypted Flash Drive",
+          description: "We recovered a flash drive from Marcus's desk. The root folder contains a text file with a heavily encoded message. We need this deciphered immediately.",
+          data: "V2UgYXJlIGJlaW5nIHdhdGNoZWQuIFRoZSB0cmFuc2ZlcnMgd2VyZSBqdXN0IHRoZSBiZWdpbm5pbmcuIElmIEkgZGllLCBsb29rIGludG8gdGhlIFN3aXNzIGFjY291bnRzLg==",
+          format: "BASE64",
+          hint: "Looks like standard MIME encoding...",
+          wave: 4
         }
       ],
       socialMedia: "",

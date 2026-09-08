@@ -45,7 +45,7 @@ const GamePage = () => {
         
         {/* Left Side: Case File */}
         {/* Visible on mobile if mobileTab === 'case'. Always visible on desktop. */}
-        <div className={`w-full lg:w-[65%] h-full p-2 sm:p-4 pt-4 lg:pt-12 relative z-10 ${mobileTab === 'case' ? 'block' : 'hidden lg:block'}`}>
+        <div className={`w-full lg:w-[65%] h-full p-2 sm:p-4 pt-10 lg:pt-12 relative z-10 ${mobileTab === 'case' ? 'block' : 'hidden lg:block'}`}>
            {isAccusationPhase ? (
              <div className="h-full flex items-center justify-center p-4">
                <div className="max-w-2xl w-full">

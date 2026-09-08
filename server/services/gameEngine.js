@@ -44,17 +44,28 @@ const startGame = async (io, roomCode, scenarioId) => {
   const caseData = await caseService.getCaseDataForWave(caseId, 1);
   io.to(roomCode).emit('game:case-data', { wave: 1, caseData });
 
-  // Setup timer-based waves
-  // Wave 2 triggers after 5 minutes (300000 ms), Wave 3 after 10 minutes (600000 ms)
+  // Setup dynamic timer-based waves
+  // Wave 1 is already sent. We will schedule Waves 2, 3, and 4.
   const timers = [];
+  let accumulatedTime = 0;
   
-  timers.push(setTimeout(() => {
-    triggerClueWave(io, roomCode, 2);
-  }, 5 * 60 * 1000));
+  // Helper to schedule a wave
+  const scheduleWave = (waveNum, minSecs, maxSecs, customMessage) => {
+    const delay = Math.floor(Math.random() * (maxSecs - minSecs + 1) + minSecs) * 1000;
+    accumulatedTime += delay;
+    timers.push(setTimeout(() => {
+      triggerClueWave(io, roomCode, waveNum, customMessage);
+    }, accumulatedTime));
+  };
+
+  // Wave 2: Lab Reports & New Suspects (approx 1 - 2 mins in)
+  scheduleWave(2, 60, 120, "UPDATE: The forensics lab just sent over their preliminary report! We also have new evidence and a person of interest to review.");
   
-  timers.push(setTimeout(() => {
-    triggerClueWave(io, roomCode, 3);
-  }, 10 * 60 * 1000));
+  // Wave 3: Deep Digital / Recovered CCTV (approx 2 - 4 mins in)
+  scheduleWave(3, 60, 120, "UPDATE: Tech division managed to recover a distorted CCTV feed from the stairwell. Check the digital evidence log immediately.");
+  
+  // Wave 4: Puzzles / Breakthrough (approx 3 - 6 mins in)
+  scheduleWave(4, 60, 120, "URGENT UPDATE: We found a heavily encrypted file on the victim's personal drive. Our tech guys can't crack it, we need you to decode this puzzle.");
 
   activeTimers.set(roomCode, timers);
 };
@@ -89,14 +100,14 @@ const advancePhase = async (io, roomCode, currentPhase) => {
   }
 };
 
-const triggerClueWave = async (io, roomCode, waveNum) => {
+const triggerClueWave = async (io, roomCode, waveNum, message = null) => {
   const room = await roomManager.getRoom(roomCode);
   if (!room || room.phase !== 'INVESTIGATION') return;
 
   await roomManager.updateRoom(roomCode, { currentWave: waveNum });
   
   const caseData = await caseService.getCaseDataForWave(room.caseId, waveNum);
-  io.to(roomCode).emit('game:clue-wave', { wave: waveNum, caseData });
+  io.to(roomCode).emit('game:clue-wave', { wave: waveNum, caseData, message });
 };
 
 const submitAccusation = async (io, roomCode, socketId, accusation) => {

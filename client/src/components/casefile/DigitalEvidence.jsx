@@ -164,16 +164,21 @@ const DigitalEvidence = ({ digital }) => {
                 <div key={idx} className="border-2 border-purple-200 bg-white rounded shadow-sm overflow-hidden">
                   <div className="bg-purple-100 px-4 py-2 border-b border-purple-200 flex justify-between items-center">
                     <span className="font-bold text-purple-900">{puzzle.title}</span>
-                    <span className="text-xs bg-purple-700 text-white px-2 py-1 rounded shadow">{puzzle.encodedType}</span>
+                    <span className="text-xs bg-purple-700 text-white px-2 py-1 rounded shadow">{puzzle.encodedType || puzzle.format}</span>
                   </div>
+                  {puzzle.description && (
+                    <div className="p-3 bg-white text-sm text-gray-700 border-b border-gray-100 font-ui">
+                      {puzzle.description}
+                    </div>
+                  )}
                   <div className="p-6 text-center">
-                    <div className="bg-gray-100 p-4 font-mono text-lg tracking-widest break-all border border-gray-300 shadow-inner inline-block min-w-[50%]">
-                      {puzzle.content}
+                    <div className="bg-gray-100 p-4 font-mono text-lg tracking-widest break-all border border-gray-300 shadow-inner inline-block min-w-[50%] user-select-all selection:bg-purple-200">
+                      {puzzle.content || puzzle.data}
                     </div>
                   </div>
-                  {puzzle.clue && (
+                  {(puzzle.clue || puzzle.hint) && (
                     <div className="bg-yellow-50 p-3 border-t border-yellow-200 text-yellow-800 text-sm italic text-center">
-                      Clue: {puzzle.clue}
+                      Clue: {puzzle.clue || puzzle.hint}
                     </div>
                   )}
                 </div>

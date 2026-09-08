@@ -79,10 +79,9 @@ const getCaseDataForWave = async (caseId, currentWave) => {
   filteredCase.timeline = filterByWave(caseObj.timeline, currentWave);
 
   if (caseObj.forensics) {
-    // Only return forensics if currentWave >= 1, but usually forensics might be wave 2.
-    // Let's assume forensics is fully available if there are any wave items?
-    // Actually, we can check if it has a wave property or default to 1.
-    filteredCase.forensics = caseObj.forensics;
+    if (!caseObj.forensics.wave || caseObj.forensics.wave <= currentWave) {
+      filteredCase.forensics = caseObj.forensics;
+    }
   }
 
   if (caseObj.digitalEvidence) {
