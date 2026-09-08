@@ -105,7 +105,7 @@ const GamePage = () => {
       </AnimatePresence>
 
       {/* Top Bar */}
-      <div className="relative z-20 bg-surface/90 backdrop-blur-sm border-b-2 border-ink-black/50 shadow-md">
+      <div className="relative z-20 bg-transparent border-b-2 border-ink-black/20">
         <PhaseHeader phase={roomState.phase} duration={0} />
       </div>
 
@@ -128,18 +128,18 @@ const GamePage = () => {
 
         {/* Right Side: Comms & Notes */}
         {/* Visible on mobile if mobileTab !== 'case'. Always visible on desktop. */}
-        <div className={`w-full lg:w-[35%] h-full flex-col border-l-2 border-ink-black/50 bg-surface/95 backdrop-blur-md relative z-20 lg:shadow-[-5px_0_15px_rgba(0,0,0,0.5)] ${mobileTab !== 'case' ? 'flex' : 'hidden lg:flex'}`}>
+        <div className={`w-full lg:w-[35%] h-full flex-col border-l-2 border-ink-black/20 bg-transparent relative z-20 ${mobileTab !== 'case' ? 'flex' : 'hidden lg:flex'}`}>
           
           {/* Desktop Tabs (Hidden on mobile) */}
-          <div className="hidden lg:flex bg-surface-light/50 border-b-2 border-ink-black/20">
+          <div className="hidden lg:flex bg-transparent border-b-2 border-ink-black/20">
             <button 
-              className={`flex-1 py-3 text-sm font-bold uppercase tracking-wider transition-colors ${activeRightTab === 'chat' ? 'bg-surface text-accent border-t-2 border-accent' : 'text-text-secondary hover:text-text-primary'}`}
+              className={`flex-1 py-3 text-sm font-bold uppercase tracking-wider transition-colors ${activeRightTab === 'chat' ? 'bg-ink-black/10 text-paper-cream border-t-2 border-paper-cream' : 'text-paper-cream/50 hover:text-paper-cream'}`}
               onClick={() => { setActiveRightTab('chat'); setMobileTab('chat'); }}
             >
               Comms
             </button>
             <button 
-              className={`flex-1 py-3 text-sm font-bold uppercase tracking-wider transition-colors ${activeRightTab === 'notes' ? 'bg-surface text-accent border-t-2 border-accent' : 'text-text-secondary hover:text-text-primary'}`}
+              className={`flex-1 py-3 text-sm font-bold uppercase tracking-wider transition-colors ${activeRightTab === 'notes' ? 'bg-ink-black/10 text-paper-cream border-t-2 border-paper-cream' : 'text-paper-cream/50 hover:text-paper-cream'}`}
               onClick={() => { setActiveRightTab('notes'); setMobileTab('notes'); }}
             >
               Notebook

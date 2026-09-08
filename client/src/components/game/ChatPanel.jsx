@@ -24,10 +24,10 @@ const ChatPanel = ({ roomCode, currentPlayer }) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-surface-light border-l border-border">
-      <div className="p-3 border-b border-border bg-surface flex justify-between items-center">
-        <h3 className="font-ui font-semibold text-sm uppercase tracking-wider text-text-secondary">Precinct Comms</h3>
-        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+    <div className="flex flex-col h-full bg-transparent">
+      <div className="p-3 border-b-2 border-ink-black/20 bg-transparent flex justify-between items-center">
+        <h3 className="font-typewriter font-bold text-sm uppercase tracking-widest text-ink-black/70">Precinct Comms</h3>
+        <span className="w-2 h-2 rounded-full bg-ink-red animate-pulse shadow-glow" />
       </div>
       
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -43,7 +43,8 @@ const ChatPanel = ({ roomCode, currentPlayer }) => {
                 key={idx} 
                 className="flex justify-center my-2"
               >
-                <div className="bg-yellow-500/20 border border-yellow-500/50 text-yellow-200 px-3 py-1 rounded text-xs text-center font-bold tracking-wide">
+                <div className="bg-paper-cream shadow-sm border-2 border-ink-black/20 text-ink-black px-4 py-2 text-xs text-center font-bold tracking-widest uppercase font-typewriter transform -rotate-1 relative">
+                  <div className="absolute -top-1 -left-1 w-2 h-2 rounded-full bg-ink-red/80"></div>
                   {msg.message}
                 </div>
               </motion.div>
@@ -57,12 +58,12 @@ const ChatPanel = ({ roomCode, currentPlayer }) => {
               key={idx} 
               className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}
             >
-              <span className="text-[10px] text-text-secondary mb-1 flex gap-2">
-                {!isMe && <span className="font-bold text-accent">{msg.sender} {msg.isHost && '(Capt)'}</span>}
+              <span className="text-[10px] text-ink-black/60 font-bold mb-1 flex gap-2 font-mono">
+                {!isMe && <span className="text-ink-blue">{msg.sender} {msg.isHost && '(Capt)'}</span>}
                 <span>{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                {isMe && <span className="font-bold text-accent">You</span>}
+                {isMe && <span className="text-ink-red">You</span>}
               </span>
-              <div className={`px-3 py-2 rounded-lg max-w-[85%] text-sm ${isMe ? 'bg-accent text-bg rounded-br-none' : 'bg-surface border border-border rounded-bl-none text-text-primary'}`}>
+              <div className={`px-4 py-2 shadow-sm font-handwriting text-lg font-bold max-w-[85%] border-2 ${isMe ? 'bg-manila text-ink-black rounded-tl-xl rounded-tr-xl rounded-bl-xl border-ink-black/30' : 'bg-paper-cream border-ink-black/20 rounded-tl-xl rounded-tr-xl rounded-br-xl text-ink-black'}`}>
                 {msg.message}
               </div>
             </motion.div>
@@ -71,15 +72,15 @@ const ChatPanel = ({ roomCode, currentPlayer }) => {
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSubmit} className="p-3 border-t border-border bg-surface flex gap-2">
+      <form onSubmit={handleSubmit} className="p-3 border-t-2 border-ink-black/20 bg-transparent flex gap-2">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Share intel..."
-          className="flex-1 text-sm py-2 px-3 bg-bg border-border rounded"
+          className="flex-1 text-lg py-2 px-3 bg-paper-cream/50 border-2 border-ink-black/20 focus:border-ink-black focus:outline-none font-handwriting !text-ink-black font-bold !placeholder-ink-black/50 transition-colors"
         />
-        <button type="submit" className="btn btn-primary px-4 py-2" disabled={!input.trim()}>
+        <button type="submit" className="bg-ink-black text-paper-cream px-6 py-2 font-bold uppercase tracking-widest border-2 border-ink-black shadow-[4px_4px_0_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[2px_2px_0_rgba(0,0,0,0.5)] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-ink-black/80 transition-colors" disabled={!input.trim()}>
           SEND
         </button>
       </form>

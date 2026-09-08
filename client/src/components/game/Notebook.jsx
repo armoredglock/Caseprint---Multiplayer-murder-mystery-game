@@ -18,13 +18,13 @@ const Notebook = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-surface relative overflow-hidden">
-      <div className="p-3 border-b border-border bg-surface flex justify-between items-center z-10">
-        <h3 className="font-ui font-semibold text-sm uppercase tracking-wider text-text-secondary">Personal Notebook</h3>
+    <div className="flex flex-col h-full bg-transparent relative overflow-hidden">
+      <div className="p-3 border-b-2 border-ink-black/20 bg-transparent flex justify-between items-center z-10">
+        <h3 className="font-typewriter font-bold text-sm uppercase tracking-widest text-ink-black/70">Personal Notebook</h3>
       </div>
       
       {/* Lined paper background */}
-      <div className="flex-1 relative bg-[#fdfdfd] text-ink-blue">
+      <div className="flex-1 relative bg-[#fdfdfd] text-ink-blue m-4 shadow-paper border-2 border-ink-black/10 transform rotate-1">
         <div 
           className="absolute inset-0 pointer-events-none" 
           style={{
@@ -38,7 +38,7 @@ const Notebook = () => {
           value={notes}
           onChange={handleNotesChange}
           placeholder="Jot down clues, suspect motives, and contradictions here..."
-          className="w-full h-full bg-transparent resize-none outline-none p-4 pl-14 font-handwriting text-xl leading-[28px] text-ink-blue relative z-20"
+          className="w-full h-full bg-transparent resize-none outline-none p-4 pl-14 font-handwriting text-2xl font-bold leading-[28px] text-ink-blue relative z-20"
           spellCheck="false"
         />
       </div>
