@@ -11,27 +11,48 @@ import CaseTimeline from './CaseTimeline';
 
 // Placeholders for the remaining two
 const IncidentReport = ({ overview }) => {
-  if (!overview) return <div className="p-8 text-center text-text-secondary font-mono">LOADING EVIDENCE FILE...</div>;
+  if (!overview) return <div className="p-4 font-mono">LOADING EVIDENCE FILE...</div>;
   return (
-  <div className="doc-official">
-    <div className="doc-header">
-      <div className="text-right w-full">
-        <h2 className="doc-title">INCIDENT REPORT</h2>
-        <p className="font-mono text-sm text-text-secondary">FORM 44-B (REV. 2021)</p>
-      </div>
+  <div className="bg-white p-4 font-mono text-sm text-gray-800">
+    <div className="space-y-6">
+      <section>
+        <div className="bg-[#1c2431] text-white px-4 py-3 flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold uppercase tracking-widest">INCIDENT REPORT</h2>
+          <p className="text-xs text-gray-300">FORM 44-B</p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-2 mb-6">
+          <div className="border-b border-gray-200 pb-2">
+            <span className="text-gray-500 font-bold block text-xs mb-1 uppercase tracking-widest">INCIDENT NO</span>
+            <span className="font-bold">{overview.incidentNumber}</span>
+          </div>
+          <div className="border-b border-gray-200 pb-2">
+            <span className="text-gray-500 font-bold block text-xs mb-1 uppercase tracking-widest">DATE</span>
+            <span className="font-bold">{overview.date}</span>
+          </div>
+          <div className="border-b border-gray-200 pb-2">
+            <span className="text-gray-500 font-bold block text-xs mb-1 uppercase tracking-widest">OFFICER</span>
+            <span className="font-bold">{overview.reportingOfficer}</span>
+          </div>
+          <div className="border-b border-gray-200 pb-2">
+            <span className="text-gray-500 font-bold block text-xs mb-1 uppercase tracking-widest">JURISDICTION</span>
+            <span className="font-bold">{overview.jurisdiction}</span>
+          </div>
+        </div>
+
+        <section className="px-2">
+          <h3 className="text-gray-500 font-bold uppercase tracking-widest text-lg border-b border-gray-300 mb-2">SUMMARY</h3>
+          <p className="leading-relaxed text-base">{overview.summary}</p>
+        </section>
+      </section>
+
+      <section className="mt-8 border-4 border-[#1c2431] p-4 relative mx-2">
+        <div className="absolute -top-4 left-4 bg-white px-3 py-1 font-bold text-[#1c2431] text-lg tracking-widest">STATUS</div>
+        <div className="pt-2 text-center">
+          <span className="text-2xl font-bold text-red-700 uppercase tracking-widest">ACTIVE INVESTIGATION</span>
+        </div>
+      </section>
     </div>
-    
-    <div className="doc-field-grid mt-6">
-      <div className="doc-field"><span className="doc-label">INCIDENT NO:</span><span className="doc-value">{overview.incidentNumber}</span></div>
-      <div className="doc-field"><span className="doc-label">DATE:</span><span className="doc-value">{overview.date}</span></div>
-      <div className="doc-field"><span className="doc-label">OFFICER:</span><span className="doc-value">{overview.reportingOfficer}</span></div>
-      <div className="doc-field"><span className="doc-label">JURISDICTION:</span><span className="doc-value">{overview.jurisdiction}</span></div>
-    </div>
-    <div className="mt-8">
-      <span className="doc-label block mb-2">SUMMARY OF INCIDENT:</span>
-      <p className="font-typewriter text-lg leading-relaxed text-ink-blue">{overview.summary}</p>
-    </div>
-    <div className="stamp stamp-red top-20 right-10">ACTIVE</div>
   </div>
 )};
 

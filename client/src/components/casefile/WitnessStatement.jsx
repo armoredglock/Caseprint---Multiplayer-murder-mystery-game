@@ -6,42 +6,35 @@ const WitnessStatement = ({ statements }) => {
   return (
     <div className="space-y-12">
       {statements.map((statement, idx) => (
-        <div key={idx} className="doc-statement relative shadow-md">
-          {/* Paper holes */}
-          <div className="absolute left-4 top-10 w-3 h-3 rounded-full bg-bg shadow-inner" />
-          <div className="absolute left-4 top-1/2 w-3 h-3 rounded-full bg-bg shadow-inner" />
-          <div className="absolute left-4 bottom-10 w-3 h-3 rounded-full bg-bg shadow-inner" />
-          
-          <div className="border-b-2 border-ink-black pb-2 mb-8">
-            <h2 className="font-ui font-bold text-xl uppercase tracking-widest text-ink-black">
-              SWORN STATEMENT
-            </h2>
-            <div className="flex justify-between text-sm font-mono mt-2 text-ink-black/70">
-              <span>WITNESS: {statement.witnessName.toUpperCase()}</span>
-              <span>DATE: {new Date(statement.timestamp).toLocaleDateString()}</span>
+        <div key={idx} className="bg-white p-4 font-mono text-sm text-gray-800 border-4 border-[#1c2431]">
+          <div className="bg-[#1c2431] text-white px-4 py-3 flex justify-between items-center mb-6">
+            <h2 className="text-xl font-bold uppercase tracking-widest">SWORN STATEMENT</h2>
+            <div className="text-right text-xs text-gray-300">
+              <p>WITNESS: {statement.witnessName.toUpperCase()}</p>
+              <p>DATE: {new Date(statement.timestamp).toLocaleDateString()}</p>
             </div>
           </div>
 
-          <div className="mb-6 font-mono text-sm text-ink-black/80 space-y-1">
-            <p>I, <strong>{statement.witnessName}</strong>, age {statement.age || '___'}, occupation {statement.occupation || '___'}, residing at {statement.address || '___'}, do hereby make the following statement of my own free will:</p>
+          <div className="px-2 mb-6 text-gray-600 leading-relaxed border-b border-gray-200 pb-4">
+            <p>I, <strong className="text-gray-900">{statement.witnessName}</strong>, age {statement.age || '___'}, occupation {statement.occupation || '___'}, residing at {statement.address || '___'}, do hereby make the following statement of my own free will:</p>
           </div>
 
-          <p className="whitespace-pre-wrap pl-4">
+          <p className="whitespace-pre-wrap px-2 leading-relaxed text-base text-gray-900 font-bold bg-gray-50 p-4 border-l-4 border-[#1c2431]">
             {statement.body}
           </p>
 
-          <div className="mt-12 pt-8 border-t border-ink-black/20 flex justify-between items-end">
-            <div className="font-mono text-sm text-ink-black/60">
-              Taken by: <br/>
-              <strong className="text-ink-black">{statement.takenBy}</strong>
+          <div className="mt-8 pt-4 px-2 flex justify-between items-end border-t-2 border-gray-200">
+            <div className="text-gray-500 text-xs font-bold tracking-widest uppercase">
+              Taken by:<br/>
+              <strong className="text-[#1c2431] text-sm block mt-1">{statement.takenBy}</strong>
             </div>
             
-            <div className="text-center">
-              <div className="signature">
+            <div className="text-right">
+              <div className="font-handwriting text-3xl text-[#1c2431] opacity-80 mb-2 transform -rotate-2">
                 {statement.signature || statement.witnessName}
               </div>
-              <div className="w-48 border-t border-ink-black mt-1 mx-auto" />
-              <span className="font-mono text-xs text-ink-black/60">Signature of Witness</span>
+              <div className="w-48 border-t-2 border-gray-300 ml-auto" />
+              <span className="font-mono text-xs text-gray-400 font-bold uppercase tracking-widest block mt-1">Signature of Witness</span>
             </div>
           </div>
         </div>

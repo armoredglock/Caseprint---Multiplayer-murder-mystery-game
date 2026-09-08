@@ -4,87 +4,62 @@ const ForensicReport = ({ forensics }) => {
   if (!forensics) return <div>No forensic data available.</div>;
 
   return (
-    <div className="bg-white p-8 font-mono text-sm text-gray-800 shadow-sm border border-gray-200 relative">
-      <div className="border-b-4 border-gray-800 pb-4 mb-6 flex justify-between items-end">
-        <div>
-          <h2 className="text-2xl font-bold uppercase tracking-widest text-gray-900">{forensics.labName || 'City Forensic Laboratory'}</h2>
-          <p className="text-gray-600 mt-1">OFFICIAL MEDICAL EXAMINER REPORT</p>
-        </div>
-        <div className="text-right">
-          <p><strong>REPORT NO:</strong> {forensics.reportNumber}</p>
-          <p><strong>DATE:</strong> {forensics.dateOfExam}</p>
-          <p><strong>EXAMINER:</strong> {forensics.examiner}</p>
-        </div>
-      </div>
-
+    <div className="bg-white p-4 font-mono text-sm text-gray-800">
+      
       <div className="space-y-6">
         <section>
-          <h3 className="bg-gray-800 text-white px-2 py-1 font-bold inline-block mb-2">EXTERNAL EXAMINATION</h3>
-          <p className="pl-4 border-l-2 border-gray-300 py-1 leading-relaxed">{forensics.externalExam || 'Pending'}</p>
-        </section>
-
-        <section>
-          <h3 className="bg-gray-800 text-white px-2 py-1 font-bold inline-block mb-2">INTERNAL EXAMINATION</h3>
-          <p className="pl-4 border-l-2 border-gray-300 py-1 leading-relaxed">{forensics.internalExam || 'Pending'}</p>
+          <h3 className="bg-[#1c2431] text-white px-4 py-2 text-xl font-bold uppercase tracking-widest mb-2">EXAMINATION</h3>
+          <p className="px-4 py-2 leading-relaxed text-base">{forensics.externalExam || forensics.internalExam || 'Otherwise healthy.'}</p>
         </section>
 
         {forensics.toxicology && forensics.toxicology.length > 0 && (
           <section>
-            <h3 className="bg-gray-800 text-white px-2 py-1 font-bold inline-block mb-2">TOXICOLOGY SCREEN</h3>
-            <table className="w-full mt-2 border-collapse border border-gray-300 text-left">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border border-gray-300 p-2">Substance</th>
-                  <th className="border border-gray-300 p-2">Result</th>
-                  <th className="border border-gray-300 p-2">Level</th>
-                  <th className="border border-gray-300 p-2">Reference</th>
-                </tr>
-              </thead>
-              <tbody>
-                {forensics.toxicology.map((tox, idx) => (
-                  <tr key={idx} className={tox.result.toLowerCase() === 'positive' ? 'bg-red-50 text-red-900 font-bold' : ''}>
-                    <td className="border border-gray-300 p-2">{tox.substance}</td>
-                    <td className="border border-gray-300 p-2">{tox.result}</td>
-                    <td className="border border-gray-300 p-2">{tox.level}</td>
-                    <td className="border border-gray-300 p-2 text-gray-500 font-normal">{tox.reference}</td>
+            <h3 className="bg-[#1c2431] text-white px-4 py-2 text-xl font-bold uppercase tracking-widest mb-2">TOXICOLOGY SCREEN</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full mt-2 border-collapse text-left">
+                <thead>
+                  <tr className="bg-gray-50 border-b border-gray-300">
+                    <th className="border-r border-gray-200 p-3 font-bold">Substance</th>
+                    <th className="border-r border-gray-200 p-3 font-bold">Result</th>
+                    <th className="border-r border-gray-200 p-3 font-bold">Level</th>
+                    <th className="p-3 font-bold">Reference</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {forensics.toxicology.map((tox, idx) => (
+                    <tr key={idx} className={`border-b border-gray-200 ${tox.result.toLowerCase() === 'positive' ? 'bg-red-50 text-red-900 font-bold' : ''}`}>
+                      <td className="border-r border-gray-200 p-3">{tox.substance}</td>
+                      <td className="border-r border-gray-200 p-3">{tox.result}</td>
+                      <td className="border-r border-gray-200 p-3">{tox.level}</td>
+                      <td className="p-3 text-gray-500">{tox.reference}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
           <section>
-             <h3 className="text-gray-500 font-bold border-b border-gray-300 mb-2">FINGERPRINTS</h3>
-             <p className="text-xs leading-relaxed break-words">{forensics.fingerprints || 'None recovered'}</p>
+             <h3 className="text-gray-500 font-bold uppercase tracking-widest text-lg border-b border-gray-300 mb-2">FINGERPRINTS</h3>
+             <p className="leading-relaxed break-words text-base">{forensics.fingerprints || 'None found.'}</p>
           </section>
           <section>
-            <h3 className="text-gray-500 font-bold border-b border-gray-300 mb-2">DNA</h3>
-            <p className="text-xs leading-relaxed">{forensics.dna || 'No foreign DNA detected'}</p>
+            <h3 className="text-gray-500 font-bold uppercase tracking-widest text-lg border-b border-gray-300 mb-2">DNA</h3>
+            <p className="leading-relaxed break-words text-base">{forensics.dna || 'No foreign DNA detected'}</p>
           </section>
         </div>
 
-        <section className="mt-8 border-4 border-gray-800 p-4 relative">
-          <div className="absolute -top-3 left-4 bg-white px-2 font-bold text-gray-800 tracking-widest">CONCLUSION</div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <section className="mt-8 border-4 border-[#1c2431] p-4 relative">
+          <div className="absolute -top-4 left-4 bg-white px-3 py-1 font-bold text-[#1c2431] text-lg tracking-widest">CONCLUSION</div>
+          <div className="grid grid-cols-1 gap-6 pt-4">
             <div>
-              <span className="text-gray-500 font-bold block text-xs mb-1">CAUSE OF DEATH</span>
-              <p className="text-lg font-bold text-red-700 uppercase">{forensics.causeOfDeath || 'Pending'}</p>
-            </div>
-            <div>
-              <span className="text-gray-500 font-bold block text-xs mb-1">MANNER OF DEATH</span>
-              <p className="text-lg font-bold uppercase">{forensics.mannerOfDeath || 'Pending'}</p>
+              <span className="text-gray-500 font-bold block text-sm mb-1">CAUSE OF DEATH</span>
+              <p className="text-xl font-bold text-red-700 uppercase">{forensics.causeOfDeath || 'Pending'}</p>
             </div>
           </div>
-          {forensics.additionalNotes && (
-            <div className="mt-4 pt-4 border-t border-gray-200">
-              <span className="text-gray-500 font-bold block text-xs mb-1">EXAMINER NOTES</span>
-              <p className="text-sm italic">{forensics.additionalNotes}</p>
-            </div>
-          )}
         </section>
-
       </div>
     </div>
   );
