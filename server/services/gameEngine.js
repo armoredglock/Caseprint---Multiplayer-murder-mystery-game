@@ -8,6 +8,90 @@ const Case = require('../models/Case');
 // Store active timers to clear them when game ends
 const activeTimers = new Map();
 
+const randomizeEvidenceDistribution = (baseCase) => {
+  // Deep clone to avoid mutating the base case
+  const randomized = JSON.parse(JSON.stringify(baseCase));
+  
+  // Rule 1 & 4: base suspects, base witnesses, standard digital evidence in Wave 1.
+  if (randomized.suspects) {
+    randomized.suspects.forEach(s => {
+      // 80% chance base suspects are wave 1, else wave 2
+      s.wave = Math.random() < 0.8 ? 1 : 2;
+    });
+  }
+  
+  if (randomized.witnessStatements) {
+    randomized.witnessStatements.forEach(w => w.wave = 1);
+  }
+
+  // Rule 2: Forensics - sometimes fast (Wave 1) sometimes late (Wave 2 or 3)
+  if (randomized.forensics) {
+    const r = Math.random();
+    randomized.forensics.wave = r < 0.3 ? 1 : (r < 0.7 ? 2 : 3);
+  }
+
+  // Rule 3: Physical Evidence earlier or later
+  if (randomized.physicalEvidence) {
+    randomized.physicalEvidence.forEach(e => {
+      const r = Math.random();
+      e.wave = r < 0.4 ? 1 : (r < 0.8 ? 2 : 3);
+    });
+  }
+
+  if (randomized.digitalEvidence) {
+    if (randomized.digitalEvidence.phoneRecords) {
+      randomized.digitalEvidence.phoneRecords.forEach(p => p.wave = 1);
+    }
+    if (randomized.digitalEvidence.emails) {
+      randomized.digitalEvidence.emails.forEach(e => e.wave = 1);
+    }
+    
+    // Rule 5: CCTV sometimes distorted (Wave 2, 3, 4)
+    if (randomized.digitalEvidence.cctvLogs) {
+      randomized.digitalEvidence.cctvLogs.forEach(c => {
+        if (c.note.includes("DISTORTED") || c.note.includes("corrupt") || c.flagged) {
+          const r = Math.random();
+          c.wave = r < 0.33 ? 2 : (r < 0.66 ? 3 : 4);
+        } else {
+          c.wave = 1;
+        }
+      });
+    }
+
+    // Rule 6: Encoded puzzles in ANY level
+    if (randomized.digitalEvidence.puzzles) {
+      randomized.digitalEvidence.puzzles.forEach(p => {
+        p.wave = Math.floor(Math.random() * 4) + 1; // 1 to 4
+      });
+    }
+  }
+
+  return randomized;
+};
+
+const generateNarrativeForWave = (caseObj, waveNum) => {
+  const parts = [];
+  if (caseObj.forensics && caseObj.forensics.wave === waveNum) {
+    parts.push("The lab has finally sent over the forensics report.");
+  }
+  if (caseObj.digitalEvidence?.cctvLogs?.some(c => c.wave === waveNum && c.flagged)) {
+    parts.push("Tech division recovered delayed or distorted CCTV footage.");
+  }
+  if (caseObj.digitalEvidence?.puzzles?.some(p => p.wave === waveNum)) {
+    parts.push("We discovered an encrypted puzzle that needs your immediate attention.");
+  }
+  if (caseObj.physicalEvidence?.some(e => e.wave === waveNum)) {
+    parts.push("Officers found new physical evidence linked to the scene.");
+  }
+  if (caseObj.suspects?.some(s => s.wave === waveNum)) {
+    parts.push("A new person of interest has been identified.");
+  }
+  
+  if (parts.length === 0) return `UPDATE: We have unlocked more background details for Wave ${waveNum}.`;
+  
+  return `UPDATE: ${parts.join(" ")}`;
+};
+
 const startGame = async (io, roomCode, scenarioId) => {
   const room = await roomManager.getRoom(roomCode);
   if (!room) return;
@@ -28,44 +112,48 @@ const startGame = async (io, roomCode, scenarioId) => {
     }
   }
 
+  // Get base case and generate custom randomized distribution
+  const baseCase = await caseService.getFullCase(caseId);
+  const customizedCase = baseCase ? randomizeEvidenceDistribution(baseCase) : null;
+
   await roomManager.updateRoom(roomCode, {
     status: 'IN_GAME',
     phase: 'INVESTIGATION', 
     scenarioId,
     caseId,
+    caseDataOverride: customizedCase,
     currentWave: 1,
     phaseStartedAt: new Date()
   });
 
-  // Broadcast game start
-  io.to(roomCode).emit('game:started', { phase: 'INVESTIGATION', duration: 0 });
-  
+  io.to(roomCode).emit('game:started', { phase: 'INVESTIGATION' });
+  io.to(roomCode).emit('chat:broadcast', {
+    sender: 'SYSTEM',
+    message: 'The investigation has begun. Review the initial case file.',
+    timestamp: new Date().toISOString()
+  });
+
   // Send Wave 1 data immediately
-  const caseData = await caseService.getCaseDataForWave(caseId, 1);
+  const caseData = await caseService.getCaseDataForWave(roomCode, 1);
   io.to(roomCode).emit('game:case-data', { wave: 1, caseData });
 
   // Setup dynamic timer-based waves
-  // Wave 1 is already sent. We will schedule Waves 2, 3, and 4.
   const timers = [];
   let accumulatedTime = 0;
   
   // Helper to schedule a wave
-  const scheduleWave = (waveNum, minSecs, maxSecs, customMessage) => {
+  const scheduleWave = (waveNum, minSecs, maxSecs) => {
     const delay = Math.floor(Math.random() * (maxSecs - minSecs + 1) + minSecs) * 1000;
     accumulatedTime += delay;
     timers.push(setTimeout(() => {
-      triggerClueWave(io, roomCode, waveNum, customMessage);
+      triggerClueWave(io, roomCode, waveNum);
     }, accumulatedTime));
   };
 
-  // Wave 2: Lab Reports & New Suspects (approx 1 - 2 mins in)
-  scheduleWave(2, 60, 120, "UPDATE: The forensics lab just sent over their preliminary report! We also have new evidence and a person of interest to review.");
-  
-  // Wave 3: Deep Digital / Recovered CCTV (approx 2 - 4 mins in)
-  scheduleWave(3, 60, 120, "UPDATE: Tech division managed to recover a distorted CCTV feed from the stairwell. Check the digital evidence log immediately.");
-  
-  // Wave 4: Puzzles / Breakthrough (approx 3 - 6 mins in)
-  scheduleWave(4, 60, 120, "URGENT UPDATE: We found a heavily encrypted file on the victim's personal drive. Our tech guys can't crack it, we need you to decode this puzzle.");
+  // Schedule Waves 2, 3, and 4 dynamically
+  scheduleWave(2, 60, 120);
+  scheduleWave(3, 60, 120);
+  scheduleWave(4, 60, 120);
 
   activeTimers.set(roomCode, timers);
 };
@@ -100,13 +188,18 @@ const advancePhase = async (io, roomCode, currentPhase) => {
   }
 };
 
-const triggerClueWave = async (io, roomCode, waveNum, message = null) => {
+const triggerClueWave = async (io, roomCode, waveNum) => {
   const room = await roomManager.getRoom(roomCode);
   if (!room || room.phase !== 'INVESTIGATION') return;
 
   await roomManager.updateRoom(roomCode, { currentWave: waveNum });
   
-  const caseData = await caseService.getCaseDataForWave(room.caseId, waveNum);
+  const caseService = require('./caseService');
+  const caseData = await caseService.getCaseDataForWave(roomCode, waveNum);
+  
+  const caseObj = room.caseDataOverride || await caseService.getFullCase(room.caseId);
+  const message = generateNarrativeForWave(caseObj, waveNum);
+
   io.to(roomCode).emit('game:clue-wave', { wave: waveNum, caseData, message });
 };
 

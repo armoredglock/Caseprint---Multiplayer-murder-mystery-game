@@ -24,6 +24,7 @@ const roomSchema = new mongoose.Schema({
   hostName: String,
   scenarioId: { type: String, required: true },
   caseId: { type: String, required: true },
+  caseDataOverride: { type: mongoose.Schema.Types.Mixed },
   password: { type: String, default: '' },
   players: { type: [playerSchema], default: [] },
   maxPlayers: { type: Number, default: 10 },

@@ -47,19 +47,30 @@ const filterByWave = (arr, currentWave) => {
   return arr.filter(item => !item.wave || item.wave <= currentWave);
 };
 
-const getCaseDataForWave = async (caseId, currentWave) => {
+const getFullCase = async (caseId) => {
   let fullCase = null;
   try {
     fullCase = await Case.findOne({ caseId });
   } catch (err) {}
 
+  if (fullCase) return fullCase.toObject();
+  return seedCases.find(c => c.caseId === caseId) || null;
+};
+
+const getCaseDataForWave = async (roomCode, currentWave) => {
   let caseObj = null;
-  if (!fullCase) {
-    caseObj = seedCases.find(c => c.caseId === caseId);
-    if (!caseObj) return null;
-  } else {
-    caseObj = fullCase.toObject();
-  }
+  
+  // Try to find the room and its overridden case data
+  try {
+    const room = await Room.findOne({ roomCode });
+    if (room && room.caseDataOverride) {
+      caseObj = room.caseDataOverride;
+    } else if (room) {
+      caseObj = await getFullCase(room.caseId);
+    }
+  } catch (err) {}
+
+  if (!caseObj) return null;
   
   // Base fields that don't need wave filtering
   const filteredCase = {
@@ -99,19 +110,13 @@ const getCaseDataForWave = async (caseId, currentWave) => {
 };
 
 const getCaseSolution = async (caseId) => {
-  let fullCase = null;
-  try {
-    fullCase = await Case.findOne({ caseId });
-  } catch(err) {}
-
-  if (fullCase) return fullCase.solution;
-  
-  const memoryCase = seedCases.find(c => c.caseId === caseId);
-  return memoryCase ? memoryCase.solution : null;
+  const caseObj = await getFullCase(caseId);
+  return caseObj ? caseObj.solution : null;
 };
 
 module.exports = {
   getPublicCases,
   getCaseDataForWave,
-  getCaseSolution
+  getCaseSolution,
+  getFullCase
 };
