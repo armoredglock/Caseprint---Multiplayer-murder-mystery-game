@@ -238,6 +238,7 @@ const submitAccusation = async (io, roomCode, socketId, accusation) => {
   
   // Notify room that someone submitted
   io.to(roomCode).emit('game:player-accused', { playerName: player.name });
+  io.to(roomCode).emit('room:state', updatedRoom);
 
   // If everyone has accused, end phase automatically
   const allAccused = updatedRoom.players.every(p => p.hasAccused);
