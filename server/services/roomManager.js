@@ -40,11 +40,22 @@ const joinRoom = async (roomCode, socketId, playerName, password = '') => {
   
   if (!room) throw new Error('Room not found');
   if (room.password && room.password !== password) throw new Error('Incorrect password');
-  if (room.status !== 'LOBBY') throw new Error('Game already in progress');
-  if (room.players.length >= room.maxPlayers) throw new Error('Room is full');
-  if (room.players.some(p => p.name === playerName)) throw new Error('Name already taken');
+  
+  const existingPlayerIndex = room.players.findIndex(p => p.name === playerName);
 
-  room.players.push({ socketId, name: playerName });
+  if (existingPlayerIndex !== -1) {
+    // Player is reconnecting! Update their socketId.
+    room.players[existingPlayerIndex].socketId = socketId;
+    if (room.hostName === playerName) {
+      room.hostSocketId = socketId;
+    }
+  } else {
+    // New player joining
+    if (room.status !== 'LOBBY') throw new Error('Game already in progress');
+    if (room.players.length >= room.maxPlayers) throw new Error('Room is full');
+    room.players.push({ socketId, name: playerName });
+  }
+
   await room.save();
   
   activeRooms.set(roomCode, room.toObject());

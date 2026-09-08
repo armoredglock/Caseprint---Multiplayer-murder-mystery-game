@@ -249,9 +249,9 @@ const submitAccusation = async (io, roomCode, socketId, accusation) => {
 const resolveGame = async (io, roomCode) => {
   const room = await roomManager.getRoom(roomCode);
   const solution = await caseService.getCaseSolution(room.caseId);
-  const caseMeta = await caseService.getCaseDataForWave(room.caseId, 0); // for title
+  const caseMeta = await caseService.getCaseDataForWave(roomCode, 0); // Need to pass roomCode, not caseId
   
-  if (!room || !solution) return;
+  if (!room || !solution || !caseMeta) return;
 
   await roomManager.updateRoom(roomCode, { phase: 'VERDICT' });
 
@@ -267,7 +267,7 @@ const resolveGame = async (io, roomCode) => {
   const results = await Promise.all(room.players.map(async (player) => {
     let score = 0;
     
-    const acc = room.accusations.find(a => a.socketId === player.socketId) || {
+    const acc = room.accusations.find(a => a.playerName === player.name) || {
       suspect: 'None',
       motive: 'Did not submit in time.',
       method: 'Did not submit in time.',
