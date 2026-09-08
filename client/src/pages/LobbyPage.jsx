@@ -258,12 +258,22 @@ const LobbyPage = () => {
                 </div>
               </div>
             ) : (
-              <div className="space-y-6 text-center py-8 relative z-10">
-                <div className="w-16 h-16 mx-auto rounded-full border-4 border-ink-black/20 border-t-ink-black animate-spin mb-6" />
-                <p className="text-2xl font-bold font-handwriting !text-ink-black tracking-wide">Awaiting Captain's Orders...</p>
-                <p className="text-ink-black/70 font-bold mb-8">The host is reviewing the case file.</p>
+              <div className="space-y-6 relative z-10">
+                <div className="bg-paper-cream p-4 border-2 border-ink-black/20 shadow-sm relative">
+                  <div className="absolute top-2 right-2 stamp stamp-red opacity-40 text-sm transform rotate-12">CLASSIFIED</div>
+                  <p className="font-mono text-ink-red font-bold mb-2 uppercase tracking-widest text-sm border-b-2 border-ink-black/10 pb-1 inline-block">Top Secret</p>
+                  <p className="text-ink-black/80 font-bold leading-relaxed">
+                    Target Case File: <span className="font-mono bg-ink-black/10 px-1 text-ink-black">#{roomState.caseId}</span>
+                  </p>
+                </div>
+
+                <div className="space-y-4 text-center py-4">
+                  <div className="w-12 h-12 mx-auto rounded-full border-4 border-ink-black/20 border-t-ink-black animate-spin mb-4" />
+                  <p className="text-2xl font-bold font-handwriting !text-ink-black tracking-wide">Awaiting Captain's Orders...</p>
+                  <p className="text-ink-black/70 font-bold text-sm">The host will open the file when the team is ready.</p>
+                </div>
                 
-                <div className="pt-6 border-t-2 border-ink-black/20">
+                <div className="pt-4 border-t-2 border-ink-black/20">
                   <button 
                     onClick={handleLeaveOrEnd}
                     className="w-full bg-transparent text-ink-red py-3 font-bold uppercase tracking-widest hover:bg-ink-red/10 transition-colors border-2 border-ink-red shadow-[4px_4px_0_rgba(204,0,0,0.3)] active:translate-y-1 active:shadow-[2px_2px_0_rgba(204,0,0,0.3)]"
