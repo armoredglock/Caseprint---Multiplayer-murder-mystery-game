@@ -171,17 +171,21 @@ const LobbyPage = () => {
                               autoFocus
                               type="text" 
                               value={editNameValue}
+                              maxLength={20}
                               onChange={(e) => setEditNameValue(e.target.value)}
-                              className="w-full text-xl px-1 py-0.5 bg-transparent border-b-2 border-ink-black focus:outline-none font-handwriting !text-ink-black"
+                              className="w-full text-xl px-1 py-0.5 bg-transparent border-b-2 border-ink-black focus:outline-none font-mono font-bold !text-ink-black"
                               onKeyDown={(e) => {
                                 if (e.key === 'Enter') handleSaveName();
-                                if (e.key === 'Escape') setIsEditingName(false);
+                                if (e.key === 'Escape') {
+                                  setIsEditingName(false);
+                                  setEditNameValue(currentPlayer?.name || '');
+                                }
                               }}
                             />
                           </div>
                         ) : (
                           <div className="flex items-center gap-2">
-                            <p className="font-handwriting text-2xl font-bold truncate !text-ink-black" title={player.name}>{player.name}</p>
+                            <p className="font-mono text-xl font-bold truncate !text-ink-black" title={player.name}>{player.name}</p>
                             {isMe && (
                               <button onClick={() => { setIsEditingName(true); setEditNameValue(player.name); }} className="text-sm text-ink-black/50 hover:text-ink-black transition-colors" title="Edit Name">✏️</button>
                             )}
@@ -205,7 +209,7 @@ const LobbyPage = () => {
               {Array.from({ length: Math.max(0, (roomState.maxPlayers || 10) - (roomState.players?.length || 0)) }).map((_, i) => (
                 <div key={`empty-${i}`} className="bg-paper-cream/20 p-4 shadow-sm border-2 border-paper-cream/30 border-dashed flex items-center gap-3 opacity-60">
                    <div className="w-12 h-12 bg-transparent flex items-center justify-center border-2 border-paper-cream/30 border-dashed" />
-                   <p className="text-paper-cream font-bold font-handwriting text-xl tracking-wide opacity-80">Awaiting Agent...</p>
+                   <p className="text-paper-cream font-bold font-mono text-xl tracking-wide opacity-80">Awaiting Agent...</p>
                 </div>
               ))}
               </div>
@@ -269,7 +273,7 @@ const LobbyPage = () => {
 
                 <div className="space-y-4 text-center py-4">
                   <div className="w-12 h-12 mx-auto rounded-full border-4 border-ink-black/20 border-t-ink-black animate-spin mb-4" />
-                  <p className="text-2xl font-bold font-handwriting !text-ink-black tracking-wide">Awaiting Captain's Orders...</p>
+                  <p className="text-2xl font-bold font-mono !text-ink-black tracking-wide">Awaiting Captain's Orders...</p>
                   <p className="text-ink-black/70 font-bold text-sm">The host will open the file when the team is ready.</p>
                 </div>
                 
