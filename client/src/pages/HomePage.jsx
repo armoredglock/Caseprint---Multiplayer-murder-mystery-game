@@ -126,7 +126,6 @@ const getRandomName = () => {
         <div className="flex flex-col md:flex-row gap-8 w-full max-w-4xl justify-center">
           
           {/* Create Room Card */}
-          {/* Create Room Card */}
           <motion.div 
             className="bg-manila-dark text-ink-black p-6 md:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.8)] border border-[#967d4a] w-full md:w-1/2 relative before:content-[''] before:absolute before:top-0 before:left-4 before:w-12 before:h-2 before:bg-[#967d4a]"
             style={{ clipPath: 'polygon(0 0, 30% 0, 33% 20px, 100% 20px, 100% 100%, 0 100%)', borderRadius: '4px 4px 4px 4px', paddingTop: '32px' }}
@@ -153,7 +152,7 @@ const getRandomName = () => {
                     value={playerName}
                     onChange={(e) => setPlayerName(e.target.value)}
                     maxLength={20}
-                    className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/40 font-handwriting text-xl"
+                    className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/70 !text-ink-black font-handwriting text-2xl font-bold"
                   />
                   <button type="button" onClick={() => setPlayerName(getRandomName())} className="px-3 text-2xl hover:scale-110 transition-transform" title="Randomize Name">
                     🎲
@@ -168,10 +167,10 @@ const getRandomName = () => {
                   <select 
                     value={selectedCaseId} 
                     onChange={(e) => setSelectedCaseId(e.target.value)}
-                    className="w-full bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 font-mono text-sm"
+                    className="w-full bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 font-mono text-sm !text-ink-black font-bold"
                   >
                     {cases.map(c => (
-                      <option key={c.caseId} value={c.caseId}>
+                      <option key={c.caseId} value={c.caseId} className="bg-manila-dark text-ink-black font-bold">
                         {c.title} [{c.difficulty}]
                       </option>
                     ))}
@@ -186,7 +185,7 @@ const getRandomName = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   maxLength={20}
-                  className="w-full bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/40 font-mono"
+                  className="w-full bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/70 !text-ink-black font-mono font-bold"
                 />
               </div>
               <button 
@@ -226,7 +225,7 @@ const getRandomName = () => {
                     value={playerName}
                     onChange={(e) => setPlayerName(e.target.value)}
                     maxLength={20}
-                    className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/40 font-handwriting text-xl"
+                    className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/70 !text-ink-black font-handwriting text-2xl font-bold"
                   />
                   <button type="button" onClick={() => setPlayerName(getRandomName())} className="px-3 text-2xl hover:scale-110 transition-transform" title="Randomize Name">
                     🎲
@@ -241,7 +240,7 @@ const getRandomName = () => {
                   value={roomCode}
                   onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
                   maxLength={6}
-                  className="w-full bg-transparent border-b-2 border-ink-black/30 focus:border-ink-black focus:outline-none px-2 py-1 uppercase text-center text-2xl tracking-widest font-mono font-bold text-ink-blue"
+                  className="w-full bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 uppercase text-center text-3xl tracking-widest font-mono font-bold !text-ink-blue placeholder-ink-black/40"
                 />
               </div>
               <div>
@@ -252,7 +251,7 @@ const getRandomName = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   maxLength={20}
-                  className="w-full bg-transparent border-b-2 border-ink-black/30 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/30 font-mono"
+                  className="w-full bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 placeholder-ink-black/70 !text-ink-black font-mono font-bold"
                 />
               </div>
               <button 
