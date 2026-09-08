@@ -40,6 +40,18 @@ const joinRoom = async (roomCode, socketId, playerName, password = '') => {
   
   if (!room) throw new Error('Room not found');
   
+  // Clean up any ghost players (same socket, different name)
+  const ghostIndex = room.players.findIndex(p => p.socketId === socketId && p.name !== playerName);
+  if (ghostIndex !== -1) {
+    const wasHost = room.players[ghostIndex].isHost;
+    room.players.splice(ghostIndex, 1);
+    if (wasHost && room.players.length > 0) {
+      room.players[0].isHost = true;
+      room.hostSocketId = room.players[0].socketId;
+      room.hostName = room.players[0].name;
+    }
+  }
+  
   const existingPlayerIndex = room.players.findIndex(p => p.name === playerName);
 
   if (existingPlayerIndex !== -1) {

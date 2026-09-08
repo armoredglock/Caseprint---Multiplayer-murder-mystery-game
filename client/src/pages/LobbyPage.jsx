@@ -126,7 +126,7 @@ const LobbyPage = () => {
             <div className="max-h-[50vh] lg:max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {roomState.players?.map((player, idx) => {
-                  const isMe = player.socketId === currentPlayer.socketId;
+                  const isMe = player.name === currentPlayer?.name;
                   const isEditing = isMe && isEditingName;
                   
                   return (

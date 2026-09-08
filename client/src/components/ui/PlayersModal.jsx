@@ -44,7 +44,7 @@ const PlayersModal = ({ isOpen, onClose }) => {
             
             <div className="p-4 overflow-y-auto custom-scrollbar flex-1 space-y-3">
               {roomState.players?.map((player) => {
-                const isMe = player.socketId === currentPlayer.socketId;
+                const isMe = player.name === currentPlayer?.name;
                 
                 return (
                   <div 
