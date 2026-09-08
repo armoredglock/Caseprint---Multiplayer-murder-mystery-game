@@ -117,9 +117,14 @@ const LobbyPage = () => {
             <p className="text-manila uppercase tracking-widest text-sm font-bold">Assemble your team</p>
           </div>
           
-          <div className="mt-6 md:mt-0 flex flex-col items-center bg-paper-cream text-ink-black p-3 md:p-4 border-2 border-ink-black/20 shadow-folder transform rotate-1 md:rotate-2 max-w-xs relative before:content-[''] before:absolute before:-top-3 before:left-1/2 before:-translate-x-1/2 before:w-4 before:h-4 before:rounded-full before:bg-red-800 before:shadow-[inset_0_3px_5px_rgba(0,0,0,0.5),0_2px_4px_rgba(0,0,0,0.4)]">
-            <span className="text-xs text-ink-black/60 uppercase mb-1 font-bold tracking-widest">Case Room Code</span>
-            <div className="flex items-center gap-4">
+          <div className="mt-6 md:mt-0 flex flex-col items-center bg-[#f4f1ea] text-ink-black p-3 md:p-4 border border-ink-black/20 shadow-[2px_5px_15px_rgba(0,0,0,0.4)] transform rotate-1 md:rotate-2 max-w-xs relative before:content-[''] before:absolute before:inset-0 before:bg-[url('/textures/paper-cream.png')] before:opacity-50 before:mix-blend-multiply before:pointer-events-none">
+            {/* Realistic Push Pin */}
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 w-4 h-4 rounded-full bg-red-600 shadow-[1px_4px_6px_rgba(0,0,0,0.6),inset_-2px_-2px_4px_rgba(0,0,0,0.4)] before:content-[''] before:absolute before:top-[2px] before:left-[2px] before:w-1.5 before:h-1.5 before:bg-white/60 before:rounded-full">
+              {/* Pin Metal Needle Shadow */}
+              <div className="absolute -bottom-3 left-1 w-1 h-3 bg-black/30 rounded-full blur-[1px] -z-10 transform -rotate-[20deg]" />
+            </div>
+            <span className="text-xs text-ink-black/60 uppercase mb-1 font-bold tracking-widest relative z-10 font-typewriter">Case Room Code</span>
+            <div className="flex items-center gap-4 relative z-10">
               <span className="font-mono text-3xl font-bold text-ink-blue tracking-widest">{roomCode}</span>
               <button onClick={handleCopyLink} className="bg-transparent border-2 border-ink-black text-ink-black text-xs px-2 py-1 font-bold uppercase tracking-widest hover:bg-ink-black hover:text-paper-cream transition-colors shadow-[2px_2px_0_rgba(0,0,0,0.5)] active:translate-y-0.5 active:shadow-[1px_1px_0_rgba(0,0,0,0.5)]">
                 Copy
