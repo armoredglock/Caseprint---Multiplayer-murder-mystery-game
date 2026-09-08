@@ -78,7 +78,7 @@ const ChatPanel = ({ roomCode, currentPlayer }) => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Share intel..."
-          className="flex-1 text-lg py-2 px-3 bg-paper-cream/50 border-2 border-ink-black/20 focus:border-ink-black focus:outline-none font-handwriting !text-ink-black font-bold !placeholder-ink-black/50 transition-colors"
+          className="flex-1 text-lg py-2 px-3 !bg-paper-cream !border-2 !border-ink-black/20 focus:!border-ink-black focus:!outline-none font-handwriting !text-ink-black font-bold !placeholder-ink-black/50 transition-colors shadow-inner"
         />
         <button type="submit" className="bg-ink-black text-paper-cream px-6 py-2 font-bold uppercase tracking-widest border-2 border-ink-black shadow-[4px_4px_0_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[2px_2px_0_rgba(0,0,0,0.5)] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-ink-black/80 transition-colors" disabled={!input.trim()}>
           SEND
