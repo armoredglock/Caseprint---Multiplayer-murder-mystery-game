@@ -60,6 +60,7 @@
   transition: background-color 0.2s;
   position: relative;
   z-index: 1;
+  flex-shrink: 0;
 }
 
 .folder-tab:not(:last-child) {

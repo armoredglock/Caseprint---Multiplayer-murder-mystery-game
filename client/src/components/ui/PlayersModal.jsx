@@ -61,10 +61,10 @@ const PlayersModal = ({ isOpen, onClose }) => {
                           🕵️
                         </div>
                         <div className="flex-1 overflow-hidden">
-                          <p className={`font-bold truncate text-base font-mono ${player.isOffline ? 'text-gray-400 line-through' : 'text-gray-900'}`}>
+                          <p className={`font-bold truncate text-lg font-typewriter ${player.isOffline ? 'text-gray-400 line-through' : 'text-gray-900'}`}>
                             {player.name} 
-                            {isMe && <span className="text-[10px] bg-gray-900 text-white px-1.5 py-0.5 ml-2 font-bold font-mono tracking-widest uppercase">YOU</span>}
-                            {player.isOffline && <span className="text-[10px] bg-gray-200 text-gray-600 px-1.5 py-0.5 ml-2 font-bold font-mono tracking-widest uppercase">OFFLINE</span>}
+                            {isMe && <span className="text-[10px] bg-gray-900 text-white px-1.5 py-0.5 ml-2 font-bold font-mono tracking-widest uppercase align-middle">YOU</span>}
+                            {player.isOffline && <span className="text-[10px] bg-gray-200 text-gray-600 px-1.5 py-0.5 ml-2 font-bold font-mono tracking-widest uppercase align-middle">OFFLINE</span>}
                           </p>
                           {player.isHost && <span className={`text-[10px] uppercase font-bold block font-mono tracking-widest ${player.isOffline ? 'text-gray-400' : 'text-[#1c2431]'}`}>Captain</span>}
                         </div>
