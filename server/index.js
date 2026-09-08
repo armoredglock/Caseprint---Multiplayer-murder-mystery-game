@@ -95,8 +95,16 @@ io.on('connection', (socket) => {
         targetSocket.leave(roomCode);
       }
 
-      // Notify others in room
-      io.to(roomCode).emit('room:player-joined', { players: room.players });
+      // Check if we should end the game
+      const activePlayers = room.players.filter(p => !p.isOffline);
+      if (room.status !== 'LOBBY' && activePlayers.length < 2) {
+        io.to(roomCode).emit('session_ended');
+        gameEngine.clearTimersForRoom(roomCode);
+        await roomManager.deleteRoom(roomCode);
+      } else {
+        // Notify others in room
+        io.to(roomCode).emit('room:player-joined', { players: room.players });
+      }
       
       if (callback) callback({ success: true });
     } catch (err) {
@@ -110,7 +118,14 @@ io.on('connection', (socket) => {
       if (result) {
         socket.leave(data.roomCode);
         if (!result.destroyed) {
-          io.to(data.roomCode).emit('room:player-joined', { players: result.room.players });
+          const activePlayers = result.room.players.filter(p => !p.isOffline);
+          if (result.room.status !== 'LOBBY' && activePlayers.length < 2) {
+            io.to(data.roomCode).emit('session_ended');
+            gameEngine.clearTimersForRoom(data.roomCode);
+            await roomManager.deleteRoom(data.roomCode);
+          } else {
+            io.to(data.roomCode).emit('room:player-joined', { players: result.room.players });
+          }
         }
       }
       if (callback) callback({ success: true });
@@ -199,7 +214,14 @@ io.on('connection', (socket) => {
     console.log(`[Socket] User disconnected: ${socket.id}`);
     const affectedRooms = await roomManager.setPlayerOffline(socket.id);
     for (const room of affectedRooms) {
-      io.to(room.roomCode).emit('room:state', room);
+      const activePlayers = room.players.filter(p => !p.isOffline);
+      if (room.status !== 'LOBBY' && activePlayers.length < 2) {
+        io.to(room.roomCode).emit('session_ended');
+        gameEngine.clearTimersForRoom(room.roomCode);
+        await roomManager.deleteRoom(room.roomCode);
+      } else {
+        io.to(room.roomCode).emit('room:state', room);
+      }
     }
   });
 });

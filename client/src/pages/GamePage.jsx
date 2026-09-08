@@ -83,7 +83,7 @@ const GamePage = () => {
               animate={{ scale: 1, rotate: 0, y: 0, opacity: 1 }}
               exit={{ y: '100vh', rotate: 10, scale: 0.8, opacity: 0 }}
               transition={{ delay: 0.2, duration: 0.8, type: 'spring', bounce: 0.4 }}
-              className="bg-manila-dark p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.9)] border-2 border-[#967d4a] relative max-w-xl text-center flex flex-col items-center justify-center"
+              className="bg-manila-dark p-6 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.9)] border-2 border-[#967d4a] relative w-11/12 max-w-xl mx-auto text-center flex flex-col items-center justify-center"
               style={{ clipPath: 'polygon(0 0, 30% 0, 32% 20px, 100% 20px, 100% 100%, 0 100%)', borderRadius: '4px 4px 4px 4px', paddingTop: '40px' }}
             >
                {/* Distressed Inner Borders */}
@@ -95,10 +95,10 @@ const GamePage = () => {
                  <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
                </svg>
 
-               <div className="absolute top-6 right-6 stamp stamp-red opacity-50 transform rotate-12 text-3xl">CLASSIFIED</div>
-               <h1 className="font-typewriter text-5xl md:text-7xl font-bold text-ink-black mb-4 mt-8 px-4">CASE #{roomState.caseId}</h1>
+               <div className="absolute top-6 right-6 stamp stamp-red opacity-50 transform rotate-12 text-2xl md:text-3xl">CLASSIFIED</div>
+               <h1 className="font-typewriter text-4xl md:text-7xl font-bold text-ink-black mb-4 mt-8 px-4 break-words w-full leading-tight">CASE #{roomState.caseId}</h1>
                <div className="w-24 h-1 bg-ink-black/20 mx-auto mb-8"></div>
-               <p className="font-handwriting text-4xl text-ink-black font-bold tracking-wide">Opening File...</p>
+               <p className="font-mono text-2xl text-ink-black font-bold tracking-widest uppercase">Opening File...</p>
             </motion.div>
           </motion.div>
         )}
