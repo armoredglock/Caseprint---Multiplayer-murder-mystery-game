@@ -3,8 +3,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  padding: 20px 10px;
-  perspective: 1000px;
+  padding: 10px 10px 10px 10px;
   /* Make transparent so global wood desk shows through */
   background: transparent;
   display: flex;
@@ -23,21 +22,20 @@
   /* Paper texture */
   background-image: url('/textures/paper-cream.png');
   background-blend-mode: multiply;
-  border: 1px solid var(--color-manila-dark);
+  border: 2px solid var(--color-ink-black);
+  z-index: 5;
 }
 
 .folder-tabs {
   display: flex;
-  position: absolute;
-  top: -40px;
-  left: 0;
-  right: 0;
+  width: 100%;
   z-index: 10;
   overflow-x: auto;
   white-space: nowrap;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
   padding-left: 10px;
+  flex-shrink: 0;
 }
 
 .folder-tabs::-webkit-scrollbar {
