@@ -65,16 +65,16 @@ const PhaseHeader = ({ phase, duration }) => {
   };
 
   return (
-    <div className="bg-surface border-b border-border p-2 sm:p-3 flex justify-between items-center z-20 relative shadow-sm">
-      <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-6 truncate pr-2">
-        <div className="truncate">
-          <h2 className="text-sm sm:text-xl font-typewriter text-accent truncate">
+    <div className="bg-transparent border-b border-ink-black/20 p-2 sm:p-3 flex flex-col sm:flex-row justify-between sm:items-center gap-2 z-20 relative shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-6">
+        <div>
+          <h2 className="text-sm sm:text-xl font-typewriter text-ink-black">
             {roomState?.scenarioId?.replace('-', ' ').toUpperCase() || roomState?.caseId?.replace('-', ' ').toUpperCase() || 'UNKNOWN CASE'}
           </h2>
-          <p className="text-[10px] sm:text-xs text-text-secondary uppercase tracking-widest font-bold truncate flex gap-2">
-            <span>Phase: <span className="text-paper-cream">{phaseNames[phase]}</span></span>
+          <p className="text-[10px] sm:text-xs text-ink-black/60 uppercase tracking-widest font-bold flex gap-2 flex-wrap">
+            <span>Phase: <span className="text-ink-black">{phaseNames[phase]}</span></span>
             {roomState?.currentWave && phase === 'INVESTIGATION' && (
-              <span className="text-purple-400 border-l border-border pl-2">
+              <span className="text-ink-black border-l border-ink-black/20 pl-2">
                 Wave: {roomState.currentWave}
               </span>
             )}

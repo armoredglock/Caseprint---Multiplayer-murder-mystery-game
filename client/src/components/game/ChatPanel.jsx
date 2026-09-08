@@ -62,12 +62,18 @@ const ChatPanel = ({ roomCode, currentPlayer }) => {
               key={idx} 
               className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}
             >
-              <span className="text-[10px] text-ink-black/60 font-bold mb-1 flex gap-2 font-mono">
-                {!isMe && <span className="text-ink-blue">{msg.sender} {msg.isHost && '(Capt)'}</span>}
-                <span>{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                {isMe && <span className="text-ink-red">You</span>}
-              </span>
-              <div className={`px-4 py-2 shadow-sm font-handwriting text-lg font-bold max-w-[85%] border-2 ${isMe ? 'bg-manila text-ink-black rounded-tl-xl rounded-tr-xl rounded-bl-xl border-ink-black/30' : 'bg-paper-cream border-ink-black/20 rounded-tl-xl rounded-tr-xl rounded-br-xl text-ink-black'}`}>
+              <div className="flex items-baseline gap-2 mb-1">
+                {!isMe && (
+                  <span className="text-sm font-bold text-paper-cream/90 font-mono tracking-widest">
+                    {msg.sender} {msg.isHost ? '(Capt)' : ''}
+                  </span>
+                )}
+                <span className="text-xs text-white/50 font-bold font-mono tracking-widest">
+                  {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </span>
+                {isMe && <span className="text-sm font-bold text-ink-red font-mono tracking-widest">You</span>}
+              </div>
+              <div className={`px-4 py-2 shadow-sm font-mono text-lg font-bold max-w-[85%] border-2 ${isMe ? 'bg-[#d6b87e] text-ink-black rounded-tl-xl rounded-tr-xl rounded-bl-xl border-ink-black' : 'bg-paper-cream border-ink-black rounded-tl-xl rounded-tr-xl rounded-br-xl text-ink-black'}`}>
                 {msg.message}
               </div>
             </motion.div>
@@ -82,7 +88,7 @@ const ChatPanel = ({ roomCode, currentPlayer }) => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Share intel..."
-          className="flex-1 text-lg py-2 px-3 !bg-paper-cream !border-2 !border-ink-black/20 focus:!border-ink-black focus:!outline-none font-handwriting !text-ink-black font-bold !placeholder-ink-black/50 transition-colors shadow-inner"
+          className="flex-1 text-lg py-2 px-3 !bg-paper-cream !border-2 !border-ink-black focus:!border-ink-black focus:!outline-none font-mono !text-ink-black font-bold !placeholder-ink-black/50 transition-colors shadow-inner"
         />
         <button type="submit" className="bg-ink-black text-paper-cream px-6 py-2 font-bold uppercase tracking-widest border-2 border-ink-black shadow-[4px_4px_0_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[2px_2px_0_rgba(0,0,0,0.5)] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-ink-black/80 transition-colors" disabled={!input.trim()}>
           SEND
