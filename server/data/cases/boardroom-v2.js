@@ -223,10 +223,12 @@ module.exports = {
     ],
     "puzzles": [
       {
+        "id": "puz-002",
         "title": "VanceCorp Cipher",
         "content": "11-9-12-12 8-9-13 20-15-14-9-7-8-20",
         "encodedType": "A1Z26",
         "clue": "Numbers represent letters of the alphabet (1=A, 2=B).",
+        "answer": "KILL HIM TONIGHT",
         "wave": 3
       }
     ],
