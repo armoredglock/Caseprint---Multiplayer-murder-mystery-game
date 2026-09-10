@@ -2,6 +2,7 @@ const roomManager = require('./roomManager');
 const caseService = require('./caseService');
 const GameSession = require('../models/GameSession');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const puzzleGenerator = require('./puzzleGenerator');
 
 const Case = require('../models/Case');
 
@@ -59,11 +60,13 @@ const randomizeEvidenceDistribution = (baseCase) => {
     }
 
     // Rule 6: Encoded puzzles in ANY level
-    if (randomized.digitalEvidence.puzzles) {
-      randomized.digitalEvidence.puzzles.forEach(p => {
-        p.wave = Math.floor(Math.random() * 4) + 1; // 1 to 4
-      });
+    // Replace with dynamically generated puzzles!
+    if (!randomized.digitalEvidence.puzzles) {
+      randomized.digitalEvidence.puzzles = [];
     }
+    
+    const puzzleCount = Math.floor(Math.random() * 3) + 1; // 1 to 3 puzzles
+    randomized.digitalEvidence.puzzles = puzzleGenerator.generateRandomPuzzles(puzzleCount);
   }
 
   return randomized;
