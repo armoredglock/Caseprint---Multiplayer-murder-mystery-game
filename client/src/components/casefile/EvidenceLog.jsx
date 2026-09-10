@@ -15,7 +15,7 @@ const EvidenceLog = ({ evidence }) => {
       </div>
 
       <div className="evidence-grid">
-        {evidence.map(item => (
+        {evidence?.map(item => (
           <div key={item.tagNumber} className="evidence-card flex flex-col h-full">
             <div className="evidence-tag">{item.tagNumber}</div>
             
@@ -47,7 +47,7 @@ const EvidenceLog = ({ evidence }) => {
               {item.chainOfCustody && item.chainOfCustody.length > 0 && (
                 <div className="mt-2 text-[10px] bg-gray-50 border border-gray-200 p-1">
                   <div className="font-bold mb-1 border-b border-gray-200 pb-1">CHAIN OF CUSTODY</div>
-                  {item.chainOfCustody.map((log, i) => (
+                  {item.chainOfCustody?.map((log, i) => (
                     <div key={i} className="flex justify-between py-0.5">
                       <span className="truncate w-1/2">{log.officer}</span>
                       <span className="truncate w-1/2 text-right">{log.action}</span>

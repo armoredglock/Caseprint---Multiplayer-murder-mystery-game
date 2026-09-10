@@ -26,7 +26,7 @@ const ForensicReport = ({ forensics }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {forensics.toxicology.map((tox, idx) => (
+                  {forensics?.toxicology?.map((tox, idx) => (
                     <tr key={idx} className={`border-b border-gray-200 ${tox.result.toLowerCase() === 'positive' ? 'bg-red-50 text-red-900 font-bold' : ''}`}>
                       <td className="border-r border-gray-200 p-3">{tox.substance}</td>
                       <td className="border-r border-gray-200 p-3">{tox.result}</td>

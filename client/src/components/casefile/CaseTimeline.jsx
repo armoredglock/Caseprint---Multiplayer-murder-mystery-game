@@ -12,7 +12,7 @@ const CaseTimeline = ({ timeline }) => {
       </div>
 
       <div className="relative border-l-4 border-ink-black/20 pl-8 ml-4 space-y-12">
-        {timeline.map((event, idx) => (
+        {timeline?.map((event, idx) => (
           <div key={idx} className="relative">
             
             {/* Timeline Node */}
@@ -36,7 +36,7 @@ const CaseTimeline = ({ timeline }) => {
                   
                   {event.linkedEvidence && event.linkedEvidence.length > 0 && (
                     <div className="mt-3 flex gap-2 flex-wrap">
-                      {event.linkedEvidence.map(ev => (
+                      {event.linkedEvidence?.map(ev => (
                         <span key={ev} className="text-[10px] font-mono bg-yellow-100 border border-yellow-300 text-yellow-800 px-2 py-0.5 rounded-full">
                           REF: {ev}
                         </span>

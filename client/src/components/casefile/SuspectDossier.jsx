@@ -14,7 +14,7 @@ const SuspectDossier = ({ suspects }) => {
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {suspects.map(suspect => {
+        {suspects?.map(suspect => {
           const isExpanded = expandedId === suspect.id;
           
           return (

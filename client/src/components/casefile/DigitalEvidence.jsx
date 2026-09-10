@@ -101,7 +101,7 @@ const DigitalEvidence = ({ digital }) => {
                 </tr>
               </thead>
               <tbody>
-                {digital.phoneRecords.map((record, idx) => (
+                {digital.phoneRecords?.map((record, idx) => (
                   <tr key={idx} className={`border-b border-gray-200 ${record.flagged ? 'bg-yellow-50' : ''}`}>
                     <td className="py-2 font-bold">{record.time}</td>
                     <td className="py-2 text-xs">
@@ -124,7 +124,7 @@ const DigitalEvidence = ({ digital }) => {
         {/* Emails */}
         {activeTab === 'email' && (
           <div className="p-0">
-            {digital.emails.map((email, idx) => (
+            {digital.emails?.map((email, idx) => (
               <div key={idx} className={`border-b-4 border-gray-300 ${email.flagged ? 'bg-yellow-50/30' : ''}`}>
                 <div className="bg-gray-100 p-3 border-b border-gray-200 font-ui text-sm">
                   <div className="grid grid-cols-[80px_1fr] gap-2 mb-1">
@@ -163,7 +163,7 @@ const DigitalEvidence = ({ digital }) => {
             </div>
             
             <div className="space-y-2">
-              {digital.cctvLogs.map((log, idx) => (
+              {digital.cctvLogs?.map((log, idx) => (
                 <div key={idx} className={`flex gap-4 ${log.flagged ? 'bg-green-900/40 text-white' : ''}`}>
                   <span className="w-24 flex-shrink-0 opacity-70">[{log.timestamp}]</span>
                   <span className="w-32 flex-shrink-0 text-blue-400">{log.camera}</span>
@@ -183,7 +183,7 @@ const DigitalEvidence = ({ digital }) => {
               <p className="text-xs text-gray-500">MANUAL DECRYPTION REQUIRED TO PROCEED</p>
             </div>
             <div className="space-y-6">
-              {digital.puzzles.map((puzzle, idx) => {
+              {digital.puzzles?.map((puzzle, idx) => {
                 const isSolved = roomState?.solvedPuzzles?.includes(puzzle.id);
                 
                 return (

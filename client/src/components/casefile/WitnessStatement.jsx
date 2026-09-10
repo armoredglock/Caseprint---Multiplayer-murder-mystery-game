@@ -5,7 +5,7 @@ const WitnessStatement = ({ statements }) => {
 
   return (
     <div className="space-y-12">
-      {statements.map((statement, idx) => (
+      {statements?.map((statement, idx) => (
         <div key={idx} className="bg-white p-4 font-mono text-sm text-gray-800 border-4 border-[#1c2431]">
           <div className="bg-[#1c2431] text-white px-4 py-3 flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold uppercase tracking-widest">SWORN STATEMENT</h2>
