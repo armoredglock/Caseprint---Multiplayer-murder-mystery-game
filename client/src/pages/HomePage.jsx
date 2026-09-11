@@ -175,12 +175,11 @@ const getRandomName = () => {
                     title="Randomize Name"
                     whileHover={{ scale: 1.1 }}
                     animate={rollingCreate ? { 
-                      rotate: [0, 180, 360], 
-                      rotateY: [0, 360, 720], 
-                      x: [0, -10, 10, 0], 
-                      y: [0, -15, 0, -5, 0] 
-                    } : { rotate: 0, rotateY: 0, x: 0, y: 0 }}
-                    transition={{ duration: 0.6, ease: "easeOut" }}
+                      rotate: [0, 180, 360, 540, 720], 
+                      x: [0, 15, -5, 0], 
+                      y: [0, -25, 0, -10, 0] 
+                    } : { rotate: 0, x: 0, y: 0 }}
+                    transition={{ duration: 0.6, times: [0, 0.4, 0.7, 0.9, 1], ease: "easeInOut" }}
                   >
                     🎲
                   </motion.button>
@@ -261,12 +260,11 @@ const getRandomName = () => {
                     title="Randomize Name"
                     whileHover={{ scale: 1.1 }}
                     animate={rollingJoin ? { 
-                      rotate: [0, 180, 360], 
-                      rotateY: [0, 360, 720], 
-                      x: [0, -10, 10, 0], 
-                      y: [0, -15, 0, -5, 0] 
-                    } : { rotate: 0, rotateY: 0, x: 0, y: 0 }}
-                    transition={{ duration: 0.6, ease: "easeOut" }}
+                      rotate: [0, 180, 360, 540, 720], 
+                      x: [0, 15, -5, 0], 
+                      y: [0, -25, 0, -10, 0] 
+                    } : { rotate: 0, x: 0, y: 0 }}
+                    transition={{ duration: 0.6, times: [0, 0.4, 0.7, 0.9, 1], ease: "easeInOut" }}
                   >
                     🎲
                   </motion.button>
