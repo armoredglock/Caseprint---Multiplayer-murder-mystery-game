@@ -48,6 +48,20 @@ const getRandomName = () => {
     return names[Math.floor(Math.random() * names.length)] + Math.floor(Math.random() * 99 + 1);
   };
 
+  const [rollingCreate, setRollingCreate] = useState(false);
+  const handleRandomizeCreate = () => {
+    setRollingCreate(true);
+    setPlayerName(getRandomName());
+    setTimeout(() => setRollingCreate(false), 500);
+  };
+
+  const [rollingJoin, setRollingJoin] = useState(false);
+  const handleRandomizeJoin = () => {
+    setRollingJoin(true);
+    setPlayerName(getRandomName());
+    setTimeout(() => setRollingJoin(false), 500);
+  };
+
   const handleCreateRoom = async (e) => {
     e.preventDefault();
     const finalName = playerName.trim() || getRandomName();
@@ -154,9 +168,17 @@ const getRandomName = () => {
                     maxLength={20}
                     className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 !placeholder-gray-800/60 placeholder:text-lg !text-ink-black font-mono text-2xl font-bold"
                   />
-                  <button type="button" onClick={() => setPlayerName(getRandomName())} className="px-3 text-2xl hover:scale-110 transition-transform" title="Randomize Name">
+                  <motion.button 
+                    type="button" 
+                    onClick={handleRandomizeCreate} 
+                    className="px-3 text-2xl" 
+                    title="Randomize Name"
+                    whileHover={{ scale: 1.1 }}
+                    animate={rollingCreate ? { rotate: 360, y: [-5, 5, -5, 0] } : { rotate: 0 }}
+                    transition={{ duration: 0.5, type: "spring" }}
+                  >
                     🎲
-                  </button>
+                  </motion.button>
                 </div>
               </div>
               <div>
@@ -227,9 +249,17 @@ const getRandomName = () => {
                     maxLength={20}
                     className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 !placeholder-gray-800/60 placeholder:text-lg !text-ink-black font-mono text-2xl font-bold"
                   />
-                  <button type="button" onClick={() => setPlayerName(getRandomName())} className="px-3 text-2xl hover:scale-110 transition-transform" title="Randomize Name">
+                  <motion.button 
+                    type="button" 
+                    onClick={handleRandomizeJoin} 
+                    className="px-3 text-2xl" 
+                    title="Randomize Name"
+                    whileHover={{ scale: 1.1 }}
+                    animate={rollingJoin ? { rotate: 360, y: [-5, 5, -5, 0] } : { rotate: 0 }}
+                    transition={{ duration: 0.5, type: "spring" }}
+                  >
                     🎲
-                  </button>
+                  </motion.button>
                 </div>
               </div>
               <div>
