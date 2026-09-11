@@ -174,8 +174,13 @@ const getRandomName = () => {
                     className="px-3 text-2xl" 
                     title="Randomize Name"
                     whileHover={{ scale: 1.1 }}
-                    animate={rollingCreate ? { rotate: 360, y: [-5, 5, -5, 0] } : { rotate: 0 }}
-                    transition={{ duration: 0.5, type: "spring" }}
+                    animate={rollingCreate ? { 
+                      rotate: [0, 180, 360], 
+                      rotateY: [0, 360, 720], 
+                      x: [0, -10, 10, 0], 
+                      y: [0, -15, 0, -5, 0] 
+                    } : { rotate: 0, rotateY: 0, x: 0, y: 0 }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
                   >
                     🎲
                   </motion.button>
@@ -255,8 +260,13 @@ const getRandomName = () => {
                     className="px-3 text-2xl" 
                     title="Randomize Name"
                     whileHover={{ scale: 1.1 }}
-                    animate={rollingJoin ? { rotate: 360, y: [-5, 5, -5, 0] } : { rotate: 0 }}
-                    transition={{ duration: 0.5, type: "spring" }}
+                    animate={rollingJoin ? { 
+                      rotate: [0, 180, 360], 
+                      rotateY: [0, 360, 720], 
+                      x: [0, -10, 10, 0], 
+                      y: [0, -15, 0, -5, 0] 
+                    } : { rotate: 0, rotateY: 0, x: 0, y: 0 }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
                   >
                     🎲
                   </motion.button>
