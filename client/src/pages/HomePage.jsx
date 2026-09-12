@@ -49,17 +49,17 @@ const getRandomName = () => {
   };
 
   const [rollingCreate, setRollingCreate] = useState(false);
-  const handleRandomizeCreate = () => {
-    setRollingCreate(true);
+  const handleRandomizeCreateStart = () => setRollingCreate(true);
+  const handleRandomizeCreateComplete = () => {
     setPlayerName(getRandomName());
-    setTimeout(() => setRollingCreate(false), 500);
+    setRollingCreate(false);
   };
 
   const [rollingJoin, setRollingJoin] = useState(false);
-  const handleRandomizeJoin = () => {
-    setRollingJoin(true);
+  const handleRandomizeJoinStart = () => setRollingJoin(true);
+  const handleRandomizeJoinComplete = () => {
     setPlayerName(getRandomName());
-    setTimeout(() => setRollingJoin(false), 500);
+    setRollingJoin(false);
   };
 
   const handleCreateRoom = async (e) => {
@@ -168,20 +168,11 @@ const getRandomName = () => {
                     maxLength={20}
                     className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 !placeholder-gray-800/60 placeholder:text-lg !text-ink-black font-mono text-2xl font-bold"
                   />
-                  <motion.button 
-                    type="button" 
-                    onClick={handleRandomizeCreate} 
-                    className="px-3 text-2xl" 
-                    title="Randomize Name"
-                    whileHover={{ scale: 1.1 }}
-                    animate={rollingCreate ? { 
-                      rotate: [0, -180, -360], 
-                      y: [0, -20, 0, -8, 0] 
-                    } : { rotate: 0, y: 0 }}
-                    transition={{ duration: 0.5, ease: "easeOut" }}
-                  >
-                    🎲
-                  </motion.button>
+                  <DiceRoller3D 
+                    isRolling={rollingCreate}
+                    onRollStart={handleRandomizeCreateStart}
+                    onRollComplete={handleRandomizeCreateComplete}
+                  />
                 </div>
               </div>
               <div>
@@ -252,20 +243,11 @@ const getRandomName = () => {
                     maxLength={20}
                     className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none px-2 py-1 !placeholder-gray-800/60 placeholder:text-lg !text-ink-black font-mono text-2xl font-bold"
                   />
-                  <motion.button 
-                    type="button" 
-                    onClick={handleRandomizeJoin} 
-                    className="px-3 text-2xl" 
-                    title="Randomize Name"
-                    whileHover={{ scale: 1.1 }}
-                    animate={rollingJoin ? { 
-                      rotate: [0, -180, -360], 
-                      y: [0, -20, 0, -8, 0] 
-                    } : { rotate: 0, y: 0 }}
-                    transition={{ duration: 0.5, ease: "easeOut" }}
-                  >
-                    🎲
-                  </motion.button>
+                  <DiceRoller3D 
+                    isRolling={rollingJoin}
+                    onRollStart={handleRandomizeJoinStart}
+                    onRollComplete={handleRandomizeJoinComplete}
+                  />
                 </div>
               </div>
               <div>
