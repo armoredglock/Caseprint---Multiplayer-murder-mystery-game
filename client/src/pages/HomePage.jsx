@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocket } from '../hooks/useSocket';
@@ -123,7 +123,6 @@ const HomePage = () => {
         if (res.ok) {
           const data = await res.json();
           if (data && data.length > 0) {
-            // Merge with local rich summaries
             const merged = data.map(serverCase => {
               const matched = DEFAULT_CASES.find(c => c.caseId === serverCase.caseId);
               return {
@@ -201,14 +200,14 @@ const HomePage = () => {
   const getDifficultyBadge = (difficulty) => {
     switch (difficulty?.toLowerCase()) {
       case 'easy':
-        return 'bg-emerald-100 text-emerald-900 border-emerald-700';
+        return 'bg-emerald-100 text-emerald-950 border-emerald-800';
       case 'hard':
-        return 'bg-red-100 text-red-900 border-red-700';
+        return 'bg-red-100 text-red-950 border-red-800';
       case 'expert':
-        return 'bg-purple-100 text-purple-950 border-purple-800';
+        return 'bg-purple-100 text-purple-950 border-purple-900';
       case 'medium':
       default:
-        return 'bg-amber-100 text-amber-900 border-amber-800';
+        return 'bg-amber-100 text-amber-950 border-amber-900';
     }
   };
 
@@ -216,9 +215,9 @@ const HomePage = () => {
     <div className="home-page min-h-[100dvh] relative overflow-y-auto overflow-x-hidden flex flex-col justify-between selection:bg-amber-900/30 selection:text-amber-100 font-typewriter">
       
       {/* Top Police Tape Barrier */}
-      <div className="w-full crime-tape py-1.5 px-4 text-center font-mono font-bold text-xs uppercase tracking-[0.25em] text-black select-none border-b-2 border-black/80 flex items-center justify-around overflow-hidden shadow-lg z-20">
+      <div className="w-full crime-tape py-2 px-4 text-center font-mono font-bold text-xs uppercase tracking-[0.25em] text-black select-none border-b-2 border-black flex items-center justify-around overflow-hidden shadow-lg z-20">
         <span className="hidden sm:inline">⚠️ POLICE CRIME SCENE ⚠️</span>
-        <span>DO NOT CROSS // HOMICIDE DIVISION DISPATCH</span>
+        <span className="font-black">DO NOT CROSS // HOMICIDE DIVISION DISPATCH</span>
         <span className="hidden md:inline">CONFIDENTIAL CASE FILES // OFFICIAL USE ONLY</span>
         <span className="hidden sm:inline">⚠️ DO NOT CROSS ⚠️</span>
       </div>
@@ -234,9 +233,9 @@ const HomePage = () => {
           transition={{ duration: 0.6 }}
         >
           {/* Precinct Stamp Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-black/60 border border-amber-600/40 rounded-full mb-3 backdrop-blur-sm shadow-md">
-            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-            <span className="text-[11px] font-mono tracking-widest uppercase text-amber-300/90 font-bold">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-black/80 border border-amber-500/60 rounded-full mb-3 shadow-md">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
+            <span className="text-xs font-mono tracking-widest uppercase text-amber-200 font-bold">
               Metropolitan Homicide Bureau // Sector 14
             </span>
           </div>
@@ -244,7 +243,7 @@ const HomePage = () => {
           <h1 
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-paper-cream tracking-tighter uppercase relative select-none"
             style={{ 
-              textShadow: '0 4px 15px rgba(0,0,0,0.9), 0 0 30px rgba(212,168,83,0.2)',
+              textShadow: '0 4px 20px rgba(0,0,0,1), 0 0 40px rgba(212,168,83,0.3)',
               letterSpacing: '-0.03em'
             }}
           >
@@ -252,17 +251,17 @@ const HomePage = () => {
           </h1>
           
           <div className="flex items-center justify-center gap-3 mt-1">
-            <div className="h-[1px] w-12 bg-amber-600/50 hidden sm:block" />
-            <p className="text-sm sm:text-base md:text-lg text-accent uppercase tracking-[0.25em] font-bold">
+            <div className="h-[2px] w-12 bg-amber-500/80 hidden sm:block" />
+            <p className="text-sm sm:text-base md:text-lg text-amber-400 uppercase tracking-[0.25em] font-black" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.8)' }}>
               Multiplayer Cooperative Murder Mystery
             </p>
-            <div className="h-[1px] w-12 bg-amber-600/50 hidden sm:block" />
+            <div className="h-[2px] w-12 bg-amber-500/80 hidden sm:block" />
           </div>
         </motion.div>
 
         {/* Central Manila Investigation Folder */}
         <motion.div 
-          className="w-full max-w-3xl relative"
+          className="w-full max-w-3xl relative text-[#111111]"
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.1 }}
@@ -272,57 +271,57 @@ const HomePage = () => {
             <button
               type="button"
               onClick={() => { setActiveTab('create'); setError(''); }}
-              className={`px-6 py-3 font-bold text-sm uppercase tracking-wider rounded-t-lg border-2 border-b-0 border-ink-black transition-all flex items-center gap-2 ${
+              className={`px-6 py-3 font-black text-sm uppercase tracking-wider rounded-t-lg border-2 border-b-0 border-[#111111] transition-all flex items-center gap-2 cursor-pointer ${
                 activeTab === 'create'
-                  ? 'bg-[#d8be8a] text-ink-black shadow-[0_-4px_10px_rgba(0,0,0,0.4)] translate-y-[2px] z-30 font-black'
-                  : 'bg-[#bba06b] text-ink-black/70 hover:bg-[#c9ad78] hover:text-ink-black z-10'
+                  ? 'bg-[#d8be8a] text-[#111111] shadow-[0_-4px_10px_rgba(0,0,0,0.5)] translate-y-[2px] z-30'
+                  : 'bg-[#a3854a] text-[#111111] hover:bg-[#b89858] z-10'
               }`}
             >
-              <span className="w-2.5 h-2.5 rounded-full bg-red-700 inline-block shadow-sm" />
-              <span>📂 Open New Case File</span>
+              <span className="w-3 h-3 rounded-full bg-red-700 inline-block border border-black shadow-sm" />
+              <span className="text-[#111111] font-black">📂 Open New Case File</span>
             </button>
 
             <button
               type="button"
               onClick={() => { setActiveTab('join'); setError(''); }}
-              className={`px-6 py-3 font-bold text-sm uppercase tracking-wider rounded-t-lg border-2 border-b-0 border-ink-black transition-all flex items-center gap-2 ${
+              className={`px-6 py-3 font-black text-sm uppercase tracking-wider rounded-t-lg border-2 border-b-0 border-[#111111] transition-all flex items-center gap-2 cursor-pointer ${
                 activeTab === 'join'
-                  ? 'bg-[#f7f2e7] text-ink-black shadow-[0_-4px_10px_rgba(0,0,0,0.4)] translate-y-[2px] z-30 font-black'
-                  : 'bg-[#bba06b] text-ink-black/70 hover:bg-[#c9ad78] hover:text-ink-black z-10'
+                  ? 'bg-[#f7f2e7] text-[#111111] shadow-[0_-4px_10px_rgba(0,0,0,0.5)] translate-y-[2px] z-30'
+                  : 'bg-[#a3854a] text-[#111111] hover:bg-[#b89858] z-10'
               }`}
             >
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-700 inline-block shadow-sm" />
-              <span>🚨 Report To Scene (Join)</span>
+              <span className="w-3 h-3 rounded-full bg-blue-700 inline-block border border-black shadow-sm" />
+              <span className="text-[#111111] font-black">🚨 Report To Scene (Join)</span>
             </button>
           </div>
 
           {/* Folder Body */}
-          <div className={`w-full rounded-b-xl rounded-tr-xl border-4 border-ink-black shadow-[0_20px_50px_rgba(0,0,0,0.85)] relative overflow-hidden transition-colors duration-300 ${
-            activeTab === 'create' ? 'bg-[#d8be8a]' : 'aged-paper-bg'
+          <div className={`w-full rounded-b-xl rounded-tr-xl border-4 border-[#111111] shadow-[0_20px_50px_rgba(0,0,0,0.9)] relative overflow-hidden transition-colors duration-300 text-[#111111] ${
+            activeTab === 'create' ? 'bg-[#d8be8a]' : 'bg-[#f7f2e7]'
           }`}>
             
             {/* Top Classified Rubber Stamp watermark */}
-            <div className="absolute top-4 right-6 pointer-events-none select-none opacity-20 transform rotate-12">
-              <span className="stamp-badge text-2xl border-4 border-ink-red text-ink-red font-black">
+            <div className="absolute top-4 right-6 pointer-events-none select-none opacity-25 transform rotate-12">
+              <span className="inline-block font-typewriter font-black text-2xl border-4 border-red-800 text-red-800 px-3 py-1 rounded tracking-widest uppercase">
                 {activeTab === 'create' ? 'CONFIDENTIAL DOSSIER' : 'PRIORITY DISPATCH'}
               </span>
             </div>
 
             {/* Folder Interior Wrapper */}
-            <div className="p-6 sm:p-8 md:p-10 relative z-10">
+            <div className="p-6 sm:p-8 md:p-10 relative z-10 text-[#111111]">
 
               {/* TAB 1: CREATE ROOM (OPEN NEW INVESTIGATION) */}
               {activeTab === 'create' && (
                 <form onSubmit={handleCreateRoom} className="space-y-6">
                   
                   {/* Lead Detective Name & 3D Dice */}
-                  <div className="bg-[#f7f2e7] border-2 border-ink-black p-4 md:p-5 shadow-[3px_3px_0_rgba(0,0,0,0.3)] relative">
-                    <div className="flex justify-between items-center mb-1">
-                      <label className="text-xs uppercase tracking-widest font-black text-ink-black/80 flex items-center gap-2">
+                  <div className="bg-[#fcfaf5] border-2 border-[#111111] p-4 md:p-5 shadow-[3px_3px_0_rgba(0,0,0,0.4)] relative">
+                    <div className="flex justify-between items-center mb-2">
+                      <label className="text-xs uppercase tracking-widest font-black text-[#111111] flex items-center gap-2">
                         <span>🛡️ Lead Detective Assignment</span>
-                        <span className="text-[10px] text-ink-black/50 font-mono">(Identity & Credentials)</span>
+                        <span className="text-[11px] text-[#444444] font-mono font-bold">(Identity & Credentials)</span>
                       </label>
-                      <span className="text-[11px] font-mono text-ink-black/60 uppercase">Click Dice to Roll Alias</span>
+                      <span className="text-[11px] font-mono text-[#333333] font-bold uppercase">Click Dice to Roll Alias</span>
                     </div>
 
                     <div className="flex items-center gap-3">
@@ -332,7 +331,7 @@ const HomePage = () => {
                         value={playerName}
                         onChange={(e) => setPlayerName(e.target.value)}
                         maxLength={25}
-                        className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none py-2 px-1 text-ink-black font-mono text-xl sm:text-2xl font-black placeholder:text-ink-black/30 placeholder:font-handwriting placeholder:text-3xl"
+                        className="flex-1 !bg-white !text-[#111111] !border-2 !border-[#111111] py-2.5 px-3 font-mono text-xl sm:text-2xl font-black !placeholder-[#666666] placeholder:font-mono focus:!border-black focus:!ring-2 focus:!ring-amber-500 shadow-inner"
                       />
                       <div className="flex-shrink-0 flex items-center justify-center">
                         <DiceRoller3D 
@@ -345,46 +344,48 @@ const HomePage = () => {
                   </div>
 
                   {/* Case Selection Dossier Card */}
-                  <div className="bg-[#f7f2e7] border-2 border-ink-black p-4 md:p-5 shadow-[3px_3px_0_rgba(0,0,0,0.3)]">
+                  <div className="bg-[#fcfaf5] border-2 border-[#111111] p-4 md:p-5 shadow-[3px_3px_0_rgba(0,0,0,0.4)]">
                     <div className="flex justify-between items-center mb-3">
-                      <label className="text-xs uppercase tracking-widest font-black text-ink-black/80 flex items-center gap-2">
+                      <label className="text-xs uppercase tracking-widest font-black text-[#111111] flex items-center gap-2">
                         <span>📁 Primary Case Requisition</span>
                       </label>
                       
                       <button
                         type="button"
                         onClick={() => setIsCaseBrowserOpen(!isCaseBrowserOpen)}
-                        className="text-xs font-mono font-bold text-ink-black/80 hover:text-ink-black underline uppercase tracking-wider flex items-center gap-1 cursor-pointer"
+                        className="text-xs font-mono font-black text-[#111111] hover:text-red-900 underline uppercase tracking-wider flex items-center gap-1 cursor-pointer"
                       >
-                        {isCaseBrowserOpen ? 'Close Case Docket ▲' : 'Browse All 8 Cases ▼'}
+                        {isCaseBrowserOpen ? '▲ Close Case Docket' : '▼ Browse All 8 Cases'}
                       </button>
                     </div>
 
                     {/* Active Selected Case Preview */}
-                    <div className="border border-ink-black/30 p-4 bg-white/70 shadow-inner rounded-sm relative">
-                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-ink-black/20 pb-2 mb-2">
+                    <div className="border-2 border-[#111111] p-4 bg-white shadow-inner rounded-sm relative text-[#111111]">
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-[#111111]/20 pb-2 mb-2">
                         <div>
-                          <span className="text-[11px] font-mono font-bold text-ink-black/60 uppercase block">
+                          <span className="text-xs font-mono font-black text-[#8b1e1e] uppercase block tracking-wider">
                             {selectedCase.incidentNumber}
                           </span>
-                          <h3 className="text-lg sm:text-xl font-black text-ink-black m-0 leading-tight">
+                          <h3 className="text-xl sm:text-2xl font-black text-[#111111] m-0 leading-tight">
                             {selectedCase.title}
                           </h3>
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <span className={`text-xs px-2.5 py-0.5 font-bold uppercase border tracking-wider font-mono ${getDifficultyBadge(selectedCase.difficulty)}`}>
+                          <span className={`text-xs px-2.5 py-1 font-black uppercase border-2 tracking-wider font-mono ${getDifficultyBadge(selectedCase.difficulty)}`}>
                             {selectedCase.difficulty}
                           </span>
-                          <span className="text-xs px-2 py-0.5 bg-black/10 text-ink-black font-mono font-bold uppercase border border-ink-black/20">
+                          <span className="text-xs px-2.5 py-1 bg-stone-100 text-[#111111] font-mono font-black uppercase border-2 border-[#111111]">
                             {selectedCase.playerRange}
                           </span>
                         </div>
                       </div>
 
-                      <p className="text-sm text-ink-black/80 italic font-mono leading-relaxed mb-1">
-                        "{selectedCase.summary}"
-                      </p>
+                      <div className="bg-amber-50/80 border-l-4 border-amber-800 p-3 my-2">
+                        <p className="text-sm text-[#111111] font-mono font-bold leading-relaxed">
+                          "{selectedCase.summary}"
+                        </p>
+                      </div>
                     </div>
 
                     {/* Expandable Case Docket Grid */}
@@ -394,9 +395,9 @@ const HomePage = () => {
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }}
-                          className="overflow-hidden mt-3 pt-3 border-t-2 border-dashed border-ink-black/20"
+                          className="overflow-hidden mt-3 pt-3 border-t-2 border-dashed border-[#111111]/30"
                         >
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-60 overflow-y-auto pr-1 custom-scrollbar">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-64 overflow-y-auto pr-1 custom-scrollbar">
                             {cases.map((c) => {
                               const isSelected = c.caseId === selectedCaseId;
                               return (
@@ -406,23 +407,23 @@ const HomePage = () => {
                                     setSelectedCaseId(c.caseId);
                                     setIsCaseBrowserOpen(false);
                                   }}
-                                  className={`p-3 border-2 cursor-pointer transition-all text-left relative ${
+                                  className={`p-3.5 border-2 cursor-pointer transition-all text-left relative ${
                                     isSelected 
-                                      ? 'bg-amber-100/90 border-ink-black shadow-[2px_2px_0_rgba(0,0,0,0.5)] font-bold' 
-                                      : 'bg-white/60 border-ink-black/30 hover:border-ink-black hover:bg-white'
+                                      ? 'bg-amber-100 border-[#111111] shadow-[3px_3px_0_rgba(0,0,0,0.6)] font-bold' 
+                                      : 'bg-white border-[#111111]/40 hover:border-[#111111] hover:bg-amber-50/50'
                                   }`}
                                 >
                                   {isSelected && (
-                                    <span className="absolute top-2 right-2 text-[10px] font-black uppercase text-red-700 border border-red-700 px-1 transform rotate-6">
-                                      SELECTED
+                                    <span className="absolute top-2 right-2 text-[10px] font-black uppercase text-red-900 border-2 border-red-900 px-1 transform rotate-6 bg-red-50">
+                                      ACTIVE
                                     </span>
                                   )}
-                                  <div className="text-[10px] font-mono text-ink-black/60 uppercase">{c.incidentNumber}</div>
-                                  <div className="text-sm font-bold text-ink-black leading-snug">{c.title}</div>
-                                  <div className="text-xs text-ink-black/60 italic truncate">{c.subtitle}</div>
-                                  <div className="mt-1 flex items-center gap-1.5 text-[10px] font-mono">
-                                    <span className={`px-1.5 py-0.2 border ${getDifficultyBadge(c.difficulty)}`}>{c.difficulty}</span>
-                                    <span className="text-ink-black/50">{c.playerRange}</span>
+                                  <div className="text-[11px] font-mono text-[#8b1e1e] font-black uppercase">{c.incidentNumber}</div>
+                                  <div className="text-base font-black text-[#111111] leading-tight mt-0.5">{c.title}</div>
+                                  <div className="text-xs text-[#444444] font-medium italic truncate mt-0.5">{c.subtitle}</div>
+                                  <div className="mt-2 flex items-center gap-2 text-xs font-mono">
+                                    <span className={`px-2 py-0.5 border font-black ${getDifficultyBadge(c.difficulty)}`}>{c.difficulty}</span>
+                                    <span className="text-[#333333] font-bold">{c.playerRange}</span>
                                   </div>
                                 </div>
                               );
@@ -434,8 +435,8 @@ const HomePage = () => {
                   </div>
 
                   {/* Security Clearance Lock (Optional Password) */}
-                  <div className="bg-[#f7f2e7] border-2 border-ink-black p-4 shadow-[3px_3px_0_rgba(0,0,0,0.3)]">
-                    <label className="text-xs uppercase tracking-widest font-black text-ink-black/80 block mb-1">
+                  <div className="bg-[#fcfaf5] border-2 border-[#111111] p-4 shadow-[3px_3px_0_rgba(0,0,0,0.4)]">
+                    <label className="text-xs uppercase tracking-widest font-black text-[#111111] block mb-1">
                       🔒 Security Clearance Passcode (Optional)
                     </label>
                     <input 
@@ -444,7 +445,7 @@ const HomePage = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       maxLength={20}
-                      className="w-full bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none py-1.5 px-1 font-mono text-sm text-ink-black placeholder:text-ink-black/40 placeholder:font-mono"
+                      className="w-full !bg-white !text-[#111111] !border-2 !border-[#111111] py-2 px-3 font-mono text-base font-bold !placeholder-[#666666] placeholder:font-mono focus:!border-black shadow-inner"
                     />
                   </div>
 
@@ -452,7 +453,7 @@ const HomePage = () => {
                   <button 
                     type="submit" 
                     disabled={isCreating}
-                    className="w-full bg-ink-black text-paper-cream py-4 px-6 text-base sm:text-lg font-black uppercase tracking-[0.2em] border-2 border-ink-black shadow-[5px_5px_0_rgba(0,0,0,0.6)] hover:bg-ink-black/90 active:translate-y-1 active:shadow-[2px_2px_0_rgba(0,0,0,0.6)] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                    className="w-full bg-[#111111] text-[#f7f2e7] py-4 px-6 text-base sm:text-lg font-black uppercase tracking-[0.2em] border-2 border-[#111111] shadow-[5px_5px_0_rgba(0,0,0,0.6)] hover:bg-[#222222] active:translate-y-1 active:shadow-[2px_2px_0_rgba(0,0,0,0.6)] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                   >
                     <span>{isCreating ? 'DISPATCHING UNITS...' : '📂 OPEN CASE FILE & DISPATCH SQUAD'}</span>
                     <span className="text-xl">→</span>
@@ -465,12 +466,12 @@ const HomePage = () => {
                 <form onSubmit={handleJoinRoom} className="space-y-6">
                   
                   {/* Detective Identity Input */}
-                  <div className="bg-white/80 border-2 border-ink-black p-4 md:p-5 shadow-[3px_3px_0_rgba(0,0,0,0.3)]">
-                    <div className="flex justify-between items-center mb-1">
-                      <label className="text-xs uppercase tracking-widest font-black text-ink-black/80 flex items-center gap-2">
+                  <div className="bg-[#fcfaf5] border-2 border-[#111111] p-4 md:p-5 shadow-[3px_3px_0_rgba(0,0,0,0.4)]">
+                    <div className="flex justify-between items-center mb-2">
+                      <label className="text-xs uppercase tracking-widest font-black text-[#111111] flex items-center gap-2">
                         <span>🛡️ Responding Detective Name</span>
                       </label>
-                      <span className="text-[11px] font-mono text-ink-black/60 uppercase">Click Dice to Roll Alias</span>
+                      <span className="text-[11px] font-mono text-[#333333] font-bold uppercase">Click Dice to Roll Alias</span>
                     </div>
 
                     <div className="flex items-center gap-3">
@@ -480,7 +481,7 @@ const HomePage = () => {
                         value={playerName}
                         onChange={(e) => setPlayerName(e.target.value)}
                         maxLength={25}
-                        className="flex-1 bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none py-2 px-1 text-ink-black font-mono text-xl sm:text-2xl font-black placeholder:text-ink-black/30 placeholder:font-handwriting placeholder:text-3xl"
+                        className="flex-1 !bg-white !text-[#111111] !border-2 !border-[#111111] py-2.5 px-3 font-mono text-xl sm:text-2xl font-black !placeholder-[#666666] placeholder:font-mono focus:!border-black shadow-inner"
                       />
                       <div className="flex-shrink-0 flex items-center justify-center">
                         <DiceRoller3D 
@@ -493,8 +494,8 @@ const HomePage = () => {
                   </div>
 
                   {/* 6-Letter Room Code Teletype */}
-                  <div className="bg-white/80 border-2 border-ink-black p-4 md:p-6 shadow-[3px_3px_0_rgba(0,0,0,0.3)] text-center">
-                    <label className="text-xs uppercase tracking-widest font-black text-ink-black/80 block mb-2">
+                  <div className="bg-[#fcfaf5] border-2 border-[#111111] p-4 md:p-6 shadow-[3px_3px_0_rgba(0,0,0,0.4)] text-center">
+                    <label className="text-xs uppercase tracking-widest font-black text-[#111111] block mb-2">
                       📟 Incident Room Code (6-Character Access Identifier)
                     </label>
                     <input 
@@ -503,16 +504,16 @@ const HomePage = () => {
                       value={roomCode}
                       onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
                       maxLength={6}
-                      className="w-full max-w-xs mx-auto bg-amber-50/50 border-2 border-ink-black py-3 px-4 text-center text-3xl sm:text-4xl tracking-[0.35em] font-mono font-black text-ink-blue focus:outline-none focus:bg-white placeholder:text-gray-300 shadow-inner"
+                      className="w-full max-w-xs mx-auto !bg-white !border-4 !border-[#111111] py-3 px-4 text-center text-3xl sm:text-4xl tracking-[0.35em] font-mono font-black !text-blue-950 focus:outline-none focus:!border-blue-900 !placeholder-[#999999] shadow-inner"
                     />
-                    <span className="text-[11px] font-mono text-ink-black/50 uppercase mt-2 block">
+                    <span className="text-xs font-mono text-[#333333] font-bold uppercase mt-2 block">
                       Obtain this dispatch code from the session lead detective
                     </span>
                   </div>
 
                   {/* Security Clearance Passcode */}
-                  <div className="bg-white/80 border-2 border-ink-black p-4 shadow-[3px_3px_0_rgba(0,0,0,0.3)]">
-                    <label className="text-xs uppercase tracking-widest font-black text-ink-black/80 block mb-1">
+                  <div className="bg-[#fcfaf5] border-2 border-[#111111] p-4 shadow-[3px_3px_0_rgba(0,0,0,0.4)]">
+                    <label className="text-xs uppercase tracking-widest font-black text-[#111111] block mb-1">
                       🔒 Security Clearance Passcode (If Protected)
                     </label>
                     <input 
@@ -521,7 +522,7 @@ const HomePage = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       maxLength={20}
-                      className="w-full bg-transparent border-b-2 border-ink-black/40 focus:border-ink-black focus:outline-none py-1.5 px-1 font-mono text-sm text-ink-black placeholder:text-ink-black/40"
+                      className="w-full !bg-white !text-[#111111] !border-2 !border-[#111111] py-2 px-3 font-mono text-base font-bold !placeholder-[#666666] placeholder:font-mono focus:!border-black shadow-inner"
                     />
                   </div>
 
@@ -529,7 +530,7 @@ const HomePage = () => {
                   <button 
                     type="submit" 
                     disabled={isJoining}
-                    className="w-full bg-blue-900 text-white py-4 px-6 text-base sm:text-lg font-black uppercase tracking-[0.2em] border-2 border-ink-black shadow-[5px_5px_0_rgba(0,0,0,0.6)] hover:bg-blue-800 active:translate-y-1 active:shadow-[2px_2px_0_rgba(0,0,0,0.6)] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                    className="w-full bg-blue-950 text-white py-4 px-6 text-base sm:text-lg font-black uppercase tracking-[0.2em] border-2 border-[#111111] shadow-[5px_5px_0_rgba(0,0,0,0.6)] hover:bg-blue-900 active:translate-y-1 active:shadow-[2px_2px_0_rgba(0,0,0,0.6)] transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                   >
                     <span>{isJoining ? 'VERIFYING CREDENTIALS...' : '🚨 REPORT TO CRIME SCENE & JOIN'}</span>
                     <span className="text-xl">→</span>
@@ -542,7 +543,7 @@ const HomePage = () => {
                 <motion.div 
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-6 p-4 bg-red-100 border-2 border-red-700 text-red-900 font-mono text-sm font-bold shadow-[3px_3px_0_rgba(185,28,28,0.5)] flex items-center gap-3"
+                  className="mt-6 p-4 bg-red-100 border-2 border-red-800 text-red-950 font-mono text-sm font-black shadow-[3px_3px_0_rgba(153,27,27,0.6)] flex items-center gap-3"
                 >
                   <span className="text-xl">⚠️</span>
                   <span>{error}</span>
@@ -558,13 +559,13 @@ const HomePage = () => {
           <button
             type="button"
             onClick={() => setShowHandbook(!showHandbook)}
-            className="w-full py-2.5 px-4 bg-black/40 hover:bg-black/60 border border-amber-600/30 text-amber-300 font-mono text-xs uppercase tracking-widest flex items-center justify-between transition-colors cursor-pointer rounded backdrop-blur-sm"
+            className="w-full py-2.5 px-4 bg-black/70 hover:bg-black/90 border-2 border-amber-500/50 text-amber-300 font-mono text-xs font-bold uppercase tracking-widest flex items-center justify-between transition-colors cursor-pointer rounded shadow-md"
           >
             <span className="flex items-center gap-2">
               <span>📖</span>
               <span>Standard Operating Procedure (How to Play)</span>
             </span>
-            <span>{showHandbook ? '▲ HIDE MANUAL' : '▼ READ BRIEFING'}</span>
+            <span className="font-black">{showHandbook ? '▲ HIDE MANUAL' : '▼ READ BRIEFING'}</span>
           </button>
 
           <AnimatePresence>
@@ -573,34 +574,34 @@ const HomePage = () => {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="overflow-hidden mt-2 bg-[#1b1510] border border-amber-600/40 p-5 rounded font-mono text-xs text-amber-200/90 shadow-2xl space-y-3"
+                className="overflow-hidden mt-2 bg-[#1b1510] border-2 border-amber-500/50 p-5 rounded font-mono text-xs text-amber-100 shadow-2xl space-y-3"
               >
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-left">
-                  <div className="border-l-2 border-amber-500 pl-3">
-                    <span className="text-amber-400 font-bold block mb-1">01. INVESTIGATE</span>
-                    <p className="text-gray-300 text-[11px] leading-relaxed">
-                      Analyze autopsy reports, recovered CCTV footage, suspect timelines, and physical evidence logs.
+                  <div className="border-l-4 border-amber-500 pl-3 bg-black/30 p-2">
+                    <span className="text-amber-400 font-black block mb-1">01. INVESTIGATE</span>
+                    <p className="text-gray-200 text-xs font-medium leading-relaxed">
+                      Analyze autopsy reports, CCTV logs, timelines, and physical evidence markers.
                     </p>
                   </div>
 
-                  <div className="border-l-2 border-purple-500 pl-3">
-                    <span className="text-purple-400 font-bold block mb-1">02. DECRYPT</span>
-                    <p className="text-gray-300 text-[11px] leading-relaxed">
-                      Crack encoded ciphers (Morse, T9, Polybius square, NATO phonetic) to unlock delayed clue waves.
+                  <div className="border-l-4 border-purple-500 pl-3 bg-black/30 p-2">
+                    <span className="text-purple-400 font-black block mb-1">02. DECRYPT</span>
+                    <p className="text-gray-200 text-xs font-medium leading-relaxed">
+                      Break ciphers (Morse, T9, Polybius, NATO) to bypass security firewalls.
                     </p>
                   </div>
 
-                  <div className="border-l-2 border-blue-500 pl-3">
-                    <span className="text-blue-400 font-bold block mb-1">03. INTERROGATE</span>
-                    <p className="text-gray-300 text-[11px] leading-relaxed">
-                      Question prime suspects with your team to expose conflicting statements and fraudulent alibis.
+                  <div className="border-l-4 border-blue-500 pl-3 bg-black/30 p-2">
+                    <span className="text-blue-400 font-black block mb-1">03. INTERROGATE</span>
+                    <p className="text-gray-200 text-xs font-medium leading-relaxed">
+                      Question prime suspects with your team to expose contradictory alibis.
                     </p>
                   </div>
 
-                  <div className="border-l-2 border-red-500 pl-3">
-                    <span className="text-red-400 font-bold block mb-1">04. CONVICT</span>
-                    <p className="text-gray-300 text-[11px] leading-relaxed">
-                      Cast your final accusation. AI detective intelligence grades your killer, motive, and method accuracy.
+                  <div className="border-l-4 border-red-500 pl-3 bg-black/30 p-2">
+                    <span className="text-red-400 font-black block mb-1">04. CONVICT</span>
+                    <p className="text-gray-200 text-xs font-medium leading-relaxed">
+                      Cast your final accusation. AI detective intelligence grades killer, motive, and method.
                     </p>
                   </div>
                 </div>
@@ -612,9 +613,9 @@ const HomePage = () => {
       </div>
 
       {/* Footer Desk Ticker */}
-      <footer className="w-full border-t border-amber-900/40 bg-black/70 backdrop-blur-md py-3 px-4 text-center font-mono text-[11px] text-amber-500/70 uppercase tracking-widest z-10 flex flex-wrap justify-between items-center gap-2">
+      <footer className="w-full border-t-2 border-amber-800/60 bg-black/90 py-3 px-4 text-center font-mono text-xs text-amber-400 uppercase tracking-widest z-10 flex flex-wrap justify-between items-center gap-2 font-bold">
         <span>Homicide Records & Archives Division // System v2.4</span>
-        <span className="text-amber-400/90 font-bold">Synchronized Multi-Detective Crime Lab</span>
+        <span className="text-amber-300 font-black">Synchronized Multi-Detective Crime Lab</span>
         <span>Caseprint © {new Date().getFullYear()}</span>
       </footer>
 
