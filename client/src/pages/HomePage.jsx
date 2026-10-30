@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSocket } from '../hooks/useSocket';
 import { useGame } from '../contexts/GameContext';
 import DiceRoller3D from '../components/DiceRoller3D';
+import RealisticPaperclip from '../components/ui/RealisticPaperclip';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -188,10 +189,8 @@ const HomePage = () => {
               </div>
             </div>
             
-            {/* Paperclip Graphic */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="absolute -top-3 -left-3 text-stone-900/70 transform -rotate-12 drop-shadow-md z-20 pointer-events-none">
-              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
-            </svg>
+            {/* Realistic Metal Paperclip */}
+            <RealisticPaperclip className="-top-4 left-4" angle={-15} size={74} variant="steel" />
 
             {/* Content container */}
             <div className="relative z-10 text-ink-black p-6 md:p-8 pt-[32px] h-full flex flex-col !overflow-visible">
@@ -341,10 +340,8 @@ const HomePage = () => {
               </div>
             </div>
             
-            {/* Paperclip Graphic */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="absolute -top-2 -left-2 text-stone-900/70 transform -rotate-6 drop-shadow-md z-20 pointer-events-none">
-              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
-            </svg>
+            {/* Realistic Metal Paperclip */}
+            <RealisticPaperclip className="-top-4 left-4" angle={-8} size={74} variant="steel" />
 
             {/* Content container */}
             <div className="relative z-10 text-ink-black p-6 md:p-8 pt-[32px] h-full flex flex-col !overflow-visible">
