@@ -152,13 +152,6 @@ const HomePage = () => {
       >
         {/* Header */}
         <div className="text-center mb-6 md:mb-10 mt-2 md:mt-0 select-none">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-black/60 border border-amber-500/40 rounded-full mb-3 shadow-md">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-            <span className="text-[11px] font-mono tracking-widest uppercase text-amber-200/90 font-bold">
-              Metropolitan Police Bureau • Homicide Division
-            </span>
-          </div>
-
           <h1 
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-typewriter text-paper-cream mb-2 tracking-tighter" 
             style={{ 
