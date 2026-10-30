@@ -1,8 +1,8 @@
 import React from 'react';
+import { useGame } from '../../contexts/GameContext';
 
 const SuspectDossier = ({ suspects }) => {
   const [expandedId, setExpandedId] = React.useState(null);
-
   if (!suspects || suspects.length === 0) return <div>No suspects identified yet.</div>;
 
   return (
@@ -20,10 +20,11 @@ const SuspectDossier = ({ suspects }) => {
           return (
             <div 
               key={suspect.id}
-              className={`bg-white border border-border/30 shadow-sm p-4 transition-all duration-300 ${isExpanded ? 'col-span-1 md:col-span-2 row-span-2 z-10 shadow-lg' : ''}`}
-              onClick={() => setExpandedId(isExpanded ? null : suspect.id)}
+              className={`bg-white border border-border/30 shadow-sm p-4 transition-all duration-300 ${isExpanded ? 'col-span-1 md:col-span-2 row-span-2 z-10 shadow-lg cursor-default' : 'cursor-pointer hover:bg-gray-50'}`}
+              onClick={() => { if (!isExpanded) setExpandedId(suspect.id); }}
             >
-              <div className="flex gap-4">
+              <div className="flex justify-between items-start">
+                <div className="flex gap-4">
                 {/* Mugshot */}
                 <div className="w-32 h-40 bg-gray-200 border-4 border-white shadow flex-shrink-0 relative overflow-hidden">
                    {suspect.photo ? (
@@ -53,6 +54,18 @@ const SuspectDossier = ({ suspects }) => {
                     {suspect.status}
                   </div>
                 </div>
+                </div>
+                
+                {/* Close Button if Expanded */}
+                {isExpanded && (
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); setExpandedId(null); }}
+                    className="text-gray-400 hover:text-ink-red transition-colors p-1"
+                    title="Close"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                  </button>
+                )}
               </div>
 
               {/* Expanded Details */}
@@ -62,9 +75,8 @@ const SuspectDossier = ({ suspects }) => {
                     <strong className="font-ui text-xs tracking-widest text-ink-black uppercase block mb-1">Last Known Whereabouts</strong>
                     <p>{suspect.lastKnownWhereabouts}</p>
                   </div>
-                  
                   <div>
-                    <strong className="font-ui text-xs tracking-widest text-ink-black uppercase block mb-1">Stated Alibi</strong>
+                    <strong className="font-ui text-xs tracking-widest text-ink-black uppercase block mb-1">Stated Alibi (Interrogation Transcript)</strong>
                     <p className="bg-yellow-100/50 p-2 border-l-4 border-yellow-400">{suspect.alibi}</p>
                   </div>
 

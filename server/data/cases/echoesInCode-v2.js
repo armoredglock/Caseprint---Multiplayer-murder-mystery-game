@@ -69,7 +69,7 @@ module.exports = {
       "alibi": "In the air during the attack.",
       "motiveAssessment": "LOW",
       "background": "Eli was blackmailing OmniCorp with stolen data.",
-      "status": "ALIBI VERIFIED"
+      "status": "CLEARED"
     },
     {
       "id": "s2",

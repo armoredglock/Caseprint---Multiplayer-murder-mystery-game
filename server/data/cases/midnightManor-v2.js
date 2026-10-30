@@ -61,7 +61,7 @@ module.exports = {
       "alibi": "Claims he was playing billiards alone in the dark.",
       "motiveAssessment": "HIGH",
       "background": "Begged his uncle for a bailout yesterday and was publicly humiliated.",
-      "status": "SUSPECT"
+      "status": "PERSON OF INTEREST"
     },
     {
       "id": "suspect-3",
@@ -74,7 +74,7 @@ module.exports = {
       "alibi": "Was preparing the midnight tea in the kitchen.",
       "motiveAssessment": "LOW",
       "background": "Has served the family for 40 years. However, he is secretly the true author of the new will, which actually leaves everything to him, not the pets.",
-      "status": "ALIBI VERIFIED"
+      "status": "CLEARED"
     },
     {
       "id": "suspect-4",

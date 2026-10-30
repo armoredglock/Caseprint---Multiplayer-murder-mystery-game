@@ -28,20 +28,20 @@ const ConfirmModal = ({ isOpen, title, message, onConfirm, onCancel, confirmText
             
             {/* Modal Body */}
             <div className="px-2 py-4 relative z-10">
-              <p className="text-ink-black/90 font-mono text-lg font-bold text-center">{message}</p>
+              <p className="text-ink-black/90 font-typewriter text-lg font-bold text-center">{message}</p>
             </div>
             
             {/* Action Buttons */}
             <div className="mt-6 flex justify-end gap-3 relative z-10">
               <button 
                 onClick={onCancel}
-                className="px-4 py-2 font-bold uppercase tracking-widest text-ink-black hover:bg-ink-black/10 transition-colors font-mono"
+                className="px-4 py-2 font-bold uppercase tracking-widest text-ink-black hover:bg-ink-black/10 transition-colors font-typewriter"
               >
                 {cancelText}
               </button>
               <button 
                 onClick={onConfirm}
-                className="bg-ink-black text-paper-cream px-6 py-2 font-bold uppercase tracking-widest hover:bg-ink-black/80 transition-colors font-mono border-2 border-ink-black shadow-[4px_4px_0_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[2px_2px_0_rgba(0,0,0,0.5)]"
+                className="bg-ink-black text-paper-cream px-6 py-2 font-bold uppercase tracking-widest hover:bg-ink-black/80 transition-colors font-typewriter border-2 border-ink-black shadow-[4px_4px_0_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[2px_2px_0_rgba(0,0,0,0.5)]"
               >
                 {confirmText}
               </button>

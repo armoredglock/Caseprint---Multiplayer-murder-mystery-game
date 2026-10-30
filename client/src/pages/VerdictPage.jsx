@@ -50,15 +50,7 @@ const VerdictPage = () => {
 
   return (
     <div className="min-h-screen bg-bg text-paper-cream overflow-y-auto relative p-4 md:p-8">
-      {/* Blood Splatter Background Overlay for Reveal */}
-      {revealStep >= 2 && (
-        <motion.div 
-          className="absolute inset-0 pointer-events-none opacity-20 bg-[url('/textures/blood-splatter.png')] bg-cover bg-center z-0"
-          initial={{ scale: 0.5, opacity: 0 }}
-          animate={{ scale: 1, opacity: 0.2 }}
-          transition={{ duration: 0.5 }}
-        />
-      )}
+
 
       <div className="container mx-auto max-w-4xl relative z-10 space-y-12 pb-20">
         

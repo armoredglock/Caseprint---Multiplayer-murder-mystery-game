@@ -20,12 +20,12 @@ module.exports = {
     name: "Lord Archibald Blackwood",
     age: 72,
     occupation: "Aristocrat / Industrialist",
-    photo: "https://i.pravatar.cc/150?u=ArchibaldBlackwood",
+    photo: "https://api.dicebear.com/9.x/avataaars/svg?seed=ArchibaldBlackwood",
     dateOfBirth: "1952-03-14",
     biography: "A wealthy and eccentric industrialist. He recently announced his intention to disinherit his entire family and leave his massive fortune to his pet corgi and a local cat sanctuary. He was widely disliked by his heirs.",
     knownAssociates: [
-      { name: "Beatrice Blackwood", relation: "Niece", photo: "https://i.pravatar.cc/150?u=BeatriceBlackwood" },
-      { name: "Reginald Sterling", relation: "Nephew", photo: "https://i.pravatar.cc/150?u=ReginaldSterling" }
+      { name: "Beatrice Blackwood", relation: "Niece", photo: "https://api.dicebear.com/9.x/avataaars/svg?seed=BeatriceBlackwood" },
+      { name: "Reginald Sterling", relation: "Nephew", photo: "https://api.dicebear.com/9.x/avataaars/svg?seed=ReginaldSterling" }
     ]
   },
   suspects: [
@@ -34,7 +34,7 @@ module.exports = {
       name: "Beatrice Blackwood",
       age: 45,
       occupation: "Socialite",
-      photo: "https://i.pravatar.cc/150?u=BeatriceBlackwood",
+      photo: "https://api.dicebear.com/9.x/avataaars/svg?seed=BeatriceBlackwood",
       relationToVictim: "Niece",
       lastKnownWhereabouts: "The Drawing Room",
       alibi: "Claims she was in the drawing room drinking sherry when the lights went out.",
@@ -47,20 +47,20 @@ module.exports = {
       name: "Reginald Sterling",
       age: 38,
       occupation: "Failed Investor",
-      photo: "https://i.pravatar.cc/150?u=ReginaldSterling",
+      photo: "https://api.dicebear.com/9.x/avataaars/svg?seed=ReginaldSterling",
       relationToVictim: "Nephew",
       lastKnownWhereabouts: "The Billiard Room",
       alibi: "Claims he was playing billiards alone in the dark.",
       motiveAssessment: "HIGH",
       background: "Begged his uncle for a bailout yesterday and was publicly humiliated.",
-      status: "SUSPECT"
+      status: 'PERSON OF INTEREST'
     },
     {
       id: "suspect-3",
       name: "Jeeves",
       age: 60,
       occupation: "Butler",
-      photo: "https://i.pravatar.cc/150?u=JeevesButler",
+      photo: "https://api.dicebear.com/9.x/avataaars/svg?seed=JeevesButler",
       relationToVictim: "Employee",
       lastKnownWhereabouts: "The Kitchen",
       alibi: "Was preparing the midnight tea in the kitchen.",
@@ -73,7 +73,7 @@ module.exports = {
       name: "Lady Penelope",
       age: 68,
       occupation: "Widow",
-      photo: "https://i.pravatar.cc/150?u=LadyPenelope",
+      photo: "https://api.dicebear.com/9.x/avataaars/svg?seed=LadyPenelope",
       relationToVictim: "Sister-in-law",
       lastKnownWhereabouts: "Upstairs Bedroom",
       alibi: "Claims she was asleep and slept through the storm.",

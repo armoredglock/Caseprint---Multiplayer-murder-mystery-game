@@ -101,7 +101,7 @@ module.exports = {
       "alibi": "Painting all night.",
       "motiveAssessment": "MEDIUM",
       "background": "Julian ruined her career in an editorial last month.",
-      "status": "SUSPECT"
+      "status": "PERSON OF INTEREST"
     }
   ],
   "forensics": {

@@ -89,7 +89,7 @@ module.exports = {
       "alibi": "Working on correspondence until midnight, then went to bed.",
       "motiveAssessment": "MEDIUM",
       "background": "Rumored to be Blackwood's mistress. She typed the draft of the new will.",
-      "status": "SUSPECT",
+      "status": "PERSON OF INTEREST",
       "wave": 2
     }
   ],

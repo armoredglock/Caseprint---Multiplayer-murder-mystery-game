@@ -106,13 +106,30 @@ h3 { font-size: 1.5rem; }
 .btn-primary {
   background-color: var(--color-accent);
   color: var(--color-bg);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-folder);
+}
+
+/* Custom Scrollbar for Dropdowns & Lists */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-ink-black);
+  border-radius: 4px;
+  opacity: 0.5;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-bg);
 }
 
 .btn-primary:hover {
   background-color: #e6b863;
   box-shadow: var(--shadow-glow);
-  transform: translateY(-2px);
 }
 
 .btn-danger {

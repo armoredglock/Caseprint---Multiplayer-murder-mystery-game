@@ -88,7 +88,7 @@ module.exports = {
       "alibi": "Asleep.",
       "motiveAssessment": "LOW",
       "background": "The gallery is heavily in debt. Sebastian is the sole beneficiary of the business insurance.",
-      "status": "ALIBI VERIFIED"
+      "status": "CLEARED"
     },
     {
       "id": "s2",

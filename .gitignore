@@ -1,6 +1,13 @@
 node_modules/
 .env
+.env.*
+.env*.local
+*.local
 .DS_Store
 dist/
 build/
+.vercel/
 scratchpad_fix_photos.js
+test-int.*
+*-int.*
+fix.js

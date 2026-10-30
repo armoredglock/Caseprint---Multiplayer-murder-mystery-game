@@ -21,13 +21,13 @@ const DiceRoller3D = ({ onRollStart, onRollComplete, isRolling }) => {
     canvas.height = 128;
     const ctx = canvas.getContext('2d');
     
-    // Background (ivory / bone color)
-    ctx.fillStyle = '#f0eade';
+    // Background (bright bone/ivory color)
+    ctx.fillStyle = '#fdfbf7';
     ctx.fillRect(0, 0, 128, 128);
     
     // Border
     ctx.lineWidth = 4;
-    ctx.strokeStyle = '#d0c8b6';
+    ctx.strokeStyle = '#e3dec7';
     ctx.strokeRect(0, 0, 128, 128);
 
     // Dots
@@ -65,12 +65,13 @@ const DiceRoller3D = ({ onRollStart, onRollComplete, isRolling }) => {
     const scene = new THREE.Scene();
     sceneRef.current = scene;
     
-    // We want a small transparent canvas
-    const width = 60;
-    const height = 60;
+    // Increase canvas size to prevent clipping during rotation
+    const width = 80;
+    const height = 80;
     
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
-    camera.position.set(0, 5, 10);
+    // Bring camera slightly closer so dice fills the 80x80 canvas nicely
+    camera.position.set(0, 4, 7);
     camera.lookAt(0, 0, 0);
     cameraRef.current = camera;
 
@@ -86,9 +87,9 @@ const DiceRoller3D = ({ onRollStart, onRollComplete, isRolling }) => {
     rendererRef.current = renderer;
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
     scene.add(ambientLight);
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
     dirLight.position.set(5, 10, 5);
     dirLight.castShadow = true;
     scene.add(dirLight);
@@ -218,7 +219,7 @@ const DiceRoller3D = ({ onRollStart, onRollComplete, isRolling }) => {
         }, 100);
       }, 500);
     }
-  }, [triggerRoll]);
+  }, [isRolling, onRollComplete]);
 
   return (
     <div 
@@ -228,7 +229,15 @@ const DiceRoller3D = ({ onRollStart, onRollComplete, isRolling }) => {
         if (!isRolling && onRollStart) onRollStart();
       }}
       title="Roll Dice"
-      style={{ width: '40px', height: '40px', borderRadius: '8px', overflow: 'hidden' }}
+      style={{ 
+        width: '64px', 
+        height: '64px', 
+        borderRadius: '8px', 
+        overflow: 'visible', // allow dice to pop out slightly if needed
+        marginTop: '-12px',
+        marginBottom: '-12px',
+        marginLeft: '-4px'
+      }}
     />
   );
 };

@@ -46,7 +46,7 @@ const PlayersModal = ({ isOpen, onClose }) => {
             <div className="flex justify-between items-center mb-4 border-b-2 border-ink-black/30 pb-2 shrink-0 relative z-10">
               <h3 className="text-2xl font-bold font-ui text-ink-black uppercase flex items-center gap-3">
                 Team Roster
-                <span className="text-sm font-mono text-ink-black font-bold px-2 py-0.5 bg-ink-black/10 rounded">
+                <span className="text-sm font-typewriter text-ink-black font-bold px-2 py-0.5 bg-ink-black/10 rounded">
                   {roomState.players?.length} / {roomState.maxPlayers}
                 </span>
               </h3>
@@ -67,17 +67,17 @@ const PlayersModal = ({ isOpen, onClose }) => {
                       🕵️
                     </div>
                     <div className="flex-1 overflow-hidden">
-                      <p className={`font-bold truncate text-lg font-mono ${player.isOffline ? 'text-ink-black/40 line-through' : 'text-ink-black'}`}>
+                      <p className={`font-bold truncate text-lg font-typewriter ${player.isOffline ? 'text-ink-black/40 line-through' : 'text-ink-black'}`}>
                         {player.name} 
-                        {isMe && <span className="text-[10px] bg-ink-black text-paper-cream px-1.5 py-0.5 ml-2 font-bold font-mono tracking-widest uppercase align-middle">YOU</span>}
-                        {player.isOffline && <span className="text-[10px] bg-ink-black/20 text-ink-black px-1.5 py-0.5 ml-2 font-bold font-mono tracking-widest uppercase align-middle">OFFLINE</span>}
+                        {isMe && <span className="text-[10px] bg-ink-black text-paper-cream px-1.5 py-0.5 ml-2 font-bold font-typewriter tracking-widest uppercase align-middle">YOU</span>}
+                        {player.isOffline && <span className="text-[10px] bg-ink-black/20 text-ink-black px-1.5 py-0.5 ml-2 font-bold font-typewriter tracking-widest uppercase align-middle">OFFLINE</span>}
                       </p>
-                      {player.isHost && <span className={`text-[10px] uppercase font-bold block font-mono tracking-widest ${player.isOffline ? 'text-ink-black/40' : 'text-ink-black'}`}>Captain</span>}
+                      {player.isHost && <span className={`text-[10px] uppercase font-bold block font-typewriter tracking-widest ${player.isOffline ? 'text-ink-black/40' : 'text-ink-black'}`}>Captain</span>}
                     </div>
                     {currentPlayer.isHost && !player.isHost && !isMe && (
                       <button 
                         onClick={() => handleKickPlayer(player.socketId)}
-                        className="text-ink-red hover:text-white border-2 border-ink-red hover:bg-ink-red font-bold text-xs uppercase tracking-widest px-2 py-1 transition-colors shrink-0 font-mono shadow-[2px_2px_0_rgba(0,0,0,0.5)] active:translate-y-[1px] active:shadow-[1px_1px_0_rgba(0,0,0,0.5)]"
+                        className="text-ink-red hover:text-white border-2 border-ink-red hover:bg-ink-red font-bold text-xs uppercase tracking-widest px-2 py-1 transition-colors shrink-0 font-typewriter shadow-[2px_2px_0_rgba(0,0,0,0.5)] active:translate-y-[1px] active:shadow-[1px_1px_0_rgba(0,0,0,0.5)]"
                         title="Kick Player"
                       >
                         Kick
@@ -92,7 +92,7 @@ const PlayersModal = ({ isOpen, onClose }) => {
             <div className="mt-6 flex justify-end shrink-0 relative z-10">
               <button 
                 onClick={onClose}
-                className="bg-ink-black text-paper-cream px-6 py-2 font-bold uppercase tracking-widest hover:bg-ink-black/80 transition-colors border-2 border-ink-black shadow-[4px_4px_0_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[2px_2px_0_rgba(0,0,0,0.5)] font-mono"
+                className="bg-ink-black text-paper-cream px-6 py-2 font-bold uppercase tracking-widest hover:bg-ink-black/80 transition-colors border-2 border-ink-black shadow-[4px_4px_0_rgba(0,0,0,0.5)] active:translate-y-1 active:shadow-[2px_2px_0_rgba(0,0,0,0.5)] font-typewriter"
               >
                 Close
               </button>

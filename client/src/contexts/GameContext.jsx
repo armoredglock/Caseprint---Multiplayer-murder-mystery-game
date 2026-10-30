@@ -18,20 +18,23 @@ export const GameProvider = ({ children }) => {
       const saved = localStorage.getItem('caseprint_session');
       if (saved) {
         try {
-          const { roomCode, playerName } = JSON.parse(saved);
-          
+          const { roomCode, playerName, sessionToken } = JSON.parse(saved);
+
           const doEmit = () => {
             const responseTimeout = setTimeout(() => {
               console.warn("Session restore timed out.");
               setIsRestoring(false);
             }, 5000);
 
-            socket.emit('room:join', { roomCode, playerName, password: '' }, (response) => {
+            socket.emit('room:join', { roomCode, playerName, password: '', sessionToken }, (response) => {
               clearTimeout(responseTimeout);
               if (response && response.success) {
                 setRoomState(response.room);
                 const player = response.room.players.find(p => p.name === playerName);
                 setCurrentPlayer(player);
+                if (response.sessionToken) {
+                  localStorage.setItem('caseprint_session', JSON.stringify({ roomCode, playerName, sessionToken: response.sessionToken }));
+                }
               } else {
                 localStorage.removeItem('caseprint_session');
               }
@@ -60,7 +63,7 @@ export const GameProvider = ({ children }) => {
         setIsRestoring(false);
       }
     };
-    
+
     restoreSession();
 
     // Room events
@@ -134,10 +137,29 @@ export const GameProvider = ({ children }) => {
     });
 
     socket.on('game:puzzle-solved', (data) => {
-      setRoomState(prev => prev ? { 
-        ...prev, 
-        solvedPuzzles: [...(prev.solvedPuzzles || []), data.puzzleId] 
+      setRoomState(prev => prev ? {
+        ...prev,
+        solvedPuzzles: [...(prev.solvedPuzzles || []), data.puzzleId]
       } : null);
+
+      if (data?.answer) {
+        setCaseData(prev => {
+          if (!prev || !prev.digitalEvidence || !prev.digitalEvidence.puzzles) return prev;
+          const updatedPuzzles = prev.digitalEvidence.puzzles.map(p => {
+            if (p.id === data.puzzleId) {
+              return { ...p, answer: data.answer };
+            }
+            return p;
+          });
+          return {
+            ...prev,
+            digitalEvidence: {
+              ...prev.digitalEvidence,
+              puzzles: updatedPuzzles
+            }
+          };
+        });
+      }
     });
 
     // Chat events
@@ -161,10 +183,11 @@ export const GameProvider = ({ children }) => {
     };
   }, []);
 
-  const initSession = (room, player) => {
+  const initSession = (room, player, sessionToken) => {
     setRoomState(room);
     setCurrentPlayer(player);
-    localStorage.setItem('caseprint_session', JSON.stringify({ roomCode: room.roomCode, playerName: player.name }));
+    const token = sessionToken || player?.sessionToken;
+    localStorage.setItem('caseprint_session', JSON.stringify({ roomCode: room.roomCode, playerName: player.name, sessionToken: token }));
   };
 
   const clearSession = () => {
@@ -182,12 +205,30 @@ export const GameProvider = ({ children }) => {
     }
   };
 
+  const interrogateSuspect = (suspectId) => {
+    return new Promise((resolve, reject) => {
+      if (!roomState) return reject(new Error('No active room'));
+
+      socket.emit('game:interrogate-suspect', {
+        roomCode: roomState.roomCode,
+        suspectId
+      }, (response) => {
+        if (response && response.success) {
+          resolve(response);
+        } else {
+          addToast(response?.error || 'Failed to interrogate suspect', 'error');
+          reject(new Error(response?.error || 'Failed'));
+        }
+      });
+    });
+  };
+
   const submitAccusation = (accusation) => {
     if (roomState) {
       socket.emit('game:submit-accusation', { roomCode: roomState.roomCode, accusation });
     }
   };
-  
+
   const submitPuzzle = (puzzleId, answer) => {
     return new Promise((resolve) => {
       if (roomState) {
@@ -211,6 +252,7 @@ export const GameProvider = ({ children }) => {
       initSession,
       clearSession,
       sendMessage,
+      interrogateSuspect,
       submitAccusation,
       submitPuzzle
     }}>

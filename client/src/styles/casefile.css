@@ -20,7 +20,7 @@
   flex-direction: column;
   overflow: hidden;
   /* Paper texture */
-  background-image: url('/textures/paper-cream.png');
+  background-color: var(--color-paper-cream);
   background-blend-mode: multiply;
   border: 2px solid var(--color-ink-black);
   z-index: 5;
@@ -151,7 +151,7 @@
 
 /* 2. Witness Statements (Handwritten) */
 .doc-statement {
-  background: url('/textures/paper-lined.png') repeat;
+  background-color: #fdfaf1;
   padding: 3rem 2rem;
   font-family: var(--font-handwriting);
   font-size: 1.4rem;
@@ -228,7 +228,6 @@
   border: 4px solid;
   padding: 0.25rem 1rem;
   border-radius: 4px;
-  opacity: 0.7;
   pointer-events: none;
   z-index: 100;
 }

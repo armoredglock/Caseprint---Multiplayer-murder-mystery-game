@@ -103,7 +103,7 @@ module.exports = {
       "alibi": "Monitoring cameras all night. Claims the 42nd-floor cameras glitched at 21:45.",
       "motiveAssessment": "HIGH",
       "background": "Former special forces. Rusk has the skills to deploy a gaseous agent and the clearance to bypass the cameras.",
-      "status": "SUSPECT",
+      "status": "PERSON OF INTEREST",
       "wave": 2
     }
   ],

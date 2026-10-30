@@ -82,7 +82,7 @@ module.exports = {
       "alibi": "Streaming on Twitch.",
       "motiveAssessment": "LOW",
       "background": "Eli taught Cipher everything.",
-      "status": "SUSPECT"
+      "status": "PERSON OF INTEREST"
     }
   ],
   "forensics": {

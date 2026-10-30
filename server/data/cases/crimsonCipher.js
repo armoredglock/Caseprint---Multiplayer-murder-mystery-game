@@ -20,11 +20,11 @@ module.exports = {
     name: "Arthur Vance",
     age: 45,
     occupation: "Investigative Journalist, The Daily Chronicle",
-    photo: "https://i.pravatar.cc/150?u=ArthurVance",
+    photo: "https://api.dicebear.com/9.x/avataaars/svg?seed=ArthurVance",
     dateOfBirth: "1979-05-12",
     biography: "Arthur Vance was a Pulitzer-prize winning journalist known for his aggressive deep dives into organized crime and corruption. Recently, he began publishing a series of articles claiming he had identified the elusive 'Crimson Killer'. He was scheduled to reveal the killer's identity in Sunday's edition.",
     knownAssociates: [
-      { name: "Eleanor Vance", relation: "Wife", photo: "https://i.pravatar.cc/150?u=EleanorVance" }
+      { name: "Eleanor Vance", relation: "Wife", photo: "https://api.dicebear.com/9.x/avataaars/svg?seed=EleanorVance" }
     ]
   },
   suspects: [
@@ -33,7 +33,7 @@ module.exports = {
       name: "Dr. Silas Crane",
       age: 52,
       occupation: "Surgeon",
-      photo: "https://i.pravatar.cc/150?u=SilasCrane",
+      photo: "https://api.dicebear.com/9.x/avataaars/svg?seed=SilasCrane",
       relationToVictim: "Subject of a previous hit piece by Vance.",
       lastKnownWhereabouts: "City Hospital, Night Shift",
       alibi: "Claims he was performing emergency surgery from 01:00 to 04:00.",
@@ -46,7 +46,7 @@ module.exports = {
       name: "Eleanor Vance",
       age: 42,
       occupation: "Novelist",
-      photo: "https://i.pravatar.cc/150?u=EleanorVance",
+      photo: "https://api.dicebear.com/9.x/avataaars/svg?seed=EleanorVance",
       relationToVictim: "Wife",
       lastKnownWhereabouts: "Home",
       alibi: "Claims she was asleep at home. No witnesses.",
@@ -59,20 +59,20 @@ module.exports = {
       name: "Victor 'Viper' Thorne",
       age: 38,
       occupation: "Enforcer, The Syndicate",
-      photo: "https://i.pravatar.cc/150?u=VictorThorne",
+      photo: "https://api.dicebear.com/9.x/avataaars/svg?seed=VictorThorne",
       relationToVictim: "Investigated by Vance.",
       lastKnownWhereabouts: "The Velvet Lounge (Nightclub)",
       alibi: "Club bouncers swear he was in the VIP room all night. Camera footage is conveniently missing.",
       motiveAssessment: "HIGH",
       background: "A known hitman. Vance was getting close to linking Thorne to the Mayor's office.",
-      status: "SUSPECT"
+      status: 'PERSON OF INTEREST'
     },
     {
       id: "suspect-4",
       name: "Det. James Miller",
       age: 49,
       occupation: "Homicide Detective",
-      photo: "https://i.pravatar.cc/150?u=JamesMiller",
+      photo: "https://api.dicebear.com/9.x/avataaars/svg?seed=JamesMiller",
       relationToVictim: "Reporting Officer / Vance's 'Source'",
       lastKnownWhereabouts: "Precinct 9",
       alibi: "Claims he was doing paperwork until he got the radio call at 03:15.",
@@ -85,7 +85,7 @@ module.exports = {
       name: "Elias Vance",
       age: 22,
       occupation: "Student",
-      photo: "https://i.pravatar.cc/150?u=EliasVance",
+      photo: "https://api.dicebear.com/9.x/avataaars/svg?seed=EliasVance",
       relationToVictim: "Son",
       lastKnownWhereabouts: "University Library",
       alibi: "Studying for finals. Library swipe records confirm entry at 22:00, but no exit record.",

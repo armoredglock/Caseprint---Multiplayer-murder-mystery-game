@@ -3,10 +3,12 @@ const mongoose = require('mongoose');
 const playerSchema = new mongoose.Schema({
   socketId: String,
   name: String,
+  sessionToken: String,
   avatar: { type: String, default: '' },
   joinedAt: { type: Date, default: Date.now },
   isHost: { type: Boolean, default: false },
-  hasAccused: { type: Boolean, default: false }
+  hasAccused: { type: Boolean, default: false },
+  interrogatedSuspects: { type: [String], default: [] }
 }, { _id: false });
 
 const accusationSchema = new mongoose.Schema({

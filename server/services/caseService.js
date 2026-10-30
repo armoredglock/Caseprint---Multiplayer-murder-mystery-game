@@ -96,11 +96,23 @@ const getCaseDataForWave = async (roomCode, currentWave) => {
   }
 
   if (caseObj.digitalEvidence) {
+    const rawPuzzles = filterByWave(caseObj.digitalEvidence.puzzles || [], currentWave);
+    const solvedIds = (room && Array.isArray(room.solvedPuzzles)) ? room.solvedPuzzles : [];
+    
+    // Sanitize puzzles: do not leak answer unless already solved in the room
+    const sanitizedPuzzles = rawPuzzles.map(p => {
+      const pObj = typeof p.toObject === 'function' ? p.toObject() : { ...p };
+      if (!solvedIds.includes(pObj.id)) {
+        delete pObj.answer;
+      }
+      return pObj;
+    });
+
     filteredCase.digitalEvidence = {
       phoneRecords: filterByWave(caseObj.digitalEvidence.phoneRecords, currentWave),
       emails: filterByWave(caseObj.digitalEvidence.emails, currentWave),
       cctvLogs: filterByWave(caseObj.digitalEvidence.cctvLogs, currentWave),
-      puzzles: filterByWave(caseObj.digitalEvidence.puzzles || [], currentWave),
+      puzzles: sanitizedPuzzles,
       socialMedia: caseObj.digitalEvidence.socialMedia,
       other: caseObj.digitalEvidence.other
     };

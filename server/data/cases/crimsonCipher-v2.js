@@ -56,7 +56,7 @@ module.exports = {
       "alibi": "Claims she was asleep at home. No witnesses.",
       "motiveAssessment": "LOW",
       "background": "She stands to inherit a $2 million life insurance policy. She has a documented history of violence and a recent restraining order filed against Arthur.",
-      "status": "ALIBI VERIFIED"
+      "status": "CLEARED"
     },
     {
       "id": "suspect-3",
@@ -69,7 +69,7 @@ module.exports = {
       "alibi": "Club bouncers swear he was in the VIP room all night. Camera footage is conveniently missing.",
       "motiveAssessment": "HIGH",
       "background": "A known hitman. Vance was getting close to linking Thorne to the Mayor's office.",
-      "status": "SUSPECT"
+      "status": "PERSON OF INTEREST"
     },
     {
       "id": "suspect-4",

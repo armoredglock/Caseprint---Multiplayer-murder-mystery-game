@@ -31,10 +31,10 @@ export const useSocket = () => {
     });
   }, []);
 
-  const joinRoom = useCallback((roomCode, playerName, password) => {
+  const joinRoom = useCallback((roomCode, playerName, password, sessionToken) => {
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => reject(new Error("Server connection timed out.")), 5000);
-      socket.emit('room:join', { roomCode, playerName, password }, (response) => {
+      socket.emit('room:join', { roomCode, playerName, password, sessionToken }, (response) => {
         clearTimeout(timeout);
         if (response && response.success) resolve(response);
         else reject(new Error(response?.error || 'Unknown error'));

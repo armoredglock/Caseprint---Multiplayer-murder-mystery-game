@@ -123,7 +123,7 @@ module.exports = {
       "alibi": "Drinking alone. Bartender vaguely remembers him leaving around 22:30.",
       "motiveAssessment": "MEDIUM",
       "background": "Fired by Marcus three weeks ago for alleged IP theft. He filed a wrongful termination suit yesterday.",
-      "status": "SUSPECT"
+      "status": "PERSON OF INTEREST"
     }
   ],
   "witnessStatements": [
