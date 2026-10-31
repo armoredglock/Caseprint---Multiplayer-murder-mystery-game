@@ -1,4 +1,5 @@
 import React from 'react';
+import RealisticPaperclip from '../ui/RealisticPaperclip';
 
 const EvidenceLog = ({ evidence }) => {
   if (!evidence || evidence.length === 0) return <div>No physical evidence logged yet.</div>;
@@ -15,9 +16,16 @@ const EvidenceLog = ({ evidence }) => {
       </div>
 
       <div className="evidence-grid">
-        {evidence?.map(item => (
-          <div key={item.tagNumber} className="evidence-card flex flex-col h-full">
+        {evidence?.map((item, idx) => (
+          <div key={item.tagNumber} className="evidence-card flex flex-col h-full relative overflow-visible">
             <div className="evidence-tag">{item.tagNumber}</div>
+            {/* Realistic Paperclip holding evidence card */}
+            <RealisticPaperclip 
+              className="-top-3 right-4" 
+              angle={idx % 2 === 0 ? 8 : -6} 
+              size={46} 
+              variant={idx % 2 === 0 ? "steel" : "brass"} 
+            />
             
             <div className="mt-6 mb-2 relative flex-grow">
                {/* Evidence Photo */}

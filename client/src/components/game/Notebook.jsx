@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useGame } from '../../contexts/GameContext';
+import RealisticPaperclip from '../ui/RealisticPaperclip';
 
 const Notebook = () => {
   const { roomState } = useGame();
@@ -23,8 +24,9 @@ const Notebook = () => {
         <h3 className="font-typewriter font-bold text-sm uppercase tracking-widest text-ink-black/70">Personal Notebook</h3>
       </div>
       
-      {/* Lined paper background */}
-      <div className="flex-1 relative bg-[#fdfdfd] text-ink-blue m-4 shadow-paper border-2 border-ink-black/10 transform rotate-1">
+      {/* Lined paper background with Realistic Paperclip */}
+      <div className="flex-1 relative bg-[#fdfdfd] text-ink-blue m-4 shadow-paper border-2 border-ink-black/10 transform rotate-1 overflow-visible">
+        <RealisticPaperclip className="-top-3 right-6" angle={-8} size={58} variant="brass" />
         <div 
           className="absolute inset-0 pointer-events-none" 
           style={{

@@ -1,4 +1,5 @@
 import React from 'react';
+import RealisticPaperclip from '../ui/RealisticPaperclip';
 
 const WitnessStatement = ({ statements }) => {
   if (!statements || statements.length === 0) return <div>No witness statements available.</div>;
@@ -6,8 +7,17 @@ const WitnessStatement = ({ statements }) => {
   return (
     <div className="space-y-12">
       {statements?.map((statement, idx) => (
-        <div key={idx} className="bg-white p-4 font-mono text-sm text-gray-800 border-4 border-[#1c2431]">
-          <div className="bg-[#1c2431] text-white px-4 py-3 flex justify-between items-center mb-6">
+        <div key={idx} className="bg-[#fcfbf7] p-5 font-mono text-sm text-gray-800 border-2 border-[#1c2431] relative shadow-md">
+          {/* Realistic Paperclip holding statement */}
+          <RealisticPaperclip 
+            className="-top-3 left-6" 
+            angle={idx % 2 === 0 ? -10 : 8} 
+            size={56} 
+            variant={idx % 2 === 0 ? "steel" : "brass"} 
+          />
+          <div className="stamp stamp-black top-2 right-4 opacity-20 text-sm pointer-events-none">RECORDED EVIDENCE</div>
+
+          <div className="bg-[#1c2431] text-white px-4 py-3 flex justify-between items-center mb-6 shadow-sm">
             <h2 className="text-xl font-bold uppercase tracking-widest">SWORN STATEMENT</h2>
             <div className="text-right text-xs text-gray-300">
               <p>WITNESS: {statement.witnessName.toUpperCase()}</p>

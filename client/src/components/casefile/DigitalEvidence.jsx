@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useGame } from '../../contexts/GameContext';
+import RealisticPaperclip from '../ui/RealisticPaperclip';
 
 const DigitalEvidence = ({ digital }) => {
   const [activeTab, setActiveTab] = useState('phone');
@@ -43,13 +44,21 @@ const DigitalEvidence = ({ digital }) => {
   };
 
   return (
-    <div className="bg-gray-100 p-4 font-mono text-sm h-full flex flex-col border border-gray-300">
+    <div className="bg-[#f8fafc] p-4 md:p-6 font-mono text-sm h-full flex flex-col border border-gray-300 relative shadow-sm">
+      {/* Realistic Paperclip holding digital printout */}
+      <RealisticPaperclip className="-top-3 right-8 z-20" angle={-8} size={56} variant="steel" />
+
+      {/* Forensic Header */}
+      <div className="flex justify-between items-center mb-3 pb-2 border-b border-gray-300">
+        <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">CYBER CRIMES DIVISION // DIGITAL FORENSICS</span>
+        <span className="text-[10px] bg-slate-200 text-slate-700 px-2 py-0.5 font-bold uppercase rounded">EXTRACT #DIG-402</span>
+      </div>
       
       {/* Internal Tabs */}
       <div className="flex gap-2 mb-4 border-b border-gray-300 pb-2 flex-wrap">
         {hasPhone && (
           <button 
-            className={`px-4 py-2 font-bold ${activeTab === 'phone' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+            className={`px-4 py-1.5 font-bold text-xs uppercase tracking-wider transition-colors ${activeTab === 'phone' ? 'bg-[#1e293b] text-white shadow-sm' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
             onClick={() => setActiveTab('phone')}
           >
             PHONE LOGS
@@ -57,7 +66,7 @@ const DigitalEvidence = ({ digital }) => {
         )}
         {hasEmail && (
           <button 
-            className={`px-4 py-2 font-bold ${activeTab === 'email' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+            className={`px-4 py-1.5 font-bold text-xs uppercase tracking-wider transition-colors ${activeTab === 'email' ? 'bg-[#1e293b] text-white shadow-sm' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
             onClick={() => setActiveTab('email')}
           >
             EMAILS
@@ -65,7 +74,7 @@ const DigitalEvidence = ({ digital }) => {
         )}
         {hasCCTV && (
           <button 
-            className={`px-4 py-2 font-bold ${activeTab === 'cctv' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+            className={`px-4 py-1.5 font-bold text-xs uppercase tracking-wider transition-colors ${activeTab === 'cctv' ? 'bg-[#1e293b] text-white shadow-sm' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
             onClick={() => setActiveTab('cctv')}
           >
             CCTV TERMINAL
@@ -73,7 +82,7 @@ const DigitalEvidence = ({ digital }) => {
         )}
         {hasPuzzle && (
           <button 
-            className={`px-4 py-2 font-bold ${activeTab === 'puzzle' ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+            className={`px-4 py-1.5 font-bold text-xs uppercase tracking-wider transition-colors ${activeTab === 'puzzle' ? 'bg-[#4c1d95] text-white shadow-sm' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
             onClick={() => setActiveTab('puzzle')}
           >
             DECRYPT/CIPHERS

@@ -7,6 +7,7 @@ import ChatPanel from '../components/game/ChatPanel';
 import Notebook from '../components/game/Notebook';
 import AccusationForm from '../components/game/AccusationForm';
 import CaseFolder from '../components/casefile/CaseFolder';
+import RealisticPaperclip from '../components/ui/RealisticPaperclip';
 
 const GamePage = () => {
   const { roomCode } = useParams();
@@ -90,10 +91,8 @@ const GamePage = () => {
                <div className="absolute inset-2 border-2 border-ink-black/15 border-dashed pointer-events-none opacity-70" style={{ clipPath: 'polygon(0 0, 29% 0, 31% 16px, 100% 16px, 100% 100%, 0 100%)' }} />
                <div className="absolute inset-3 border border-ink-black/10 pointer-events-none opacity-50" style={{ clipPath: 'polygon(0 0, 28% 0, 30% 14px, 100% 14px, 100% 100%, 0 100%)' }} />
                
-               {/* Paperclip Graphic */}
-               <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="absolute -top-4 -left-4 text-gray-800/60 transform -rotate-12 drop-shadow-md z-10 pointer-events-none">
-                 <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
-               </svg>
+               {/* Realistic Metal Paperclip */}
+               <RealisticPaperclip className="-top-4 left-6" angle={-14} size={84} variant="steel" />
 
                <div className="absolute top-6 right-6 stamp stamp-red opacity-50 transform rotate-12 text-2xl md:text-3xl">CLASSIFIED</div>
                <h1 className="font-typewriter text-4xl md:text-7xl font-bold text-ink-black mb-4 mt-8 px-4 break-words w-full leading-tight">CASE #{roomState.caseId}</h1>

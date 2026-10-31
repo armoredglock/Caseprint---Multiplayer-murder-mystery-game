@@ -1,10 +1,13 @@
 import React from 'react';
+import RealisticPaperclip from '../ui/RealisticPaperclip';
 
 const CaseTimeline = ({ timeline }) => {
   if (!timeline || timeline.length === 0) return <div>Timeline reconstruction pending.</div>;
 
   return (
-    <div className="py-8 px-4 max-w-2xl mx-auto">
+    <div className="py-8 px-4 max-w-2xl mx-auto relative overflow-visible">
+      {/* Realistic Paperclip holding timeline file */}
+      <RealisticPaperclip className="-top-2 right-4 z-20" angle={12} size={56} variant="brass" />
       <div className="text-center mb-10">
         <h2 className="font-ui font-bold text-2xl uppercase tracking-widest text-ink-black border-b-2 border-ink-black inline-block pb-2">
           EVENT RECONSTRUCTION

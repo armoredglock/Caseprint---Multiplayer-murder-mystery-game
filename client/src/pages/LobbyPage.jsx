@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useGame } from '../contexts/GameContext';
 import { useToast } from '../contexts/ToastContext';
+import RealisticPaperclip from '../components/ui/RealisticPaperclip';
+import RealisticPushPin from '../components/ui/RealisticPushPin';
 import { socket } from '../socket';
 import { useSocket } from '../hooks/useSocket';
 import ConfirmModal from '../components/ui/ConfirmModal';
@@ -118,11 +120,8 @@ const LobbyPage = () => {
           </div>
           
           <div className="mt-6 md:mt-0 flex flex-col items-center bg-[#f4f1ea] text-ink-black p-3 md:p-4 border border-ink-black/20 shadow-[2px_5px_15px_rgba(0,0,0,0.4)] transform rotate-1 md:rotate-2 max-w-xs relative before:content-[''] before:absolute before:inset-0 before:bg-[url('/textures/paper-cream.png')] before:opacity-50 before:mix-blend-multiply before:pointer-events-none">
-            {/* Realistic Push Pin */}
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 w-4 h-4 rounded-full bg-red-600 shadow-[1px_4px_6px_rgba(0,0,0,0.6),inset_-2px_-2px_4px_rgba(0,0,0,0.4)] before:content-[''] before:absolute before:top-[2px] before:left-[2px] before:w-1.5 before:h-1.5 before:bg-white/60 before:rounded-full">
-              {/* Pin Metal Needle Shadow */}
-              <div className="absolute -bottom-3 left-1 w-1 h-3 bg-black/30 rounded-full blur-[1px] -z-10 transform -rotate-[20deg]" />
-            </div>
+            {/* Realistic 3D Push Pin */}
+            <RealisticPushPin className="-top-4 left-1/2 -translate-x-1/2" color="red" size={26} angle={6} />
             <span className="text-xs text-ink-black/60 uppercase mb-1 font-bold tracking-widest relative z-10 font-typewriter">Case Room Code</span>
             <div className="flex items-center gap-4 relative z-10">
               <span className="font-mono text-3xl font-bold text-ink-blue tracking-widest">{roomCode}</span>
@@ -157,8 +156,16 @@ const LobbyPage = () => {
                       initial={{ opacity: 0, scale: 0.8, rotate: 0 }}
                       animate={{ opacity: 1, scale: 1, rotate: rotation }}
                       transition={{ delay: idx * 0.1 }}
-                      className={`bg-paper-cream text-ink-black p-4 shadow-paper border-2 ${player.isHost ? 'border-ink-red' : 'border-ink-black/20'} flex items-center gap-3 relative transition-transform hover:scale-[1.02] z-10`}
+                      className={`bg-paper-cream text-ink-black p-4 shadow-paper border-2 ${player.isHost ? 'border-ink-red' : 'border-ink-black/20'} flex items-center gap-3 relative transition-transform hover:scale-[1.02] z-10 overflow-visible`}
                     >
+                      {/* Realistic Paperclip holding detective ID card */}
+                      <RealisticPaperclip 
+                        className="-top-3 left-3" 
+                        angle={idx % 2 === 0 ? -12 : 8} 
+                        size={42} 
+                        variant={player.isHost ? "brass" : "steel"} 
+                      />
+
                       {player.isHost && (
                          <div className="absolute top-1 right-2 text-ink-red font-bold text-[10px] uppercase tracking-widest opacity-80 transform rotate-12">Captain</div>
                       )}
@@ -230,10 +237,8 @@ const LobbyPage = () => {
             <div className="absolute inset-2 border-2 border-ink-black/15 border-dashed pointer-events-none opacity-70" style={{ clipPath: 'polygon(0 0, 29% 0, 34% 16px, 100% 16px, 100% 100%, 0 100%)' }} />
             <div className="absolute inset-3 border border-ink-black/10 pointer-events-none opacity-50" style={{ clipPath: 'polygon(0 0, 28% 0, 33% 14px, 100% 14px, 100% 100%, 0 100%)' }} />
             
-            {/* Paperclip Graphic */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="absolute -top-3 -left-3 text-gray-800/60 transform -rotate-12 drop-shadow-md z-10 pointer-events-none">
-              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
-            </svg>
+            {/* Realistic Metal Paperclip */}
+            <RealisticPaperclip className="-top-4 left-4" angle={-12} size={74} variant="brass" />
 
             <h2 className="text-3xl mb-6 border-b-2 border-ink-black/30 pb-2 text-center font-bold font-ui relative z-10">Mission Briefing</h2>
             

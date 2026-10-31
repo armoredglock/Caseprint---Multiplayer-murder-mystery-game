@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useGame } from '../../contexts/GameContext';
 import { useSocket } from '../../hooks/useSocket';
 import { useToast } from '../../contexts/ToastContext';
+import RealisticPaperclip from './RealisticPaperclip';
 
 const PlayersModal = ({ isOpen, onClose }) => {
   const { roomState, currentPlayer } = useGame();
@@ -37,10 +38,8 @@ const PlayersModal = ({ isOpen, onClose }) => {
             <div className="absolute inset-2 border-2 border-ink-black/15 border-dashed pointer-events-none opacity-70" style={{ clipPath: 'polygon(0 0, 30% 0, 32% 16px, 100% 16px, 100% 100%, 0 100%)' }} />
             <div className="absolute inset-3 border border-ink-black/10 pointer-events-none opacity-50" style={{ clipPath: 'polygon(0 0, 29% 0, 31% 14px, 100% 14px, 100% 100%, 0 100%)' }} />
             
-            {/* Paperclip Graphic */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="absolute -top-3 -left-3 text-gray-800/60 transform -rotate-12 drop-shadow-md z-10 pointer-events-none">
-              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
-            </svg>
+            {/* Realistic Metal Paperclip */}
+            <RealisticPaperclip className="-top-4 left-4" angle={-12} size={68} variant="steel" />
 
             {/* Clean Modern Header */}
             <div className="flex justify-between items-center mb-4 border-b-2 border-ink-black/30 pb-2 shrink-0 relative z-10">

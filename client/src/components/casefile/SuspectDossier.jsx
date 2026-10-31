@@ -1,5 +1,6 @@
 import React from 'react';
 import { useGame } from '../../contexts/GameContext';
+import RealisticPaperclip from '../ui/RealisticPaperclip';
 
 const SuspectDossier = ({ suspects }) => {
   const [expandedId, setExpandedId] = React.useState(null);
@@ -14,19 +15,25 @@ const SuspectDossier = ({ suspects }) => {
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {suspects?.map(suspect => {
+        {suspects?.map((suspect, idx) => {
           const isExpanded = expandedId === suspect.id;
           
           return (
             <div 
               key={suspect.id}
-              className={`bg-white border border-border/30 shadow-sm p-4 transition-all duration-300 ${isExpanded ? 'col-span-1 md:col-span-2 row-span-2 z-10 shadow-lg cursor-default' : 'cursor-pointer hover:bg-gray-50'}`}
+              className={`bg-[#fdfcf9] border border-gray-300 shadow-sm p-4 transition-all duration-300 relative ${isExpanded ? 'col-span-1 md:col-span-2 row-span-2 z-10 shadow-xl cursor-default ring-2 ring-ink-black/20' : 'cursor-pointer hover:bg-white hover:shadow-md'}`}
               onClick={() => { if (!isExpanded) setExpandedId(suspect.id); }}
             >
               <div className="flex justify-between items-start">
                 <div className="flex gap-4">
-                {/* Mugshot */}
-                <div className="w-32 h-40 bg-gray-200 border-4 border-white shadow flex-shrink-0 relative overflow-hidden">
+                {/* Mugshot with Realistic Paperclip */}
+                <div className="w-32 h-40 bg-gray-200 border-4 border-white shadow-md flex-shrink-0 relative overflow-visible">
+                   <RealisticPaperclip 
+                     className="-top-3 -left-2" 
+                     angle={idx % 2 === 0 ? -12 : 10} 
+                     size={44} 
+                     variant={idx % 2 === 0 ? "steel" : "brass"} 
+                   />
                    {suspect.photo ? (
                      <img src={suspect.photo} alt={suspect.name} className="w-full h-full object-cover grayscale contrast-125" />
                    ) : (

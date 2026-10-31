@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useGame } from '../../contexts/GameContext';
 import { motion } from 'framer-motion';
+import RealisticPaperclip from '../ui/RealisticPaperclip';
 
 const AccusationForm = () => {
   const { caseData, submitAccusation, currentPlayer, roomState } = useGame();
@@ -59,8 +60,11 @@ const AccusationForm = () => {
     <motion.div 
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="p-6 bg-surface-light border border-border rounded-lg shadow-lg relative overflow-hidden"
+      className="p-6 bg-surface-light border border-border rounded-lg shadow-lg relative overflow-visible"
     >
+      {/* Realistic Paperclip holding accusation dossier */}
+      <RealisticPaperclip className="-top-3 left-8 z-30" angle={-12} size={64} variant="steel" />
+
       {/* Official form styling */}
       <div className="absolute top-0 left-0 w-full h-2 bg-danger" />
       <div className="absolute top-8 right-8 stamp stamp-red opacity-20">OFFICIAL USE ONLY</div>

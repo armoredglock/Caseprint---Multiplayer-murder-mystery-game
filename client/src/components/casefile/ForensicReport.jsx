@@ -1,12 +1,22 @@
 import React from 'react';
+import RealisticPaperclip from '../ui/RealisticPaperclip';
 
 const ForensicReport = ({ forensics }) => {
   if (!forensics) return <div>No forensic data available.</div>;
 
   return (
-    <div className="bg-white p-4 font-mono text-sm text-gray-800">
+    <div className="bg-[#fcfbf9] p-4 md:p-6 font-mono text-sm text-gray-800 relative border border-gray-200 shadow-sm">
+      {/* Realistic Paperclip */}
+      <RealisticPaperclip className="-top-3 right-8" angle={-8} size={58} variant="steel" />
+      <div className="stamp stamp-black top-2 right-20 opacity-25 text-base pointer-events-none">CRIME LAB</div>
       
       <div className="space-y-6">
+        <div className="border-b-2 border-gray-800 pb-3 mb-4">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-bold uppercase tracking-widest font-ui text-[#1c2431]">FORENSIC PATHOLOGY & CRIME LAB REPORT</h2>
+            <span className="text-xs font-mono text-gray-500 font-bold uppercase">CORONER REF #CR-882</span>
+          </div>
+        </div>
         <section>
           <h3 className="bg-[#1c2431] text-white px-4 py-2 text-xl font-bold uppercase tracking-widest mb-2">EXAMINATION</h3>
           <p className="px-4 py-2 leading-relaxed text-base">{forensics.externalExam || forensics.internalExam || 'Otherwise healthy.'}</p>

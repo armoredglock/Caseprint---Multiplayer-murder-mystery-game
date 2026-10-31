@@ -8,48 +8,56 @@ import ForensicReport from './ForensicReport';
 import EvidenceLog from './EvidenceLog';
 import DigitalEvidence from './DigitalEvidence';
 import CaseTimeline from './CaseTimeline';
+import RealisticPaperclip from '../ui/RealisticPaperclip';
 
 // Placeholders for the remaining two
 const IncidentReport = ({ overview }) => {
   if (!overview) return <div className="p-4 font-mono">LOADING EVIDENCE FILE...</div>;
   return (
-  <div className="bg-white p-4 font-mono text-sm text-gray-800">
+  <div className="bg-[#fcfbf9] p-4 md:p-6 font-mono text-sm text-gray-800 relative border border-gray-200 shadow-sm">
+    {/* Realistic Paperclip holding Incident Report */}
+    <RealisticPaperclip className="-top-3 right-6" angle={8} size={56} variant="steel" />
+    <div className="stamp stamp-red top-3 right-16 opacity-30 text-lg pointer-events-none">OFFICIAL RECORD</div>
+
     <div className="space-y-6">
       <section>
-        <div className="bg-[#1c2431] text-white px-4 py-3 flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold uppercase tracking-widest">INCIDENT REPORT</h2>
-          <p className="text-xs text-gray-300">FORM 44-B</p>
+        <div className="bg-[#1c2431] text-white px-4 py-3 flex justify-between items-center mb-4 shadow-sm">
+          <div>
+            <h2 className="text-xl font-bold uppercase tracking-widest font-ui">INCIDENT REPORT</h2>
+            <p className="text-[10px] text-gray-300 font-mono">METROPOLITAN POLICE DEPARTMENT</p>
+          </div>
+          <p className="text-xs text-gray-300 font-mono font-bold">FORM 44-B</p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-2 mb-6">
-          <div className="border-b border-gray-200 pb-2">
+          <div className="border-b border-gray-300 pb-2">
             <span className="text-gray-500 font-bold block text-xs mb-1 uppercase tracking-widest">INCIDENT NO</span>
-            <span className="font-bold">{overview.incidentNumber}</span>
+            <span className="font-bold text-ink-blue text-base">{overview.incidentNumber}</span>
           </div>
-          <div className="border-b border-gray-200 pb-2">
+          <div className="border-b border-gray-300 pb-2">
             <span className="text-gray-500 font-bold block text-xs mb-1 uppercase tracking-widest">DATE</span>
-            <span className="font-bold">{overview.date}</span>
+            <span className="font-bold text-base">{overview.date}</span>
           </div>
-          <div className="border-b border-gray-200 pb-2">
+          <div className="border-b border-gray-300 pb-2">
             <span className="text-gray-500 font-bold block text-xs mb-1 uppercase tracking-widest">OFFICER</span>
-            <span className="font-bold">{overview.reportingOfficer}</span>
+            <span className="font-bold text-base">{overview.reportingOfficer}</span>
           </div>
-          <div className="border-b border-gray-200 pb-2">
+          <div className="border-b border-gray-300 pb-2">
             <span className="text-gray-500 font-bold block text-xs mb-1 uppercase tracking-widest">JURISDICTION</span>
-            <span className="font-bold">{overview.jurisdiction}</span>
+            <span className="font-bold text-base">{overview.jurisdiction}</span>
           </div>
         </div>
 
         <section className="px-2">
-          <h3 className="text-gray-500 font-bold uppercase tracking-widest text-lg border-b border-gray-300 mb-2">SUMMARY</h3>
-          <p className="leading-relaxed text-base">{overview.summary}</p>
+          <h3 className="text-gray-600 font-bold uppercase tracking-widest text-sm border-b border-gray-300 mb-2 pb-1">SUMMARY OF INCIDENT</h3>
+          <p className="leading-relaxed text-base font-typewriter text-ink-black/90 bg-white/70 p-4 border border-gray-200">{overview.summary}</p>
         </section>
       </section>
 
-      <section className="mt-8 border-4 border-[#1c2431] p-4 relative mx-2">
-        <div className="absolute -top-4 left-4 bg-white px-3 py-1 font-bold text-[#1c2431] text-lg tracking-widest">STATUS</div>
-        <div className="pt-2 text-center">
-          <span className="text-2xl font-bold text-red-700 uppercase tracking-widest">ACTIVE INVESTIGATION</span>
+      <section className="mt-8 border-2 border-[#1c2431] p-4 relative mx-2 bg-white">
+        <div className="absolute -top-3 left-4 bg-white px-2 font-bold text-[#1c2431] text-xs uppercase tracking-widest border border-[#1c2431]">CURRENT CLASSIFICATION</div>
+        <div className="pt-1 text-center">
+          <span className="text-2xl font-bold text-red-700 uppercase tracking-widest font-ui">ACTIVE HOMICIDE INVESTIGATION</span>
         </div>
       </section>
     </div>
@@ -59,11 +67,17 @@ const IncidentReport = ({ overview }) => {
 const VictimProfile = ({ victim }) => {
   if (!victim) return <div className="p-8 text-center text-text-secondary font-mono">LOADING EVIDENCE FILE...</div>;
   return (
-  <div className="bg-white p-6 shadow border border-gray-200 font-ui text-ink-black">
-    <h2 className="font-bold text-2xl mb-4 border-b-2 border-ink-black uppercase">VICTIM PROFILE</h2>
+  <div className="bg-[#fcfbf9] p-6 shadow-sm border border-gray-200 font-ui text-ink-black relative">
+    <div className="flex justify-between items-center border-b-2 border-ink-black pb-2 mb-6">
+      <h2 className="font-bold text-2xl uppercase tracking-wider">VICTIM PROFILE & IDENTIFICATION</h2>
+      <span className="text-xs font-mono font-bold text-gray-500 uppercase tracking-widest">DOSSIER // DECEASED</span>
+    </div>
+
     <div className="flex flex-col sm:flex-row gap-6">
-      <div className="w-full sm:w-1/3 max-w-[200px] mx-auto sm:max-w-none">
-        <div className="bg-white p-2 pb-8 shadow-md border border-gray-100 transform -rotate-3">
+      <div className="w-full sm:w-1/3 max-w-[210px] mx-auto sm:max-w-none">
+        {/* Realistic Polaroid Photo with Realistic Paperclip */}
+        <div className="bg-white p-2 pb-8 shadow-md border border-gray-200 transform -rotate-2 relative">
+          <RealisticPaperclip className="-top-3 -right-2" angle={14} size={48} variant="brass" />
           <div className="bg-gray-200 h-48 flex items-center justify-center font-mono text-gray-400 text-sm border border-gray-300 relative overflow-hidden">
             {victim.photo ? (
               <img src={victim.photo} alt={victim.name} className="w-full h-full object-cover grayscale contrast-125" />
@@ -71,17 +85,19 @@ const VictimProfile = ({ victim }) => {
               'NO PHOTO'
             )}
           </div>
-          <p className="text-center font-handwriting text-xl mt-2">{victim.name}</p>
+          <p className="text-center font-handwriting text-xl mt-2 text-ink-blue font-bold">{victim.name}</p>
         </div>
       </div>
-      <div className="w-full sm:w-2/3 space-y-2 font-mono text-sm">
-        <p><strong>NAME:</strong> {victim.name}</p>
-        <p><strong>AGE:</strong> {victim.age}</p>
-        <p><strong>OCCUPATION:</strong> {victim.occupation}</p>
-        <p><strong>DOB:</strong> {victim.dateOfBirth}</p>
+      <div className="w-full sm:w-2/3 space-y-3 font-mono text-sm">
+        <div className="grid grid-cols-2 gap-2 bg-white/80 p-3 border border-gray-200">
+          <p><strong>NAME:</strong> <span className="text-ink-blue font-bold">{victim.name}</span></p>
+          <p><strong>AGE:</strong> {victim.age}</p>
+          <p><strong>OCCUPATION:</strong> {victim.occupation}</p>
+          <p><strong>DOB:</strong> {victim.dateOfBirth}</p>
+        </div>
         <div className="mt-4 border-t border-gray-200 pt-4 font-ui">
-          <strong className="block mb-1 text-xs uppercase tracking-widest text-gray-500">BIOGRAPHY</strong>
-          <p className="text-base">{victim.biography}</p>
+          <strong className="block mb-2 text-xs uppercase tracking-widest text-gray-500 font-bold">BACKGROUND & BIOGRAPHY</strong>
+          <p className="text-base leading-relaxed font-typewriter text-ink-black/90 bg-white/60 p-4 border border-gray-200">{victim.biography}</p>
         </div>
       </div>
     </div>
@@ -139,7 +155,9 @@ const CaseFolder = () => {
       </div>
 
       {/* Main Folder Body */}
-      <div className="case-folder">
+      <div className="case-folder relative">
+        {/* Realistic Binder Paperclip fastening the active document bundle */}
+        <RealisticPaperclip className="-top-3 right-8 z-30" angle={6} size={66} variant="steel" />
         <div className="document-area">
           <AnimatePresence mode="wait">
             <motion.div

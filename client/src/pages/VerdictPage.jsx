@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGame } from '../contexts/GameContext';
 import { motion } from 'framer-motion';
+import RealisticPaperclip from '../components/ui/RealisticPaperclip';
 
 const VerdictPage = () => {
   const { roomCode } = useParams();
@@ -99,9 +100,11 @@ const VerdictPage = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
-            className="bg-surface p-8 rounded-lg border-2 border-danger shadow-[0_0_30px_rgba(139,34,82,0.3)] relative overflow-hidden mt-12"
+            className="bg-surface p-8 rounded-lg border-2 border-danger shadow-[0_0_30px_rgba(139,34,82,0.3)] relative overflow-visible mt-12"
           >
-            <div className="absolute -right-4 -top-4 stamp stamp-red text-4xl">GUILTY</div>
+            {/* Realistic Paperclip holding final verdict file */}
+            <RealisticPaperclip className="-top-4 left-8 z-30" angle={-10} size={72} variant="brass" />
+            <div className="absolute -right-4 -top-4 stamp stamp-red text-4xl pointer-events-none">GUILTY</div>
             
             <h2 className="text-3xl font-typewriter mb-6 text-paper-cream">THE TRUTH</h2>
             
